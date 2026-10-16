@@ -3,7 +3,9 @@
 Run by the "submit" job in .github/workflows/ios.yml:
     ASC_KEY_ID=… ASC_ISSUER_ID=… ASC_KEY_P8=… python3 tools/asc_submit.py 1.0.0
 """
+import os
 import sys
+import time
 import urllib.error
 
 import asc_listing as asc
@@ -32,11 +34,25 @@ def main(version_string):
     version = call('GET', f'/v1/apps/{app_id}/appStoreVersions?filter[platform]=IOS&filter[versionString]={version_string}')['data'][0]
     print('version', version_string, version['attributes'].get('appStoreState'))
 
-    # The newest processed build of this version.
-    builds = call('GET', f'/v1/builds?filter[app]={app_id}&filter[preReleaseVersion.version]={version_string}&filter[processingState]=VALID&sort=-uploadedDate&limit=1')['data']
-    if not builds:
-        fail(f'No processed build for {version_string} yet; wait for TestFlight to finish processing')
-    build = builds[0]
+    # The newest processed build of this version. When this run also uploaded one (MIN_BUILD = its build number),
+    # wait for Apple to finish processing it rather than submitting an older build.
+    min_build = int(os.environ.get('MIN_BUILD') or 0)
+    deadline = time.time() + 75 * 60
+    while True:
+        builds = call('GET', f'/v1/builds?filter[app]={app_id}&filter[preReleaseVersion.version]={version_string}&sort=-uploadedDate&limit=10')['data']
+        fresh = [b for b in builds if int(b['attributes']['version']) >= min_build]
+        valid = [b for b in fresh if b['attributes'].get('processingState') == 'VALID']
+        if valid:
+            build = valid[0]
+            break
+        bad = [b for b in fresh if b['attributes'].get('processingState') in ('FAILED', 'INVALID')]
+        if bad:
+            fail(f'Build {bad[0]["attributes"]["version"]} was rejected while processing ({bad[0]["attributes"]["processingState"]}); see App Store Connect → TestFlight')
+        if time.time() > deadline:
+            fail(f'No processed build {min_build or ""} for {version_string} after 75 minutes; run submit again later')
+        states = ', '.join(f'{b["attributes"]["version"]}:{b["attributes"].get("processingState")}' for b in fresh) or 'not uploaded yet'
+        print(f'waiting for build ≥ {min_build} to finish processing ({states})', flush=True)
+        time.sleep(60)
     call('PATCH', f'/v1/appStoreVersions/{version["id"]}/relationships/build', {'data': {'type': 'builds', 'id': build['id']}})
     print('build', build['attributes']['version'], 'attached')
 

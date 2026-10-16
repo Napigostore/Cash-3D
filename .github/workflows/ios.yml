@@ -223,8 +223,11 @@ jobs:
           echo "::notice title=Listing::App Store texts and screenshots uploaded for vi and en-US."
 
   submit:
-    if: ${{ inputs.submit || contains(github.event.head_commit.message, '[submit]') }}
-    runs-on: macos-15
+    # With [testflight] in the same run, waits for that upload and submits it once Apple has processed it.
+    needs: testflight
+    if: ${{ always() && (inputs.submit || contains(github.event.head_commit.message, '[submit]')) && needs.testflight.result != 'failure' && needs.testflight.result != 'cancelled' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v5
       - name: Submit for App Review
@@ -232,6 +235,7 @@ jobs:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          MIN_BUILD: ${{ needs.testflight.result == 'success' && github.run_number || '' }}
         run: |
           python3 -m pip install --quiet --break-system-packages pyjwt cryptography
           python3 tools/asc_submit.py "$(grep -E 'MARKETING_VERSION' ios/project.yml | grep -oE '[0-9][0-9.]*')"
