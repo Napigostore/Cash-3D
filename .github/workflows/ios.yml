@@ -7,11 +7,11 @@ name: iOS
 #      [listing]     take screenshots on the 6.9" iPhone simulator and upload texts + screenshots (ios/fastlane)
 #      [submit]      attach the newest processed build and submit the version for App Review
 #
-# Secrets (repository Settings â†’ Secrets and variables â†’ Actions):
+# Secrets (repository Settings Ã¢â€ â€™ Secrets and variables Ã¢â€ â€™ Actions):
 #   APPLE_TEAM_ID     10-character Team ID of the Apple Developer account
 #   ASC_KEY_ID        App Store Connect API key id
 #   ASC_ISSUER_ID     App Store Connect API issuer id
-#   ASC_KEY_P8        contents of the AuthKey_XXXX.p8 file
+#   ASC_KEY_P8        contents of the AuthKey_XXXX.p8 file (a Team key, Admin role; XXXX is ASC_KEY_ID)
 on:
   push:
     paths:
