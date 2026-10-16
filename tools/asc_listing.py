@@ -27,8 +27,12 @@ _token = {'value': '', 'at': 0.0}
 def token():
     if time.time() - _token['at'] > 600:
         now = int(time.time())
-        _token['value'] = jwt.encode({'iss': os.environ['ASC_ISSUER_ID'], 'iat': now, 'exp': now + 1200, 'aud': 'appstoreconnect-v1'},
-                                     os.environ['ASC_KEY_P8'], algorithm='ES256', headers={'kid': os.environ['ASC_KEY_ID'], 'typ': 'JWT'})
+        # Secrets pasted into GitHub often carry a stray space or newline; Apple rejects the token for it.
+        key_id, issuer, p8 = (os.environ[k].strip() for k in ('ASC_KEY_ID', 'ASC_ISSUER_ID', 'ASC_KEY_P8'))
+        claims = {'iat': now, 'exp': now + 1200, 'aud': 'appstoreconnect-v1'}
+        # An Individual key has no issuer: it signs as the user instead.
+        claims.update({'sub': 'user'} if os.environ.get('ASC_INDIVIDUAL') else {'iss': issuer})
+        _token['value'] = jwt.encode(claims, p8, algorithm='ES256', headers={'kid': key_id, 'typ': 'JWT'})
         _token['at'] = time.time()
     return _token['value']
 

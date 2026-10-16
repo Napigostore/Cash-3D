@@ -36,6 +36,15 @@ def main():
             apps = json.loads(response.read())['data']
     except urllib.error.HTTPError as e:
         if e.code == 401:
+            # Tell an Individual key (not usable for uploads) apart from a mismatched Team key.
+            os.environ['ASC_INDIVIDUAL'] = '1'
+            asc._token['at'] = 0
+            try:
+                urllib.request.urlopen(urllib.request.Request(asc.API + '/v1/apps?limit=1', headers={'Authorization': 'Bearer ' + asc.token()}), timeout=60).read()
+                fail('This is an Individual API key. Uploads need a Team key: App Store Connect → Users and Access → Integrations → '
+                     'App Store Connect API → Team Keys → Generate API Key (Admin), then update ASC_KEY_ID and ASC_KEY_P8.')
+            except urllib.error.HTTPError:
+                pass
             fail('Apple rejected the API key (401). ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_P8 must all come from the same key '
                  '(App Store Connect → Users and Access → Integrations → Team Keys), and the key must not be revoked.')
         if e.code == 403:

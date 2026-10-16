@@ -125,6 +125,8 @@ jobs:
           for name in TEAM KEY_ID ISSUER KEY_P8; do [ -z "${!name}" ] && missing="$missing $name"; done
           if [ -n "$missing" ]; then echo "::error title=TestFlight::Missing secrets:$missing (APPLE_TEAM_ID, ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8)"; exit 1; fi
 
+          # Stray spaces or newlines from pasting the secrets make Apple reject the key.
+          KEY_ID=$(printf '%s' "$KEY_ID" | tr -d '[:space:]'); ISSUER=$(printf '%s' "$ISSUER" | tr -d '[:space:]')
           KEY_PATH="$RUNNER_TEMP/AuthKey_$KEY_ID.p8"
           printf '%s\n' "$KEY_P8" > "$KEY_PATH"
           AUTH=(-allowProvisioningUpdates -authenticationKeyPath "$KEY_PATH" -authenticationKeyID "$KEY_ID" -authenticationKeyIssuerID "$ISSUER")
