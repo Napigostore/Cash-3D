@@ -69,6 +69,8 @@ POST = [
     (r'ECAPARK', 'ECOVALE'), (r'Ecapark|Ecopark', 'Ecovale'), (r'TIME CATY', 'TEMPO CITY'),
     (r'Time Caty|Times City', 'Tempo City'), (r'Cash 3D', 'Cash to Freedom'), (r"'₫'", "'$'"),
     (r"(\$\{[^}]*\}) cp\b", r'\1 sh'), (r"' cp'", "' sh'"),
+    # The gold unit (chỉ) is also the word "only".
+    (r"\}/only`", "}/coin`"), (r"/only</small>", "/coin</small>"), (r"\} only`", "} coins`"),
 ]
 # Leftover fragments split around ASCII-only Vietnamese words: exact text swaps after everything else.
 LIT = [
@@ -90,7 +92,15 @@ LIT = [
 def load_map():
     vn = [l.split('\t', 1)[1] for l in open(os.path.join(ROOT, 'tools', 'vn_phrases.txt'), encoding='utf-8').read().splitlines()]
     en = [''] * len(vn)
+    extra = {}
     for name in os.listdir(EN_DIR):
+        if name == 'extra.tsv':
+            # Phrases added after the first translation pass: "Vietnamese<TAB>English" per line.
+            for l in open(os.path.join(EN_DIR, name), encoding='utf-8').read().splitlines():
+                if '	' in l:
+                    k, v = l.split('	', 1)
+                    extra[k] = v
+            continue
         start = int(name.split('.')[0])
         lines = open(os.path.join(EN_DIR, name), encoding='utf-8').read().splitlines()
         if name.endswith('.tsv'):
@@ -108,7 +118,9 @@ def load_map():
         t = t.replace("'", '’')
         parts = t.split('"')
         return ''.join(p + ('“' if i % 2 == 0 else '”') for i, p in enumerate(parts[:-1])) + parts[-1]
-    return dict(zip(vn, [typo(t) for t in en]))
+    table = dict(zip(vn, [typo(t) for t in en]))
+    table.update({k: typo(v) for k, v in extra.items()})
+    return table
 
 
 def english(html):

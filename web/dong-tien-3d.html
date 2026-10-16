@@ -74,6 +74,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .sheet h2{font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.15;margin:2px 0 8px;text-wrap:balance}
 .sheet p{line-height:1.55;color:#d3dbea;margin:0 0 10px;max-width:62ch}
 .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ledger td .acts{margin-top:6px;gap:6px}.ledger td .acts .btn{padding:6px 10px;font-size:12px}
 .acts .btn{flex:1 1 140px}
 .facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:10px 0}
 .fact{background:var(--ink);border-radius:10px;padding:8px 10px;border:1px solid var(--line);min-width:0}
@@ -841,8 +842,60 @@ function assetLabel(a){
   if(a.type==='scam')return `${a.name} (cam kết ${pct(a.promise)}/tháng)`;
   return a.name+(a.share?` (${pct(a.share,0)})`:'');
 }
+/* ================= Giao dịch tức thì: mua bán, vay, trả nợ bất cứ lúc nào ================= */
+/* Ngoài đời giao dịch lúc nào cũng được, chỉ là giá bao nhiêu. Bán ngay cho môi giới/ngân hàng rẻ hơn
+   giá người mua trên thẻ Thị trường; mua ngay trên sàn đắt hơn giá trên thẻ Cơ hội. */
+const QUICK={re:{boom:.97,normal:.9,bust:.8},biz:.7,gold:.97,crypto:.98,bond:.95,buy:1.02,goldBuy:1.03};
+let armed=null;
+const reCyc=a=>(G.cyc&&G.cyc[a.kind==='land'?'land':'re'])||'normal';
+function quickQuote(a){let price,net,basis;
+  if(a.type==='re'){price=round1(assetValue(a)*QUICK.re[reCyc(a)]);net=price-a.loan-price*TAX_SELL_RE;basis=a.equity||0;}
+  else if(a.type==='biz'){if(a.kind==='startup')return null;price=round1(assetValue(a)*QUICK.biz);net=price-a.loan;basis=a.equity||0;}
+  else if(a.type==='stock'){price=Math.round(a.shares*STOCKS[a.sym].base*(G.stockIdx||1));net=price*(1-STK_FEE-STK_TAX);basis=a.shares*a.cost;}
+  else if(a.type==='gold'){price=Math.round(a.qty*GOLD_REF*QUICK.gold);net=price;basis=a.cost;}
+  else if(a.type==='crypto'){price=Math.round(a.qty*btcPrice()*QUICK.crypto);net=price;basis=a.cost;}
+  else if(a.type==='bond'){price=Math.round(a.units*a.face*(a.def?.4:QUICK.bond));net=price;basis=a.units*a.face;}
+  else return null;
+  net=Math.round(net);return {price,net,basis,profit:net-basis};}
+function quickSell(p,a){const Q=quickQuote(a);if(!Q)return;
+  if(Q.net<0&&p.cash<-Q.net)return toast(`Cần ${fmt(-Q.net)} tiền mặt để tất toán khoản vay khi bán`,'neg');
+  p.assets.splice(p.assets.indexOf(a),1);p.cash+=Q.net;sfx(Q.net>0?'cash':'pay');
+  p.deals.push({name:'Bán ngay '+assetLabel(a),pl:Q.profit});
+  toast(`Bán ngay ${assetLabel(a)}: nhận ${fmt(Q.net)} (${Q.profit>=0?'lãi':'lỗ'} ${fmt(Math.abs(Q.profit))})`,Q.profit>=0?'pos':'neg');
+  log(`Bán ngay ${assetLabel(a)} giá ${fmt(Q.price)}, nhận về ${fmt(Q.net)} (${Q.profit>=0?'lãi':'lỗ'} ${fmt(Math.abs(Q.profit))})`,p);}
+function prepay(p,a,amt){amt=Math.min(amt,a.loan,p.cash);if(amt<=0)return;a.loan-=amt;p.cash-=amt;
+  if(a.loan<1){a.loan=0;a.left=0;a.pay=0;}else a.pay=pmt(a.loan,a.rate,a.left/12);
+  sfx('pay');log(`Trả bớt nợ vay ${a.name}: ${fmt(amt)}, góp còn ${fmt(a.pay)}/tháng`,p);toast(`Trả bớt ${fmt(amt)}: góp còn ${fmt(a.pay)}/tháng`,'pos');}
+const equityRoom=a=>Math.max(0,Math.floor((assetValue(a)*(a.type==='biz'||a.kind==='land'?.5:.7)-a.loan)/(10*TR))*10*TR);
+function equityLoan(p,a,amt){if(amt<=0)return;const r=Math.max(.06,.1+(G.rateAdj||0));
+  a.rate=(a.loan*(a.rate||r)+amt*r)/(a.loan+amt);a.loan+=amt;a.left=Math.max(a.left||0,15*12);a.teaserLeft=0;a.pay=pmt(a.loan,a.rate,a.left/12);p.cash+=amt;sfx('cash');
+  log(`Vay thế chấp ${a.name}: ${fmt(amt)} (lãi ${pct(r)}/năm), góp ${fmt(a.pay)}/tháng`,p);toast(`Vay thế chấp ${fmt(amt)}: góp ${fmt(a.pay)}/tháng`,'neg');}
+function payDown(p,i,amt){const l=p.liabs[i];amt=Math.min(amt,l.bal,p.cash);if(amt<=0)return;const k=(l.bal-amt)/l.bal;p.cash-=amt;l.bal-=amt;l.pay=Math.round(l.pay*k);
+  if(l.bal<1)p.liabs.splice(i,1);sfx('pay');log(`Trả bớt ${l.label}: ${fmt(amt)}`,p);toast(`Trả bớt ${l.label}: chi phí còn ${fmt(l.pay)}/tháng`,'pos');}
+const stockAsk=sym=>Math.round(STOCKS[sym].base*(G.stockIdx||1)*QUICK.buy/100)*100;
+function quickBuy(p,kind,sym,n){
+  if(kind==='stock'){const px=stockAsk(sym),total=Math.round(n*px*(1+STK_FEE));if(p.cash<total)return;p.cash-=total;
+    const h=p.assets.find(a=>a.type==='stock'&&a.sym===sym);if(h){h.cost=(h.cost*h.shares+total)/(h.shares+n);h.shares+=n;}else p.assets.push({type:'stock',sym,shares:n,cost:total/n});
+    log(`Mua ngay ${n} cp ${sym} @ ${fmtD(px)} = ${fmt(total)}`,p);}
+  else if(kind==='gold'){const total=Math.round(n*GOLD_REF*QUICK.goldBuy);if(p.cash<total)return;p.cash-=total;const g=p.assets.find(a=>a.type==='gold');if(g){g.qty+=n;g.cost+=total;}else p.assets.push({type:'gold',qty:n,cost:total});log(`Mua ngay ${n} chỉ vàng ${fmt(total)}`,p);}
+  else if(kind==='crypto'){const total=Math.round(n*btcPrice()*QUICK.buy);if(p.cash<total)return;p.cash-=total;const h=p.assets.find(a=>a.type==='crypto');if(h){h.qty+=n;h.cost+=total;}else p.assets.push({type:'crypto',qty:n,cost:total});log(`Mua ngay ${trimNum(n,2)} BTC ${fmt(total)}`,p);}
+  sfx('pay');}
+/* Hỏi mua tài sản của người chơi khác theo giá thị trường × k. Người mua nhận luôn khoản vay còn lại. */
+const offerFor=(a,k)=>round1(assetValue(a)*k);
+function botAccepts(q,a,offer){const Q=quickQuote(a),r=offer/Math.max(1,assetValue(a)),cf=assetCF(a),gain=offer-num(a.loan)-(Q?Q.basis:0);
+  return r>=1.25||(r>=1.1&&(cf<=0||gain>(Q?Q.basis:0)*.2))||(r>=1&&cf<0);}
+function tradeAsset(buyer,seller,a,offer){const loan=num(a.loan),fee=a.type==='re'?Math.round(offer*FEE_BUY_RE):0,pay=offer-loan+fee,get=Math.round(offer-loan-(a.type==='re'?offer*TAX_SELL_RE:0));
+  if(buyer.cash<pay)return toast(`Cần ${fmt(pay)} tiền mặt (giá ${fmt(offer)} − dư nợ ${fmt(loan)}${fee?' + phí 1%':''})`,'neg');
+  if(get<0&&seller.cash<-get)return toast(`${seller.name} không đủ tiền tất toán khoản vay`,'neg');
+  const ok=seller.bot?botAccepts(seller,a,offer):confirm(`${seller.name} ơi, ${buyer.name} muốn mua ${assetLabel(a)} giá ${fmt(offer)}.\nBạn nhận về ${fmt(get)} (đã trừ dư nợ${a.type==='re'?' và thuế 2%':''}). Đồng ý bán?`);
+  if(!ok){toast(`${seller.name} từ chối bán ${assetLabel(a)} giá ${fmt(offer)}`,'neg');log(`Hỏi mua ${assetLabel(a)} của ${seller.name} giá ${fmt(offer)}: bị từ chối`,buyer);return;}
+  const Q=quickQuote(a);seller.assets.splice(seller.assets.indexOf(a),1);seller.cash+=get;seller.deals.push({name:'Bán cho '+buyer.name+': '+assetLabel(a),pl:get-(Q?Q.basis:0)});
+  buyer.cash-=pay;if(a.type==='re'||a.type==='biz'){a.price=offer;a.value=offer;a.equity=pay;}else if(a.type==='gold'||a.type==='crypto')a.cost=pay;buyer.assets.push(a);sfx('cash');
+  toast(`${buyer.name} mua ${assetLabel(a)} của ${seller.name} giá ${fmt(offer)}`,'pos');
+  log(`Mua ${assetLabel(a)} của ${seller.name} giá ${fmt(offer)}: trả ${fmt(pay)}, nhận nợ vay ${fmt(loan)}`,buyer);log(`Bán ${assetLabel(a)} cho ${buyer.name} giá ${fmt(offer)}, nhận về ${fmt(get)}`,seller);}
 function showStatement(p){
   const c=calc(p),isCur=p===curP()&&G.phase==='roll'&&!isBotTurn(),M=mode();
+  const buyer=!isOnline()&&G.phase==='roll'&&!isBotTurn()&&curP()!==p&&!curP().ft&&!p.ft?curP():null;
   if(p.ft){
     openViewer({tone:'ft',key:'st:'+p.id,eyebrow:`Báo cáo · Vòng Thịnh Vượng · ${Math.floor(p.age)} tuổi`,title:esc(p.name),
       body:`<div class="ledger"><div class="facts">${fact('Tiền mặt',fmt(p.cash))}${fact('Ngày lĩnh lương','+'+fmt(p.ftCF),'pos')}${fact('Mục tiêu',fmt(p.ftStart+ftGoal()))}${fact('Giấc mơ',fmt(G.dreams[p.dream].c))}</div>
@@ -861,10 +914,16 @@ function showStatement(p){
     if(a.type==='bond')d=`Mệnh giá ${fmt(a.face)}/lô · lãi ${pct(a.coupon)}/năm`;
     if(a.type==='gold')d=`Giá vốn ${fmt(a.cost)}`;
     if(a.type==='scam')d=`Đã nhận lại ${fmt(a.paid)}`;
-    return `<tr><td>${esc(assetLabel(a))}<br><small>${d}</small></td><td>${fmt(assetValue(a))}</td></tr>`;}).join('')||'<tr><td style="color:var(--muted)">Chưa có tài sản. Hãy tìm thương vụ ở ô Cơ hội.</td><td></td></tr>';
-  const liabRows=p.liabs.map((l,i)=>`<tr><td>${esc(l.label)}<br><small>Trả ${fmt(l.pay)}/tháng</small></td><td>${fmt(l.bal)} ${isCur?btn('Trả hết',()=>payOff(p,i),p.cash<l.bal):''}</td></tr>`).join('')
+    const Q=quickQuote(a);let acts='';
+    if(isCur&&Q){acts+=armed===a?btn(`Xác nhận bán: nhận ${fmt(Q.net)}`,()=>{armed=null;quickSell(p,a);},Q.net<0&&p.cash<-Q.net,'primary'):btn(`Bán ngay ${fmt(Q.price)}`,()=>{armed=a;});
+      if(a.loan>0){const part=Math.min(a.loan,Math.max(10*TR,Math.round(a.loan/4/(10*TR))*10*TR));acts+=btn(`Trả bớt nợ ${fmt(part)}`,()=>prepay(p,a,part),p.cash<part,'green');if(part<a.loan)acts+=btn('Trả hết nợ vay',()=>prepay(p,a,a.loan),p.cash<a.loan,'green');}
+      const room=(a.type==='re'||a.type==='biz')&&a.kind!=='startup'?equityRoom(a):0;if(room>=10*TR)acts+=btn(`Vay thế chấp ${fmt(room)}`,()=>equityLoan(p,a,room));}
+    if(buyer&&Q&&a.type!=='stock')acts+=[1,1.1,1.25].map(k=>{const o=offerFor(a,k);return btn(`Hỏi mua ${fmt(o)}`,()=>tradeAsset(buyer,p,a,o),buyer.cash<o-num(a.loan));}).join('');
+    const qd=Q&&isCur?`<br><small>Bán ngay: giá ${fmt(Q.price)}${a.loan?` − dư nợ ${fmt(a.loan)}`:''}${a.type==='re'?' − thuế 2%':''} = nhận ${fmt(Q.net)} · <span class="${Q.profit>=0?'pos':'neg'}">${Q.profit>=0?'lãi':'lỗ'} ${fmt(Math.abs(Q.profit))}</span></small>`:'';
+    return `<tr><td>${esc(assetLabel(a))}<br><small>${d}</small>${qd}${acts?`<div class="acts">${acts}</div>`:''}</td><td>${fmt(assetValue(a))}</td></tr>`;}).join('')||'<tr><td style="color:var(--muted)">Chưa có tài sản. Hãy tìm thương vụ ở ô Cơ hội.</td><td></td></tr>';
+  const liabRows=p.liabs.map((l,i)=>`<tr><td>${esc(l.label)}<br><small>Trả ${fmt(l.pay)}/tháng</small></td><td>${fmt(l.bal)} ${isCur?btn('Trả hết',()=>payOff(p,i),p.cash<l.bal):''}${isCur&&l.bal>10*TR?btn(`Trả bớt ${fmt(Math.max(10*TR,Math.round(l.bal/4/TR)*TR))}`,()=>payDown(p,i,Math.max(10*TR,Math.round(l.bal/4/TR)*TR)),p.cash<Math.max(10*TR,Math.round(l.bal/4/TR)*TR),'green'):''}</td></tr>`).join('')
     +`<tr><td>Vay tiêu dùng<br><small>Lãi ${pct(clr())}/tháng, hạn mức ${fmt(loanCap(p))}</small></td><td>${fmt(p.loan)}</td></tr>`;
-  const loanBtns=isCur?`<div class="acts">${btn('Vay thêm 10 tr',()=>{p.loan+=CL_STEP;p.cash+=CL_STEP;log('Vay tiêu dùng 10 tr',p);},p.loan+CL_STEP>loanCap(p))}${btn('Trả bớt nợ 10 tr',()=>{p.loan-=CL_STEP;p.cash-=CL_STEP;log('Trả nợ tiêu dùng 10 tr',p);},p.loan<CL_STEP||p.cash<CL_STEP,'green')}</div>`:'';
+  const loanBtns=isCur?`<div class="acts">${btn('Vay thêm 10 tr',()=>{p.loan+=CL_STEP;p.cash+=CL_STEP;log('Vay tiêu dùng 10 tr',p);},p.loan+CL_STEP>loanCap(p))}${btn('Trả bớt nợ 10 tr',()=>{p.loan-=CL_STEP;p.cash-=CL_STEP;log('Trả nợ tiêu dùng 10 tr',p);},p.loan<CL_STEP||p.cash<CL_STEP,'green')}${btn('Vay thêm 100 tr',()=>{p.loan+=10*CL_STEP;p.cash+=10*CL_STEP;log('Vay tiêu dùng 100 tr',p);},p.loan+10*CL_STEP>loanCap(p))}${btn('Trả hết nợ tiêu dùng',()=>{const v=p.loan;p.cash-=v;p.loan=0;log(`Trả hết nợ tiêu dùng ${fmt(v)}`,p);},!p.loan||p.cash<p.loan,'green')}</div>`:'';
   const depBtns=isCur?`<div class="acts">${btn('Gửi 10 tr',()=>{p.cash-=10*TR;p.dep+=10*TR;},p.cash<10*TR)}${btn('Gửi 100 tr',()=>{p.cash-=100*TR;p.dep+=100*TR;},p.cash<100*TR)}${btn('Rút hết',()=>{p.cash+=p.dep;p.dep=0;},!p.dep,'green')}</div>`:'';
   const insRow=M.insurance?`<h3>Bảo hiểm sức khỏe</h3><p>${p.hins?`Đang có bảo hiểm, phí ${fmt(c.insPrem)}/tháng, chi trả 80% viện phí.`:'Chưa có bảo hiểm. Một lần nằm viện có thể tốn 30–90 tr.'}</p>${isCur?`<div class="acts">${p.hins?btn('Hủy bảo hiểm',()=>{p.hins=false;}):btn('Mua bảo hiểm',()=>{p.hins=true;log('Mua bảo hiểm sức khỏe',p);},false,'green')}</div>`:''}`:'';
   openViewer({tone:'payday',key:'st:'+p.id,eyebrow:`Báo cáo tài chính · ${p.retired?'Nghỉ hưu':p.prof} · ${Math.floor(p.age)} tuổi${p.bot?' · máy':''}`,title:esc(p.name),inl,
@@ -877,10 +936,16 @@ function showStatement(p){
     <h3>Diễn biến</h3>${sparkHTML()}
     <h3>Tiết kiệm ngân hàng</h3><p>Đang gửi <b class="num">${fmt(p.dep)}</b>, lãi ${pct(DEP_RATE,0)}/năm, rút được bất cứ lúc nào. Lãi tiết kiệm tính là thu nhập thụ động.</p>${depBtns}
     ${insRow}
-    <h3>Tài sản</h3><table>${assetRows}</table>
+    <h3>Tài sản</h3>${isCur?'<p class="lesson">Bán ngay cho môi giới thì nhanh nhưng rẻ hơn giá người mua trên thẻ Thị trường. Bấm lần hai để xác nhận.</p>':buyer?`<p class="lesson">${esc(buyer.name)} có thể hỏi mua tài sản của ${esc(p.name)} theo giá thị trường ×1, ×1,1 hoặc ×1,25. Trả giá càng cao càng dễ được đồng ý; người mua nhận luôn khoản vay còn lại.</p>`:''}<table>${assetRows}</table>${isCur?buyNowHTML(p,btn):''}
     <h3>Nợ cá nhân</h3><table>${liabRows}</table>${loanBtns}${achHTML(p)}</div>`});
   drawSpark(p);
 }
+function buyNowHTML(p,btn){
+  const rows=SYMS.map(sym=>{const px=stockAsk(sym);return `<tr><td>${sym}<br><small>${esc(STOCKS[sym].n)} · cổ tức ${pct(STOCKS[sym].div/px)}/năm</small><div class="acts">${[100,1000].map(n=>btn(`+${n} cp`,()=>quickBuy(p,'stock',sym,n),p.cash<n*px*(1+STK_FEE))).join('')}</div></td><td>${fmtD(px)}</td></tr>`;}).join('');
+  const gold=Math.round(GOLD_REF*QUICK.goldBuy),btc=Math.round(btcPrice()*QUICK.buy);
+  return `<h3>Mua ngay trên sàn</h3><p class="lesson">Giá khớp lệnh cao hơn giá tham chiếu 2–3%. Muốn giá tốt hơn, hãy chờ thẻ Cơ hội.</p><table>${rows}
+    <tr><td>Vàng nhẫn<br><small>giá mua ${fmt(gold)}/chỉ</small><div class="acts">${[1,10].map(n=>btn(`+${n} chỉ`,()=>quickBuy(p,'gold',null,n),p.cash<n*gold)).join('')}</div></td><td>${fmt(gold)}</td></tr>
+    <tr><td>Bitcoin<br><small>giá mua ${fmt(btc)}/BTC</small><div class="acts">${[.01,.1].map(n=>btn(`+${trimNum(n,2)} BTC`,()=>quickBuy(p,'crypto',null,n),p.cash<n*btc)).join('')}</div></td><td>${fmt(btc)}</td></tr></table>`;}
 function achHTML(p){const ks=Object.keys(ACH);return `<h3>Thành tích (${ks.filter(k=>p.ach[k]).length}/${ks.length})</h3><div class="achs">${ks.map(k=>`<span class="ach ${p.ach[k]?'got':''}" title="${esc(ACH[k].d)}">${p.ach[k]?'★':'☆'} ${ACH[k].n}</span>`).join('')}</div>`;}
 function payOff(p,i){const l=p.liabs[i];if(p.cash<l.bal)return;p.cash-=l.bal;p.liabs.splice(i,1);toast(`${p.name} trả hết ${l.label}: chi phí giảm ${fmt(l.pay)}/tháng`,'pos');log(`Trả hết ${l.label} (${fmt(l.bal)}), giảm ${fmt(l.pay)}/tháng`,p);}
 function sparkHTML(){return `<canvas class="spark" id="spark"></canvas><div class="legend"><span><i style="background:var(--money)"></i>Thu nhập thụ động</span><span><i style="background:var(--danger)"></i>Tổng chi phí / mục tiêu</span></div>`;}
