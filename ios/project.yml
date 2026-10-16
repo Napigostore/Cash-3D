@@ -1,5 +1,6 @@
 # XcodeGen spec: `xcodegen generate` in this folder creates CashToFreedom.xcodeproj.
 # The project file itself is not kept in git, so it never needs hand-merging.
+# Build number = GitHub run number (set by .github/workflows/ios.yml), version = MARKETING_VERSION.
 name: CashToFreedom
 options:
   bundleIdPrefix: com.cashtofreedom
