@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cash to Freedom – Support</title>
+<style>
+  :root{--bg:#0b1220;--text:#e8edf6;--muted:#9fb0c8;--gold:#e9b949}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  main{max-width:720px;margin:0 auto;padding:32px 16px 64px}
+  h1{color:var(--gold);font-size:30px;margin:0 0 4px} h2{font-size:18px;margin:28px 0 6px}
+  .muted{color:var(--muted)} a{color:var(--gold)} img{width:96px;height:96px;border-radius:22px}
+  nav{margin-bottom:24px} [hidden]{display:none}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="?lang=en">English</a> · <a href="?lang=vi">Tiếng Việt</a></nav>
+<img src="icon.png" alt="">
+
+<section id="en">
+<h1>Cash to Freedom</h1>
+<p class="muted">A 3D board game about money, assets and the road to financial freedom.</p>
+<h2>How to play</h2>
+<p>Each turn is 4 months: you receive your salary, pay your expenses and roll the dice. Buy assets that put money in your pocket. When your passive income is larger than your total expenses, you escape the Grind Mill and enter the Prosperity Track. Buy your dream to win.</p>
+<h2>Frequently asked</h2>
+<p><b>Is my game saved?</b> Yes, automatically on your device. Deleting the app deletes it.</p>
+<p><b>How do I change the language?</b> Tap the EN / VI button at the top right.</p>
+<p><b>Are the stocks and prices real?</b> No. Everything is a fictional simulation for learning, not investment advice.</p>
+<h2>Contact</h2>
+<p>Report a problem or send feedback: <a href="https://github.com/Napigostore/Cash-3D/issues">GitHub issues</a>.</p>
+<p><a href="privacy.html">Privacy Policy</a></p>
+</section>
+
+<section id="vi" hidden>
+<h1>Cash to Freedom – Dòng Tiền 3D</h1>
+<p class="muted">Trò chơi bàn cờ 3D về tiền bạc, tài sản và con đường tự do tài chính.</p>
+<h2>Cách chơi</h2>
+<p>Mỗi lượt là 4 tháng: bạn nhận lương, trả chi phí rồi tung xúc xắc. Hãy mua tài sản đưa tiền vào túi. Khi thu nhập thụ động lớn hơn tổng chi phí, bạn thoát Vòng Cối Xay và bước vào Vòng Thịnh Vượng. Mua được giấc mơ là chiến thắng.</p>
+<h2>Câu hỏi thường gặp</h2>
+<p><b>Ván chơi có được lưu không?</b> Có, tự động trên máy của bạn. Xóa ứng dụng sẽ xóa ván chơi.</p>
+<p><b>Đổi ngôn ngữ thế nào?</b> Bấm nút EN / VI ở góc trên bên phải.</p>
+<p><b>Cổ phiếu, giá cả có thật không?</b> Không. Tất cả là mô phỏng để học, không phải khuyến nghị đầu tư.</p>
+<h2>Liên hệ</h2>
+<p>Báo lỗi hoặc góp ý: <a href="https://github.com/Napigostore/Cash-3D/issues">GitHub issues</a>.</p>
+<p><a href="privacy.html?lang=vi">Chính sách quyền riêng tư</a></p>
+</section>
+</main>
+<script>
+  if (new URLSearchParams(location.search).get('lang') === 'vi') {
+    document.getElementById('en').hidden = true; document.getElementById('vi').hidden = false; document.documentElement.lang = 'vi';
+  }
+</script>
+</body>
+</html>
