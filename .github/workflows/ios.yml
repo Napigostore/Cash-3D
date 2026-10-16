@@ -92,6 +92,15 @@ jobs:
           X=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
           if [ -z "$X" ]; then echo "::error title=Xcode::No Xcode 26 on this runner"; exit 1; fi
           sudo xcode-select -s "$X"
+      # Fails fast, with a readable reason, when the API key secrets are wrong or the app record is missing.
+      - name: Check App Store Connect access
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          python3 -m pip install --quiet --break-system-packages pyjwt cryptography
+          python3 tools/asc_check.py
       - name: Build the web game (vi + en)
         run: python3 tools/build_web.py
       - name: Install XcodeGen
