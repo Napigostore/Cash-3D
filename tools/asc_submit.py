@@ -56,9 +56,10 @@ def main(version_string):
     call('PATCH', f'/v1/appStoreVersions/{version["id"]}/relationships/build', {'data': {'type': 'builds', 'id': build['id']}})
     print('build', build['attributes']['version'], 'attached')
 
-    # App Review details: the game has no accounts, so no demo login; notes tell the reviewer what to expect.
+    # App Review details: no demo login needed (the game is fully playable offline); notes tell the reviewer what to expect.
     detail = call('GET', f'/v1/appStoreVersions/{version["id"]}/appStoreReviewDetail').get('data')
-    notes = ('No account or sign-in is needed; the game is fully offline and stores progress on the device only. '
+    notes = ('No account is needed to play; progress is stored on the device. Online play is optional: Start screen → '
+             '"Play online" → Sign in with Apple (or email), then create a room and add bots; Delete account is in the online lobby. '
              'Tap "Start a new game" (1 player vs 3 bots by default), then "Roll the dice". It is an educational board game about '
              'personal finance: all prices, stocks and companies are fictional simulations, no ads. Round 1 is free; PRO (monthly or yearly auto-renewable subscription, or a lifetime non-consumable) unlocks round 2 and the expert advisor. The purchase sheet opens from the crown button (top right), the Free time tile, or when a player reaches financial freedom; it has Restore and links to the Terms of Use and Privacy Policy. '
              'The app is in English or Vietnamese following the device language; the EN/VI button at the top right switches it.')
@@ -70,13 +71,20 @@ def main(version_string):
              'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version['id']}}}}})
     print('review details: no sign-in required, notes set')
 
-    # In-app purchases (Cash to Freedom PRO): a first one can only be reviewed together with an app version.
-    for iap in call('GET', f'/v1/apps/{app_id}/inAppPurchasesV2?limit=50')['data']:
-        state = iap['attributes'].get('state')
-        print('in-app purchase', iap['attributes'].get('productId'), state)
-        if state in ('READY_TO_SUBMIT', 'DEVELOPER_ACTION_NEEDED', 'REJECTED'):
-            call_ok('POST', '/v1/inAppPurchaseSubmissions', {'data': {'type': 'inAppPurchaseSubmissions', 'relationships': {
-                'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iap['id']}}}}}, allow=(400, 403, 409, 422))
+    # Privacy policy on the app information: URL and a short text, in every language (Apple now asks for both).
+    infos = call('GET', f'/v1/apps/{app_id}/appInfos')['data']
+    info = next((i for i in infos if i['attributes'].get('appStoreState') != 'READY_FOR_SALE'), infos[0])
+    for loc in call('GET', f'/v1/appInfos/{info["id"]}/appInfoLocalizations')['data']:
+        vi = loc['attributes']['locale'].startswith('vi')
+        url = 'https://napigostore.github.io/Cash-3D/docs/privacy.html' + ('?lang=vi' if vi else '')
+        text = (('Chơi offline không cần tài khoản. Khi chọn chơi trực tuyến, chúng tôi lưu tên hiển thị, email, bạn bè và phòng chơi '
+                 'trên Firebase để vận hành trận đấu; bạn có thể xóa tài khoản trong game. Thanh toán PRO qua Apple. Chi tiết: ')
+                if vi else
+                ('Offline play needs no account. If you play online we store your display name, email, friends and game rooms on '
+                 'Firebase to run matches; you can delete your account in the game. PRO is paid through Apple. Details: ')) + url
+        call_ok('PATCH', f'/v1/appInfoLocalizations/{loc["id"]}', {'data': {'type': 'appInfoLocalizations', 'id': loc['id'],
+                'attributes': {'privacyPolicyUrl': url, 'privacyPolicyText': text}}}, allow=(409,))
+    print('privacy policy set for', len(infos), 'app info(s)')
 
     # One review submission for the app, holding the version.
     open_ones = call('GET', f'/v1/apps/{app_id}/reviewSubmissions?filter[platform]=IOS&filter[state]=READY_FOR_REVIEW,UNRESOLVED_ISSUES')['data']
@@ -92,6 +100,14 @@ def main(version_string):
             'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': submission['id']}},
             'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version['id']}}}}})
     print('review submission', submission['id'], 'holds the version')
+
+    # In-app purchases (PRO lifetime): the first one goes in together with the version already in the submission.
+    for iap in call('GET', f'/v1/apps/{app_id}/inAppPurchasesV2?limit=50')['data']:
+        state = iap['attributes'].get('state')
+        print('in-app purchase', iap['attributes'].get('productId'), state)
+        if state in ('READY_TO_SUBMIT', 'DEVELOPER_ACTION_NEEDED', 'REJECTED'):
+            call_ok('POST', '/v1/inAppPurchaseSubmissions', {'data': {'type': 'inAppPurchaseSubmissions', 'relationships': {
+                'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iap['id']}}}}}, allow=(400, 403, 409, 422))
 
     # Subscriptions (PRO monthly / yearly): a first group goes in together with the version being submitted.
     for group in call('GET', f'/v1/apps/{app_id}/subscriptionGroups')['data']:
