@@ -5,6 +5,7 @@ name: iOS
 #  - Run by hand with the boxes ticked, or push a commit whose message contains the tag:
 #      [testflight]  sign and upload a build to App Store Connect / TestFlight
 #      [listing]     take screenshots on the 6.9" iPhone simulator and upload texts + screenshots (ios/fastlane)
+#      [pro]         create or update the PRO subscriptions and lifetime purchase (tools/asc_pro.py)
 #      [submit]      attach the newest processed build and submit the version for App Review
 #
 # Secrets (repository Settings Ã¢â€ â€™ Secrets and variables Ã¢â€ â€™ Actions):
