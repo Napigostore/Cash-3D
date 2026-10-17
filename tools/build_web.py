@@ -23,7 +23,7 @@ USD = 2500
 # The game file is a body fragment (as published on claude.ai); the app needs a full document.
 SKELETON = ('<!doctype html><html lang="vi"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">'
-            '<style>html,body{margin:0;background:#0b1220;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}#onlineBtn{display:none!important}</style></head>\n')
+            '<style>html,body{margin:0;background:#0b1220;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}</style></head>\n')
 
 # Exact source snippets swapped before the phrase pass (multi-word tile labels, number formatting, locale).
 PRE = [

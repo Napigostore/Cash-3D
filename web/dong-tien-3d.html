@@ -1022,7 +1022,7 @@ function showSummary(){
 
 /* ================= turn flow ================= */
 function startTurn(){
-  const p=curP();G.phase='busy';renderHUD();focusOn(p);save();
+  const p=curP();G.phase='busy';if(isOnline()){G.turnAt=Date.now();G.takeover=0;}renderHUD();focusOn(p);save();
   const seq=[];
   if(G.news&&!G.news.seen)seq.push(done=>showNews(done));
   if(G.swan&&!G.swan.seen)seq.push(done=>showSwan(done));
@@ -1081,6 +1081,7 @@ function endTurn(){
   nextTurn();
 }
 function nextTurn(){
+  if(G&&G.players)G.players.forEach(q=>{if(q.tmpBot){q.bot=false;q.tmpBot=false;}});
   const p=curP();p.hist.push(snapHist(p));if(p.hist.length>120)p.hist.shift();
   if(!G.players.some(q=>!q.won&&!q.out)){save();showSummary();return;}
   let i=G.cur;do{i=(i+1)%G.players.length;if(i===0){G.turn++;const m0=G.month;G.month+=mpt();if(Math.floor(G.month/12)>Math.floor(m0/12))newYear();}}while(G.players[i].won||G.players[i].out);
@@ -1720,7 +1721,7 @@ function showSetup(resume){
       <input id="pname${i}" value="${esc(d.name)}" maxlength="16" aria-label="Tên người chơi ${i+1}">
       <div class="meta"><button class="pill ${d.bot?'botpill':''}" data-bot="${i}">${d.bot?'Máy tự chơi':'Người chơi'} ⇄</button>${d.bot?`<button class="pill botpill" data-lvl="${i}">${BOT_LVL[d.botLvl].n} ↻</button>`:''}<button class="pill pickpill" data-prof="${i}">Nghề: <b>${pr.n}</b> ▾</button><span class="pill">${draftScen==='grad'?22:pr.age} tuổi</span><span class="pill">Lương <b>${fmt(T(pr.sal))}</b></span><span class="pill">Dư/tháng <b>${sgn(net)}</b></span><button class="pill pickpill" data-dream="${i}">Ước mơ: <b>${esc(DREAMS[d.dreamId].n)}</b> ▾</button></div></div></div>`;}).join('')}
     <button class="btn primary" id="startBtn" style="width:100%;margin-top:10px">Bắt đầu ván mới</button>
-    <button class="btn" id="onlineBtn" style="width:100%;margin-top:8px">Chơi trực tuyến · tìm bạn chơi</button>
+    ${onlineReady()?'<button class="btn" id="onlineBtn" style="width:100%;margin-top:8px">Chơi trực tuyến · tìm bạn chơi</button>':''}
     <div class="howto"><b>Cách chơi nhanh.</b> Mỗi lượt là 4 tháng: bạn nhận lương, trả chi phí, rồi tung xúc xắc. Ô <b>Cơ hội</b> cho bạn mua tài sản; mỗi thương vụ có bảng tính dòng tiền và lợi suất. Ô <b>Thưởng giữa năm</b> và <b>Thưởng Tết</b> cho thêm tiền khi đi qua. Khi thu nhập thụ động lớn hơn tổng chi phí, bạn sang <b>Vòng Thịnh Vượng</b>. Bấm <b>?</b> để xem luật đầy đủ.</div></div>`;};
   render();
   s.onclick=e=>{const b=e.target.closest('button');if(!b)return;syncNames();
@@ -1990,14 +1991,31 @@ async function signInEmail(create){await fbInit();const em=$('#olEmail').value.t
   catch(e){toast(authMsg(e),'neg');}}
 function authMsg(e){const m={'auth/invalid-email':'Email không hợp lệ.','auth/weak-password':'Mật khẩu cần ít nhất 6 ký tự.','auth/email-already-in-use':'Email này đã có tài khoản, hãy đăng nhập.','auth/invalid-credential':'Sai email hoặc mật khẩu.','auth/wrong-password':'Sai mật khẩu.','auth/user-not-found':'Chưa có tài khoản với email này.'};return m[e.code]||e.message;}
 
+/* ---- Đăng nhập với Apple (ứng dụng iOS) ---- */
+const appleBridge=()=>window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.apple;
+let appleWait=null;
+window.onNativeApple=r=>{const w=appleWait;appleWait=null;if(w)w(r||{error:'Không có phản hồi'});};
+const nativeApple=()=>new Promise(res=>{appleWait=res;appleBridge().postMessage({action:'signin'});});
+async function signInApple(){try{await fbInit();const r=await nativeApple();if(r.error){if(r.error!=='cancel')toast('Đăng nhập Apple thất bại: '+r.error,'neg');return;}
+  const cred=new firebase.auth.OAuthProvider('apple.com').credential({idToken:r.idToken,rawNonce:r.rawNonce});const c=await FB.auth.signInWithCredential(cred);
+  if(r.name&&!c.user.displayName)await c.user.updateProfile({displayName:r.name});await ensureUser(c.user);toast('Đã đăng nhập','pos');}catch(e){toast(authMsg(e),'neg');}}
+/* Apple yêu cầu cho xóa tài khoản ngay trong ứng dụng */
+async function deleteAccount(){if(!ME)return;if(!confirm('Xóa vĩnh viễn tài khoản trực tuyến, danh sách bạn bè và lời mời? Ván chơi trên máy này vẫn giữ nguyên.'))return;
+  const apple=ME.providerData.some(x=>x.providerId==='apple.com');
+  try{if(apple&&appleBridge()){const r=await nativeApple();if(r.error)return;await ME.reauthenticateWithCredential(new firebase.auth.OAuthProvider('apple.com').credential({idToken:r.idToken,rawNonce:r.rawNonce}));
+      if(r.code&&FB.auth.revokeAccessToken)await FB.auth.revokeAccessToken(r.code).catch(()=>{});}
+    else if(!apple){const pw=prompt('Nhập mật khẩu để xác nhận xóa tài khoản');if(!pw)return;await ME.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(ME.email,pw));}
+    if(roomData)await leaveRoom();const ref=FB.db.collection('users').doc(ME.uid);const inv=await ref.collection('invites').get().catch(()=>null);if(inv)for(const d of inv.docs)await d.ref.delete().catch(()=>{});
+    await ref.delete().catch(()=>{});await ME.delete();ME=null;meDoc=null;toast('Đã xóa tài khoản','pos');closeViewer();}
+  catch(e){toast(authMsg(e),'neg');}}
 /* ---- màn hình trực tuyến ---- */
 let olMode='easy',olTab='login';
 async function showOnline(){
   if(!onlineReady())return openViewer({tone:'market',key:'ol:none',eyebrow:'Chơi trực tuyến',title:'Chưa bật máy chủ',body:`<p>Bản này chưa được gắn dự án Firebase. Chủ trò chơi cần điền cấu hình Firebase vào game để mở tính năng tìm bạn chơi.</p>`});
   try{await fbInit();}catch(e){return openViewer({tone:'market',key:'ol:err',eyebrow:'Chơi trực tuyến',title:'Không kết nối được',body:`<p>${esc(e.message)}. Kiểm tra kết nối mạng rồi thử lại.</p>`});}
-  if(!ME){const inl=[signInGoogle,()=>signInEmail(false),()=>signInEmail(true),()=>{olTab=olTab==='login'?'reg':'login';showOnline();}];
+  if(!ME){const inl=[appleBridge()?signInApple:signInGoogle,()=>signInEmail(false),()=>signInEmail(true),()=>{olTab=olTab==='login'?'reg':'login';showOnline();}];
     return openViewer({tone:'market',key:'ol:login',eyebrow:'Chơi trực tuyến',title:'Đăng nhập để tìm bạn chơi',inl,body:`<div class="olbox">
-      <button class="btn gbtn" data-i="0"><span class="g">G</span> Đăng nhập bằng Google</button>
+      ${appleBridge()?'<button class="btn" data-i="0" style="background:#fff;color:#000;font-weight:700"> Đăng nhập với Apple</button>':'<button class="btn gbtn" data-i="0"><span class="g">G</span> Đăng nhập bằng Google</button>'}
       <div class="ordiv"><span>hoặc dùng email</span></div>
       ${olTab==='reg'?'<input id="olName" class="olin" placeholder="Tên hiển thị" maxlength="16">':''}
       <input id="olEmail" class="olin" type="email" placeholder="Email" autocomplete="email">
@@ -2006,7 +2024,7 @@ async function showOnline(){
       <button class="btn" data-i="3">${olTab==='reg'?'Đã có tài khoản? Đăng nhập':'Chưa có tài khoản? Tạo mới'}</button></div>`});}
   if(roomData&&roomData.status==='open')return showRoom();
   const fr=await loadFriends();const inv=await loadInvites();
-  const inl=[quickMatch,()=>createRoom(false),joinByCode,addFriend,async()=>{await FB.auth.signOut();ME=null;showOnline();}];
+  const inl=[quickMatch,()=>createRoom(false),joinByCode,addFriend,async()=>{await FB.auth.signOut();ME=null;showOnline();},deleteAccount];
   const fRows=fr.map(f=>{inl.push(()=>inviteFriend(f));return `<div class="row"><span class="dot" style="background:${isOnlineTs(f.lastSeen)?'var(--money)':'var(--muted)'}"></span><div class="grow">${esc(f.name)}<small>${isOnlineTs(f.lastSeen)?'Đang trực tuyến':'Ngoại tuyến'} · ${esc(f.email)}</small></div><button class="btn sm" data-i="${inl.length-1}">Mời</button></div>`;}).join('');
   const iRows=inv.map(v=>{inl.push(()=>acceptInvite(v));return `<div class="row"><div class="grow"><b>${esc(v.fromName)}</b> mời bạn vào phòng ${esc(v.code)}<small>${MODES[v.mode]?MODES[v.mode].n:''}</small></div><button class="btn sm green" data-i="${inl.length-1}">Vào</button></div>`;}).join('');
   inl.push(()=>{olMode='easy';showOnline();});inl.push(()=>{olMode='hard';showOnline();});const mi=inl.length-2;
@@ -2017,7 +2035,8 @@ async function showOnline(){
     <span class="lbl">Vào phòng bằng mã</span><div class="olrow"><input id="olCode" class="olin" placeholder="Mã 6 ký tự" maxlength="6" style="text-transform:uppercase"><button class="btn" data-i="2">Vào</button></div>
     <span class="lbl">Bạn bè</span><div class="olrow"><input id="olFriend" class="olin" type="email" placeholder="Email của bạn bè"><button class="btn" data-i="3">Thêm</button></div>
     <div class="rows">${fRows||'<p style="color:var(--muted)">Chưa có bạn bè. Thêm bằng email họ đã dùng để đăng nhập.</p>'}</div>
-    <div class="acts"><button class="btn" data-i="4">Đăng xuất</button></div>`});}
+    <p class="lesson">Mỗi lượt chơi trực tuyến có ${TURN_LIMIT} giây. Hết giờ, máy chơi thay lượt đó; quá giờ 3 lần, máy chơi thay luôn.</p>
+    <div class="acts"><button class="btn" data-i="4">Đăng xuất</button><button class="btn" data-i="5" style="color:var(--danger)">Xóa tài khoản</button></div>`});}
 async function loadFriends(){if(!meDoc||!meDoc.friends||!meDoc.friends.length)return [];const out=[];for(const id of meDoc.friends.slice(0,30)){const s=await FB.db.collection('users').doc(id).get();if(s.exists)out.push({id,...s.data()});}return out;}
 async function loadInvites(){const q=await FB.db.collection('users').doc(ME.uid).collection('invites').orderBy('at','desc').limit(5).get().catch(()=>null);return q?q.docs.map(d=>({id:d.id,...d.data()})):[];}
 function watchInvites(){if(invUnsub)invUnsub();invUnsub=FB.db.collection('users').doc(ME.uid).collection('invites').onSnapshot(s=>{s.docChanges().forEach(c=>{if(c.type==='added'){const v=c.doc.data();if(v.at&&v.at.toMillis&&Date.now()-v.at.toMillis()<120000)toast(`${v.fromName} mời bạn chơi (phòng ${v.code})`,'pos');}});});}
@@ -2065,10 +2084,24 @@ function pickOnline(kind,i){const s=roomData.seats[i];
   if(kind==='dream'){const inl=DREAMS.map((d,k)=>()=>{updSeat((x,j)=>j===i?{...x,dreamId:k}:null);showRoom();});pendingJingle=null;return openViewer({tone:'ft',key:'ol:pick',eyebrow:'Phòng',title:'Chọn ước mơ',inl,body:`<div class="dreamgrid">${DREAMS.map((d,k)=>`<button class="dreamc ${s.dreamId===k?'on':''}" data-i="${k}">${art(DREAM_ART[d.a])}<b>${d.n}</b><small>${fmt(d.c)}</small></button>`).join('')}</div>`});}
   avatarPicker({zod:s.zod,col:s.col,char:s.char},v=>{updSeat((x,j)=>j===i?{...x,...v}:null);FB.db.collection('users').doc(ME.uid).update({char:v.char,zod:v.zod}).catch(()=>{});showRoom();},i);}
 async function startOnlineGame(){const r=roomData;const ids=[...new Set(r.seats.map(s=>s.dreamId))];while(ids.length<4){const k=Math.floor(Math.random()*DREAMS.length);if(!ids.includes(k))ids.push(k);}
-  const g={v:STATE_V,mode:r.mode,scenario:'normal',quiz:true,dreams:ids.slice(0,4).map(k=>DREAMS[k]),players:[],cur:0,turn:1,month:0,phase:'await',log:[],stockIdx:1,rateAdj:0,btcIdx:1,cyc:{land:'normal',re:'normal',stock:'normal'},online:{room:r.id,host:r.host}};
+  const g={v:STATE_V,mode:r.mode,scenario:'normal',quiz:false,dreams:ids.slice(0,4).map(k=>DREAMS[k]),players:[],cur:0,turn:1,month:0,phase:'await',log:[],stockIdx:1,rateAdj:0,btcIdx:1,cyc:{land:'normal',re:'normal',stock:'normal'},online:{room:r.id,host:r.host}};
   G=g;G.players=r.seats.map((s,i)=>{const p=newPlayer(i,{...s,dream:Math.max(0,ids.indexOf(s.dreamId))},PROFS[s.prof],s.name,'normal');p.uid=s.uid;return p;});
   G.players.forEach(p=>log(`Bắt đầu ${Math.floor(p.age)} tuổi: ${p.prof}, lương ${fmt(p.salary)}`,p));
   await FB.db.collection('rooms').doc(r.id).update({status:'playing',state:JSON.stringify(G),rev:1,updated:now()});}
+/* ---- giới hạn thời gian mỗi lượt khi chơi trực tuyến ---- */
+const TURN_LIMIT=90,AFK_MAX=3;
+let turnPill=null,warned=0;
+function turnClock(){if(!isOnline()||!G.players||!curP()||!G.turnAt||curP().bot){if(turnPill)turnPill.hidden=true;return;}
+  if(!turnPill){turnPill=document.createElement('div');turnPill.id='turnPill';turnPill.style.cssText='position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 30px);z-index:60;padding:4px 12px;border-radius:999px;font:700 13px var(--f-mono,monospace);background:#0f1a2e;border:1px solid var(--line);color:#fff;pointer-events:none';document.body.appendChild(turnPill);}
+  const left=Math.max(0,Math.ceil(TURN_LIMIT-(Date.now()-G.turnAt)/1000)),mine=iControl();turnPill.hidden=false;
+  turnPill.textContent=`⏱ ${left}s · ${mine?'lượt của bạn':'lượt của '+curP().name}`;turnPill.style.borderColor=left<=15?'#ff4d4d':'var(--line)';turnPill.style.color=left<=15?'#ffb3b3':'#fff';
+  if(mine&&left<=10&&warned!==G.turnAt){warned=G.turnAt;toast('Còn 10 giây! Hết giờ máy sẽ chơi thay lượt này','neg');sfx('pay');}
+  if(ME&&G.online.host===ME.uid&&!G.takeover&&left<=0&&Date.now()-G.turnAt>(TURN_LIMIT+4)*1000)takeover();}
+/* chủ phòng cho máy chơi thay người hết giờ */
+function takeover(){const p=curP();if(!p||p.bot)return;p.afk=(p.afk||0)+1;p.bot=true;p.tmpBot=p.afk<AFK_MAX;G.takeover=1;
+  toast(p.tmpBot?`${p.name} hết giờ, máy chơi thay lượt này`:`${p.name} hết giờ ${AFK_MAX} lần, máy chơi thay từ nay`,'neg');log(p.tmpBot?'Hết giờ, máy chơi thay lượt này':'Hết giờ nhiều lần, máy chơi thay',p);
+  closeModal();closeViewer();if(G.phase==='roll'){save();roll(p.ft?(p.charity>0?3:2):(p.charity>0?2:1),true);}else endTurn();}
+setInterval(turnClock,500);
 /* ---- đồng bộ ván ---- */
 const isOnline=()=>!!(G&&G.online);
 function controllerOf(p){return p.bot?G.online.host:p.uid;}

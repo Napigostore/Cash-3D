@@ -7,6 +7,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
     private static let background = UIColor(red: 0.043, green: 0.071, blue: 0.125, alpha: 1)
     private static let languageKey = "language"
     private let pro = ProStore()
+    private let apple = AppleSignIn()
 
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
@@ -19,6 +20,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
         config.mediaTypesRequiringUserActionForPlayback = []
         config.userContentController.add(LanguageHandler(owner: self), name: "lang")
         config.userContentController.add(ProHandler(owner: self), name: "pro")
+        config.userContentController.add(AppleHandler(owner: self), name: "apple")
 
         webView = WKWebView(frame: .zero, configuration: config)
         webView.isOpaque = false
@@ -62,6 +64,14 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
             case "restore": sendProState(error: await pro.restore())
             default: sendProState()
             }
+        }
+    }
+
+    func signInWithApple() {
+        apple.anchor = view.window
+        apple.start { [weak self] result in
+            let data = (try? JSONSerialization.data(withJSONObject: result)) ?? Data("{}".utf8)
+            self?.webView.evaluateJavaScript("window.onNativeApple&&window.onNativeApple(\(String(decoding: data, as: UTF8.self)))")
         }
     }
 
@@ -143,6 +153,16 @@ private final class ProHandler: NSObject, WKScriptMessageHandler {
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
         let body = message.body as? [String: Any]
         owner?.handlePro(body?["action"] as? String ?? "status", id: body?["id"] as? String ?? "")
+    }
+}
+
+/// Receives Sign in with Apple requests (webkit.messageHandlers.apple) from the online lobby.
+private final class AppleHandler: NSObject, WKScriptMessageHandler {
+    weak var owner: GameViewController?
+    init(owner: GameViewController) { self.owner = owner }
+
+    func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
+        owner?.signInWithApple()
     }
 }
 

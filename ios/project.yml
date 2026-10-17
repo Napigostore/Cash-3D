@@ -28,6 +28,11 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "5.0"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    # Sign in with Apple for online play. The App ID needs the capability too (developer.apple.com → Identifiers).
+    entitlements:
+      path: CashToFreedom/CashToFreedom.entitlements
+      properties:
+        com.apple.developer.applesignin: [Default]
     info:
       path: CashToFreedom/Info.plist
       properties:

@@ -138,6 +138,9 @@ jobs:
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
             archive > archive.log 2>&1 || report archive.log
           grep -q "ARCHIVE SUCCEEDED" archive.log || report archive.log
+          # An unsigned app carries no entitlements and the export signs with the ones it finds in the app:
+          # an ad-hoc signature with them keeps Sign in with Apple in the uploaded build.
+          codesign -f -s - --entitlements CashToFreedom/CashToFreedom.entitlements "$RUNNER_TEMP/$APP.xcarchive/Products/Applications/$APP.app"
 
           cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
           <?xml version="1.0" encoding="UTF-8"?>
