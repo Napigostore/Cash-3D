@@ -50,6 +50,10 @@ def warn(message):
     print('::warning title=PRO products::' + message.replace('%', '%25').replace('\n', '%0A'))
 
 
+def note(message):
+    print('::notice title=PRO products::' + message.replace('%', '%25').replace('\n', '%0A'))
+
+
 def pages(path):
     out = []
     while path:
@@ -119,7 +123,7 @@ def subscriptions(app_id, territories, data):
         old = req('GET', f'/v1/subscriptions/{sid}/appStoreReviewScreenshot', allow=(404,))
         if not (old and old.get('data')):
             upload('subscriptionAppStoreReviewScreenshots', 'subscription', 'subscriptions', sid, data)
-        print(pid, req('GET', f'/v1/subscriptions/{sid}')['data']['attributes'].get('state'))
+        note(f"{pid}: {req('GET', f'/v1/subscriptions/{sid}')['data']['attributes'].get('state')}")
 
 
 def lifetime(app_id, territories, data):
@@ -159,7 +163,7 @@ def lifetime(app_id, territories, data):
     old = req('GET', f'/v2/inAppPurchases/{iid}/appStoreReviewScreenshot', allow=(404,))
     if not (old and old.get('data')):
         upload('inAppPurchaseAppStoreReviewScreenshots', 'inAppPurchaseV2', 'inAppPurchases', iid, data)
-    print(pid, req('GET', f'/v2/inAppPurchases/{iid}')['data']['attributes'].get('state'))
+    note(f"{pid}: {req('GET', f'/v2/inAppPurchases/{iid}')['data']['attributes'].get('state')}")
 
 
 def main(screenshot):
@@ -171,6 +175,14 @@ def main(screenshot):
             step(app_id, territories, data)
         except Exception as e:  # the app ships either way
             warn(f'{step.__name__}: {str(e)[-1200:]}')
+    # what App Store Connect now holds
+    subs = []
+    for g in req('GET', f'/v1/apps/{app_id}/subscriptionGroups')['data']:
+        subs += [f"{x['attributes'].get('productId')}={x['attributes'].get('state')}"
+                 for x in req('GET', f'/v1/subscriptionGroups/{g["id"]}/subscriptions')['data']]
+    iaps = [f"{x['attributes'].get('productId')}={x['attributes'].get('state')}"
+            for x in req('GET', f'/v1/apps/{app_id}/inAppPurchasesV2?limit=50')['data']]
+    note('In App Store Connect: subscriptions ' + (', '.join(subs) or 'none') + ' | in-app purchases ' + (', '.join(iaps) or 'none'))
 
 
 if __name__ == '__main__':

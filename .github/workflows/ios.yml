@@ -29,6 +29,10 @@ on:
         description: Take screenshots and upload the App Store listing
         type: boolean
         default: false
+      pro:
+        description: Create or update the PRO subscriptions and lifetime purchase
+        type: boolean
+        default: false
       submit:
         description: Submit the prepared version for App Review
         type: boolean
@@ -231,6 +235,45 @@ jobs:
           python3 tools/asc_pro.py ios/fastlane/iap/pro.png
           python3 tools/asc_listing.py "$(grep -E 'MARKETING_VERSION' ios/project.yml | grep -oE '[0-9][0-9.]*')"
           echo "::notice title=Listing::App Store texts and screenshots uploaded for vi and en-US."
+
+  pro:
+    # Only the PRO products: a screenshot of the purchase sheet on the simulator, then tools/asc_pro.py.
+    if: ${{ inputs.pro || contains(github.event.head_commit.message, '[pro]') }}
+    needs: build
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - name: Use Xcode 26
+        run: |
+          X=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          sudo xcode-select -s "$X"
+      - name: Build the web game (vi + en)
+        run: python3 tools/build_web.py
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        working-directory: ios
+        run: xcodegen generate
+      - name: Screenshot of the PRO sheet
+        working-directory: ios
+        run: |
+          DEVICE=$(xcrun simctl list devices available | grep -E "iPhone 1[6-9] Pro Max" | tail -1 | sed -E 's/.*\(([0-9A-F-]{36})\).*/\1/')
+          xcrun simctl boot "$DEVICE"
+          xcodebuild -project $APP.xcodeproj -scheme $APP -configuration Debug -sdk iphonesimulator \
+            -destination "id=$DEVICE" -derivedDataPath sim CODE_SIGNING_ALLOWED=NO build > sim.log 2>&1 || { tail -40 sim.log; exit 1; }
+          xcrun simctl install "$DEVICE" sim/Build/Products/Debug-iphonesimulator/$APP.app
+          mkdir -p fastlane/iap
+          xcrun simctl launch "$DEVICE" $BUNDLE_ID -AppleLanguages "(en)" -demo pro
+          sleep 16
+          xcrun simctl io "$DEVICE" screenshot fastlane/iap/pro.png
+      - name: Create the PRO products
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          python3 -m pip install --quiet --break-system-packages pyjwt cryptography
+          python3 tools/asc_pro.py ios/fastlane/iap/pro.png
 
   submit:
     # With [testflight] in the same run, waits for that upload and submits it once Apple has processed it.
