@@ -55,10 +55,10 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
         webView.evaluateJavaScript("window.proUpdate&&window.proUpdate(\(pro.stateJSON(error: error)))")
     }
 
-    func handlePro(_ action: String) {
+    func handlePro(_ action: String, id: String) {
         Task {
             switch action {
-            case "buy": sendProState(error: await pro.buy())
+            case "buy": sendProState(error: await pro.buy(id))
             case "restore": sendProState(error: await pro.restore())
             default: sendProState()
             }
@@ -95,6 +95,12 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
             return
         }
         decisionHandler(.allow)
+    }
+
+    // Links with target="_blank" (terms of use, privacy policy) open in Safari.
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for action: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        if let url = action.request.url, url.scheme == "https" { UIApplication.shared.open(url) }
+        return nil
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
@@ -135,8 +141,8 @@ private final class ProHandler: NSObject, WKScriptMessageHandler {
     init(owner: GameViewController) { self.owner = owner }
 
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
-        let action = (message.body as? [String: Any])?["action"] as? String ?? "status"
-        owner?.handlePro(action)
+        let body = message.body as? [String: Any]
+        owner?.handlePro(body?["action"] as? String ?? "status", id: body?["id"] as? String ?? "")
     }
 }
 

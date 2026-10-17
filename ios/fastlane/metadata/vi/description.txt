@@ -15,10 +15,15 @@ CHƠI THEO CÁCH CỦA BẠN
 • Bàn cờ 3D sinh động, thành phố tài sản lớn dần, nhạc nền đổi theo tâm trạng.
 • Tiếng Việt và tiếng Anh.
 
-BẢN PRO (tùy chọn, mua một lần)
+MIỄN PHÍ CHƠI TRỌN VÒNG 1 (Vòng Cối Xay). Bản PRO mở khóa vòng 2:
+• Vòng Thịnh Vượng: IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập huyền thoại, công trình để đời.
 • Gà Vàng thành chuyên gia tài chính riêng: hỏi không giới hạn, phân tích sâu (giá trị hợp lý của thương vụ, tỷ lệ nợ, phân bổ tài sản, bước đi tiếp theo cụ thể).
 • Tư vấn sau mỗi ván: điểm mạnh, điểm yếu trong cách đầu tư của bạn.
 • Cuộc sống VIP: khởi đầu May mắn và Hạnh phúc +10, vương miện trên bảng xếp hạng, thương vụ tốt hơn một chút.
+
+Gói PRO: theo tháng, theo năm (thuê bao tự động gia hạn, không dùng thử miễn phí) hoặc trọn đời (mua một lần). Thuê bao tự gia hạn trừ khi hủy ít nhất 24 giờ trước khi hết kỳ; quản lý trong Cài đặt › Apple ID › Đăng ký.
+Điều khoản sử dụng: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Chính sách quyền riêng tư: https://napigostore.github.io/Cash-3D/docs/privacy.html
 
 Không quảng cáo. Không cần tài khoản. Chơi offline.
 

@@ -60,7 +60,7 @@ def main(version_string):
     detail = call('GET', f'/v1/appStoreVersions/{version["id"]}/appStoreReviewDetail').get('data')
     notes = ('No account or sign-in is needed; the game is fully offline and stores progress on the device only. '
              'Tap "Start a new game" (1 player vs 3 bots by default), then "Roll the dice". It is an educational board game about '
-             'personal finance: all prices, stocks and companies are fictional simulations, no ads. The only purchase is the optional non-consumable Cash to Freedom PRO (crown button, top right; also offered on the Free time tile), with Restore. '
+             'personal finance: all prices, stocks and companies are fictional simulations, no ads. Round 1 is free; PRO (monthly or yearly auto-renewable subscription, or a lifetime non-consumable) unlocks round 2 and the expert advisor. The purchase sheet opens from the crown button (top right), the Free time tile, or when a player reaches financial freedom; it has Restore and links to the Terms of Use and Privacy Policy. '
              'The app is in English or Vietnamese following the device language; the EN/VI button at the top right switches it.')
     attributes = {'demoAccountRequired': False, 'notes': notes}
     if detail:
@@ -92,6 +92,17 @@ def main(version_string):
             'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': submission['id']}},
             'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version['id']}}}}})
     print('review submission', submission['id'], 'holds the version')
+
+    # Subscriptions (PRO monthly / yearly): a first group goes in together with the version being submitted.
+    for group in call('GET', f'/v1/apps/{app_id}/subscriptionGroups')['data']:
+        subs = call('GET', f'/v1/subscriptionGroups/{group["id"]}/subscriptions')['data']
+        call_ok('POST', '/v1/subscriptionGroupSubmissions', {'data': {'type': 'subscriptionGroupSubmissions', 'relationships': {
+            'subscriptionGroup': {'data': {'type': 'subscriptionGroups', 'id': group['id']}}}}}, allow=(400, 403, 409, 422))
+        for sub in subs:
+            print('subscription', sub['attributes'].get('productId'), sub['attributes'].get('state'))
+            if sub['attributes'].get('state') in ('READY_TO_SUBMIT', 'DEVELOPER_ACTION_NEEDED', 'REJECTED'):
+                call_ok('POST', '/v1/subscriptionSubmissions', {'data': {'type': 'subscriptionSubmissions', 'relationships': {
+                    'subscription': {'data': {'type': 'subscriptions', 'id': sub['id']}}}}}, allow=(400, 403, 409, 422))
 
     call('PATCH', f'/v1/reviewSubmissions/{submission["id"]}', {'data': {'type': 'reviewSubmissions', 'id': submission['id'], 'attributes': {'submitted': True}}})
     print('::notice title=TestFlight::Submitted Cash to Freedom ' + version_string + ' (build ' + build['attributes']['version'] + ') for App Review.')

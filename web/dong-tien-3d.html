@@ -1068,13 +1068,13 @@ async function moveSteps(p,steps){
 function endTurn(){
   closeModal();const p=curP();missionsCheck();const c=calc(p);
   [...G.players].forEach(q=>checkAch(q).forEach(k=>{toast(`${q.name} đạt thành tích: ${ACH[k].n}`,'pos');log(`Thành tích: ${ACH[k].n}`,q);}));
-  if(!p.ft&&!p.out&&c.passive>c.totalExp){
+  if(!p.ft&&!p.out&&c.passive>c.totalExp&&!(needPaywall(p)&&p.ftWait&&G.turn-p.ftWait<4*G.players.length)){
     sfx('win');coinRain(40);
     const ftc=Math.max(TY,Math.round(c.passive*200/(10*TR))*10*TR);
     const go=async()=>{closeModal();p.ft=true;p.freeAge=p.age;addS(p,{happy:20},'Tự do tài chính');moment('escape','TỰ DO TÀI CHÍNH!',`${esc(p.name)} thoát Vòng Cối Xay lúc ${Math.floor(p.age)} tuổi`);chickSay('freedom',p);if(!p.bot){setMastered(p);if(G.quiz)toast(`${p.name} đã nắm vững tài sản và tiêu sản: từ nay không cần ghi sổ nữa`,'pos');}p.ftCF=ftc;p.ftStart=ftc;p.ftBase=ftc;p.ftLap=0;p.ftVentures=[];p.ftAssets=[];p.cash+=ftc;p.ftPos=0;checkAch(p);log(`Tự do tài chính lúc ${Math.floor(p.age)} tuổi! Ngày lĩnh lương ${fmt(ftc)}`,p);await hopTo(p,true);arrangeTokens();ftChooseLifestyle(p,nextTurn);};
     openModal({tone:'ft',eyebrow:'Hoàn thành vòng Người lao động',title:`${esc(p.name)} tự do tài chính lúc ${Math.floor(p.age)} tuổi!`,art:art('escape'),quote:QUOTES.ctx.free,
       body:`<p>Thu nhập thụ động <b class="num pos">${fmt(c.passive)}</b>/tháng đã vượt tổng chi phí <b class="num">${fmt(c.totalExp)}</b>. Không còn phải đi làm vì tiền.</p><div class="facts">${fact('Ngày lĩnh lương mới',fmt(ftc),'pos','= thu nhập thụ động × 200')}${fact('Mục tiêu thắng',fmt(ftc+ftGoal()))}</div><p>Ở Vòng Thịnh Vượng (vòng ngoài), mua được giấc mơ “${esc(G.dreams[p.dream].n)}” hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())} để thắng. Cẩn thận: chi tiêu phình to, kiện tụng, thuế, khủng hoảng và kèo mạo hiểm có thể đẩy bạn về lại Vòng Cối Xay.</p>`,
-      acts:[{label:'Vào Vòng Thịnh Vượng',cls:'primary',fn:go}],bot:go});
+      acts:[{label:'Vào Vòng Thịnh Vượng',cls:'primary',fn:()=>needPaywall(p)?showPaywall(p,go):go()}],bot:go});
     return;
   }
   if(p.ft&&p.ftCF>=p.ftStart+ftGoal()&&!p.won){if(S(p).legacy>=legacyNeed()){win(p,`Ngày lĩnh lương đạt ${fmt(p.ftCF)}, Di sản ${S(p).legacy}.`);return;}if(!p.legacyHint){p.legacyHint=1;toast(`${p.name} đủ dòng tiền nhưng Di sản mới ${S(p).legacy}/${legacyNeed()}: hãy làm từ thiện, xây công trình để đời`,'neg');}}
@@ -1874,7 +1874,7 @@ function askChicken(){const p=curP();if(!p||isBotTurn())return;
 /* ================= Bản PRO (mua trong ứng dụng iOS) ================= */
 /* Ứng dụng iOS báo trạng thái qua window.proUpdate({available,owned,price}). Khi App Store chưa có sản phẩm,
    available=false và mọi lời mời mua đều ẩn. Trên web, thêm #pro vào địa chỉ để thử các tính năng PRO. */
-const PROS={available:false,owned:false,price:''};
+const PROS={available:false,owned:false,price:'',plans:[]};
 const proBridge=()=>window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.pro;
 const isPro=()=>!!PROS.owned||/[#&]pro\b/.test(location.hash);
 const proOffer=()=>PROS.available&&!isPro();
@@ -1882,20 +1882,31 @@ function proPerks(p){if(p.bot||p.proPerk)return;p.pro=true;p.proPerk=1;const s=S
 window.proUpdate=st=>{const was=isPro();Object.assign(PROS,st||{});
   if(isPro()&&G&&G.players){G.players.forEach(proPerks);if(!was){if(typeof window.__proDone==='function')window.__proDone();moment('trophy','Chào mừng thành viên PRO! 👑','Gà Vàng giờ là chuyên gia tài chính riêng của bạn');save();}}
   if(st&&st.error)toast(st.error,'neg');const b=$('#proBtn');if(b)b.hidden=!(PROS.available||isPro());if(G&&G.players)renderHUD();};
-function proBuy(){const b=proBridge();if(b)b.postMessage({action:'buy'});}
+function proBuy(id){const b=proBridge();if(b)b.postMessage({action:'buy',id:id||''});}
 function proRestore(){const b=proBridge();if(b)b.postMessage({action:'restore'});}
-const PRO_PERKS=[['Gà Vàng thành chuyên gia tài chính','Hỏi không giới hạn và phân tích sâu: giá trị hợp lý của thương vụ, tỷ lệ nợ, phân bổ tài sản, bước đi tiếp theo cụ thể.'],
+const PRO_PERKS=[['Mở khóa Vòng Thịnh Vượng','IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập, công trình để đời: phần gay cấn nhất của trò chơi.'],['Gà Vàng thành chuyên gia tài chính','Hỏi không giới hạn và phân tích sâu: giá trị hợp lý của thương vụ, tỷ lệ nợ, phân bổ tài sản, bước đi tiếp theo cụ thể.'],
   ['Tư vấn sau mỗi ván','Điểm mạnh, điểm yếu trong cách đầu tư của bạn, rút ra từ cả ván chơi.'],
   ['Cuộc sống VIP','Khởi đầu với May mắn và Hạnh phúc +10, vương miện 👑 trên bảng xếp hạng.'],
   ['Lợi thế của người có cố vấn','Thương vụ tốt xuất hiện thường hơn một chút, +1 điểm xúc xắc ở các kèo lớn của Vòng Thịnh Vượng.'],
   ['Ủng hộ người làm game','Giúp Cash to Freedom tiếp tục có tính năng mới.']];
-function showPro(done){const own=isPro(),fin=()=>{window.__proDone=null;closeModal();if(done)done();};window.__proDone=fin;
-  openModal({tone:'ft',eyebrow:'Cash to Freedom PRO',title:own?'Bạn đang dùng bản PRO 👑':'Chơi như nhà đầu tư có cố vấn riêng',art:art('trophy'),
-    body:`<div class="rows">${PRO_PERKS.map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${own?'':`<p class="lesson">Mua một lần, dùng mãi trên mọi thiết bị cùng Apple ID.${PROS.price?` Giá ${esc(PROS.price)}.`:''}</p>`}`,
-    acts:own?[{label:'Tuyệt!',cls:'primary',fn:fin}]:[{label:`Mua PRO${PROS.price?' · '+PROS.price:''}`,cls:'primary',disabled:!PROS.available,fn:proBuy},{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau',fn:fin}],bot:fin});}
+const PLAN_NAME={month:'Gói tháng',year:'Gói năm',life:'Trọn đời'};
+const PLAN_UNIT={month:'/tháng',year:'/năm',life:''};
+function planActs(){const L=(PROS.plans||[]).length?PROS.plans:[{id:'',kind:'life',price:PROS.price}];
+  return L.map((x,i)=>({label:`${PLAN_NAME[x.kind]||'PRO'} · ${x.price||''}${PLAN_UNIT[x.kind]||''}`,cls:i===0?'primary':'',disabled:!PROS.available,fn:()=>proBuy(x.id)}));}
+const PRO_TERMS=()=>`<p class="lesson">Gói tháng và gói năm tự động gia hạn với cùng mức giá cho tới khi bạn hủy. Tiền được trừ vào tài khoản Apple khi xác nhận mua và ở mỗi kỳ gia hạn, trừ khi bạn tắt tự động gia hạn ít nhất 24 giờ trước khi kỳ hiện tại kết thúc. Quản lý, hủy gói trong Cài đặt › Apple ID › Đăng ký. Gói trọn đời trả một lần. <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Điều khoản sử dụng</a> · <a href="https://napigostore.github.io/Cash-3D/docs/privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a></p>`;
+function showPro(done,title){const own=isPro(),fin=()=>{window.__proDone=null;closeModal();if(done)done();};window.__proDone=fin;
+  openModal({tone:'ft',eyebrow:'Cash to Freedom PRO',title:own?'Bạn đang dùng bản PRO 👑':(title||'Chơi như nhà đầu tư có cố vấn riêng'),art:art('trophy'),
+    body:`<div class="rows">${PRO_PERKS.map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${own?'':PRO_TERMS()}`,
+    acts:own?[{label:'Tuyệt!',cls:'primary',fn:fin}]:[...planActs(),{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau',fn:fin}],bot:fin});}
+/* Vòng Thịnh Vượng là của PRO khi App Store đã bán gói (nếu chưa bán được thì vẫn mở, để không ai bị kẹt) */
+const needPaywall=p=>!p.bot&&PROS.available&&!isPro();
+function showPaywall(p,enter){window.__proDone=()=>{window.__proDone=null;closeModal();enter();};
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · PRO',title:'Bạn đã tự do tài chính! Bước tiếp theo dành cho PRO',art:art('escape'),
+    body:`<p>Phía trước là cuộc chơi của người giàu: IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập huyền thoại và những công trình để đời. Nâng cấp PRO để bước vào Vòng Thịnh Vượng.</p><div class="rows">${PRO_PERKS.slice(0,3).map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${PRO_TERMS()}`,
+    acts:[...planActs(),{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau, chơi tiếp Vòng 1',fn:()=>{window.__proDone=null;closeModal();p.ftWait=G.turn;log('Tự do tài chính, chờ nâng cấp PRO để vào Vòng Thịnh Vượng',p);nextTurn();}}],bot:enter});}
 function proAdCard(p){if(p.bot||!proOffer())return endTurn();
   openModal({tone:'opp',eyebrow:'Cơ hội · Đầu tư vào chính mình',title:'Cash to Freedom PRO',art:art('scholar'),
-    body:'<p>Người giàu đầu tư vào kiến thức trước khi đầu tư vào tài sản. Bản PRO biến Gà Vàng thành chuyên gia tài chính riêng: phân tích từng thương vụ, chỉ ra bước đi tiếp theo, tư vấn sau mỗi ván. Cuộc chơi của bạn sẽ dễ thở hơn một chút.</p>',
+    body:'<p>Người giàu đầu tư vào kiến thức trước khi đầu tư vào tài sản. Bản PRO mở Vòng Thịnh Vượng và biến Gà Vàng thành chuyên gia tài chính riêng: phân tích từng thương vụ, chỉ ra bước đi tiếp theo, tư vấn sau mỗi ván. Cuộc chơi của bạn sẽ dễ thở hơn một chút.</p>',
     lesson:'Một lời khuyên đúng lúc có thể đáng giá hơn nhiều năm tự mò mẫm.',acts:[{label:'Xem bản PRO',cls:'primary',fn:()=>showPro(endTurn)},{label:'Bỏ qua',fn:endTurn}],bot:endTurn});}
 /* chuyên gia: phân tích sâu hơn cho người chơi PRO */
 function expertGeneral(p){const c=calc(p),L=[];if(p.ft)return '';

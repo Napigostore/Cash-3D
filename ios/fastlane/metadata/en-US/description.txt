@@ -15,10 +15,15 @@ PLAY YOUR WAY
 • Animated 3D board with a growing city of the assets you own, mood-adaptive music.
 • English and Vietnamese.
 
-CASH TO FREEDOM PRO (optional, one-time purchase)
+FREE TO PLAY ROUND 1 (the Grind Mill) in full. Cash to Freedom PRO unlocks round 2:
+• The Prosperity Track: IPOs, industrial parks, new tech bets, golf, supercars, legendary collectibles and legacy projects.
 • The Golden Rooster becomes your personal financial expert: unlimited questions and deeper analysis (fair value of each deal, debt ratio, asset allocation, your next concrete step).
 • Post-game review of your strengths and weaknesses as an investor.
 • VIP life: start with +10 Luck and Happiness, a crown on the leaderboard, slightly better deals.
+
+PRO plans: Monthly, Yearly (auto-renewing subscriptions, no free trial) or Lifetime (one-time purchase). Subscriptions renew automatically unless cancelled at least 24 hours before the end of the period; manage them in Settings › Apple ID › Subscriptions.
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacy Policy: https://napigostore.github.io/Cash-3D/docs/privacy.html
 
 No ads. No account. Works offline.
 

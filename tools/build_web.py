@@ -172,7 +172,7 @@ DEMO_DRIVE = """<script>
   if(k==='deal'){showDeal(curP(),drawBig());}
   else if(k==='statement'){showStatement(curP());}
   else if(k==='rules'){showRules();}
-  else if(k==='pro'){PROS.available=true;PROS.price=PROS.price||(document.documentElement.lang==='vi'?'129.000 đ':'$4.99');showPro();}
+  else if(k==='pro'){const vi=document.documentElement.lang==='vi';PROS.available=true;PROS.plans=PROS.plans&&PROS.plans.length?PROS.plans:[{id:'m',kind:'month',price:vi?'49.000 đ':'$1.99'},{id:'y',kind:'year',price:vi?'249.000 đ':'$9.99'},{id:'l',kind:'life',price:vi?'499.000 đ':'$19.99'}];showPro();}
 })();
 </script>
 """
