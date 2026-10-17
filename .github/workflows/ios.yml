@@ -206,7 +206,13 @@ jobs:
               n=$((n+1))
             done
           done
-          ls -la fastlane/screenshots/*
+          # The PRO sheet, for the in-app purchase review screenshot (not part of the store listing).
+          mkdir -p fastlane/iap
+          xcrun simctl terminate "$DEVICE" $BUNDLE_ID 2>/dev/null || true
+          xcrun simctl launch "$DEVICE" $BUNDLE_ID -AppleLanguages "(en)" -demo pro
+          sleep 16
+          xcrun simctl io "$DEVICE" screenshot fastlane/iap/pro.png
+          ls -la fastlane/screenshots/* fastlane/iap
       - name: Keep the screenshots
         uses: actions/upload-artifact@v5
         with:
@@ -219,13 +225,14 @@ jobs:
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
         run: |
           python3 -m pip install --quiet --break-system-packages pyjwt cryptography
+          python3 tools/asc_iap.py ios/fastlane/iap/pro.png
           python3 tools/asc_listing.py "$(grep -E 'MARKETING_VERSION' ios/project.yml | grep -oE '[0-9][0-9.]*')"
           echo "::notice title=Listing::App Store texts and screenshots uploaded for vi and en-US."
 
   submit:
     # With [testflight] in the same run, waits for that upload and submits it once Apple has processed it.
-    needs: testflight
-    if: ${{ always() && (inputs.submit || contains(github.event.head_commit.message, '[submit]')) && needs.testflight.result != 'failure' && needs.testflight.result != 'cancelled' }}
+    needs: [testflight, listing]
+    if: ${{ always() && (inputs.submit || contains(github.event.head_commit.message, '[submit]')) && needs.testflight.result != 'failure' && needs.testflight.result != 'cancelled' && needs.listing.result != 'failure' && needs.listing.result != 'cancelled' }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:

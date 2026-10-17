@@ -273,7 +273,7 @@ body.tk-on #topbar{padding-top:calc(env(safe-area-inset-top,0px) + 30px)}
 </style>
 
 <canvas id="scene" aria-label="Bàn cờ 3D"></canvas>
-<div id="ticker" hidden aria-label="Bản tin thị trường"><div id="tickerIn"></div></div><header id="topbar"><button class="rankhead" id="rankToggle" aria-expanded="true"><span>▾</span> Xếp hạng</button><button class="iconbtn" id="rulesBtn" title="Luật chơi" aria-label="Luật chơi">?</button><button class="iconbtn" id="soundBtn" title="Âm thanh" aria-label="Bật tắt âm thanh">♪</button><button class="iconbtn" id="menuBtn" title="Ván mới" aria-label="Ván mới">⟲</button><div id="rank"></div></header>
+<div id="ticker" hidden aria-label="Bản tin thị trường"><div id="tickerIn"></div></div><header id="topbar"><button class="rankhead" id="rankToggle" aria-expanded="true"><span>▾</span> Xếp hạng</button><button class="iconbtn" id="proBtn" hidden title="PRO" aria-label="PRO" onclick="showPro()">👑</button><button class="iconbtn" id="rulesBtn" title="Luật chơi" aria-label="Luật chơi">?</button><button class="iconbtn" id="soundBtn" title="Âm thanh" aria-label="Bật tắt âm thanh">♪</button><button class="iconbtn" id="menuBtn" title="Ván mới" aria-label="Ván mới">⟲</button><div id="rank"></div></header>
 <section id="hud"></section>
 <div id="toasts"></div>
 <div id="rollNum" hidden></div>
@@ -456,6 +456,7 @@ function newPlayer(i,d,prof,name,scen){
   for(const k in prof.L){const [b,pay]=prof.L[k];p.liabs.push({key:k,label:LIAB_LABEL[k],bal:T(b),pay:T(pay)});}
   let sav=T(prof.sav);
   if(scen==='grad'){p.age=22;sav=5*TR;p.liabs.push({key:'study',label:'Vay học phí đại học',bal:50*TR,pay:1*TR});}
+  if(!p.bot&&isPro())proPerks(p);
   p.age0=p.age;p.sal0=p.salary;p.prof0=p.prof;p.missions=pickMissions();p.mDone=[];
   p.cash=sav+calc(p).cashflow;
   p.hist.push(snapHist(p));
@@ -566,6 +567,7 @@ function re(title,text,kind,price,rent,opex,term,o={}){rent=Math.round(rent*mode
   return {k:'prop',title,text,art:o.art,label:o.label,a,ltvs:kind==='land'?[0,.5]:[0,.5,.7]};}
 function biz(title,text,kind,price,profit,ltvs,term,rate,o={}){profit=Math.round(profit*(kind==='small'?mode().sMul:mode().yMul)/1e5)*1e5;return {k:'prop',title,text,art:o.art,a:{type:'biz',kind,name:title,price,value:price,profit,rate:(rate||.11)+(G&&G.rateAdj||0),term},ltvs};}
 function drawSmallRaw(){
+  if(proOffer()&&p0()&&!p0().bot&&Math.random()<.04)return {k:'proad',title:'Cash to Freedom PRO'};
   const r=Math.random(),M=mode();
   if(M.scam&&r<.05)return pick([{k:'scam',name:'Sàn tiền ảo VanaCoin',promise:.05,title:'Sàn tiền ảo lãi 5%/tháng',text:`${cap(who())} khoe ảnh chụp tài khoản lãi đều mỗi tháng, rủ bạn "vào sớm kẻo hết suất". Sàn không có giấy phép.`},
     {k:'scam',name:'Dự án nông nghiệp đa cấp',promise:.04,title:'Góp vốn trồng sâm, cam kết lãi 4%/tháng',text:'Hội thảo ở khách sạn 5 sao, diễn giả hứa "càng giới thiệu nhiều người càng giàu". Hợp đồng không ghi rõ ai chịu rủi ro.'}]);
@@ -634,7 +636,7 @@ function drawBigRaw(){
   return re('Lô đất 500 m² gần sân bay Long Thành','Đất thổ cư mặt đường, giá đã tăng mạnh nhiều năm qua. Không có dòng tiền.','land',rnd(20,50)*100*TR,0,0,15,{art:'land',label:'Long Thành, Đồng Nai'});
 }
 function bestCoc(d){if(d.k!=='prop')return 1;return Math.max(...d.ltvs.map(x=>analyze(d.a,x).coc));}
-function drawDeal(big){let d=big?drawBigRaw():drawSmallRaw();{const pp=p0();if(pp&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<Math.max(0,(S(pp).luck-50)/200+(d.a.type==='re'?(S(pp).rel-40)/120:0)))d=big?drawBigRaw():drawSmallRaw();}const gb=mode().goodBias;if(gb&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<gb)d=big?drawBigRaw():drawSmallRaw();if(gb&&d.k==='scam')d=drawSmallRaw();return d;}
+function drawDeal(big){let d=big?drawBigRaw():drawSmallRaw();{const pp=p0();if(pp&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<Math.max(0,(S(pp).luck-50)/200+(d.a.type==='re'?(S(pp).rel-40)/120:0)))d=big?drawBigRaw():drawSmallRaw();}{const pp=p0();if(pp&&pp.pro&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<.15)d=big?drawBigRaw():drawSmallRaw();}const gb=mode().goodBias;if(gb&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<gb)d=big?drawBigRaw():drawSmallRaw();if(gb&&d.k==='scam')d=drawSmallRaw();return d;}
 const drawSmall=()=>drawDeal(false),drawBig=()=>drawDeal(true);
 const RE_GROUP={room:'phòng trọ, ki-ốt, căn hộ dịch vụ',apt:'căn hộ chung cư',shop:'nhà phố',land:'đất nền'};
 function drawMarket(){
@@ -741,17 +743,18 @@ function freeOptions(p){const L=[
   {id:'work',label:'Làm thêm cuối tuần',eff:{happy:-4,health:-3},cash:()=>Math.round(p.salary*.5/1e5)*1e5,note:'Có tiền ngay, nhưng hơi mệt'},
   {id:'gym',label:'Tập thể dục, chạy bộ',eff:{health:10,happy:3},note:'Ít ốm vặt, viện phí thấp hơn'},
   {id:'rest',label:'Ngủ nướng, xem phim',eff:{happy:10,luck:2},note:'Vui vẻ thì may mắn đến'},
-  {id:'course',label:'Học khóa đầu tư online',eff:{know:18},cost:2*TR,note:'Hiểu sâu về cổ phiếu, trái phiếu'}];
+  {id:'course',label:'Học khóa đầu tư online',eff:{know:18},cost:2*TR,note:'Hiểu sâu về cổ phiếu, trái phiếu'},
+  ...(!p.bot&&(proOffer()||isPro())?[{id:'pro',label:isPro()?'Chơi Cash to Freedom PRO, học với chuyên gia':'Học tài chính với chuyên gia trong Cash to Freedom PRO',eff:{know:isPro()?20:6,happy:4},note:isPro()?'Kinh nghiệm thực tế từ chuyên gia':'Xem bản PRO giúp bạn chơi giỏi hơn thế nào'}]:[])];
   return L.filter(o=>!o.need||o.need());}
 function botFree(p,opts){const s=S(p),f=id=>opts.find(o=>o.id===id);
   if(p.kids&&s.kids<60&&f('kids'))return f('kids');if(p.cash<calc(p).totalExp*3)return f('work');if(s.health<45)return f('gym');if(s.know<55)return f('news');if(s.rel<55)return f('coffee');return f('rest');}
 function cardFree(p){const opts=freeOptions(p);
-  const pickO=o=>{if(o.cost)pay(p,o.cost,o.label);if(o.cash){const c=o.cash();gain(p,c);toast(`${p.name}: +${fmt(c)} từ làm thêm`,'pos');}addS(p,o.eff,o.label);if(!p.bot)quoteToast(FREE_QUOTES[o.id]);endTurn();};
+  const pickO=o=>{if(o.id==='pro'&&!isPro()){addS(p,o.eff,o.label);return showPro(endTurn);}if(o.cost)pay(p,o.cost,o.label);if(o.cash){const c=o.cash();gain(p,c);toast(`${p.name}: +${fmt(c)} từ làm thêm`,'pos');}addS(p,o.eff,o.label);if(!p.bot)quoteToast(FREE_QUOTES[o.id]);endTurn();};
   const inl=opts.map(o=>()=>pickO(o));
   openModal({tone:'charity',eyebrow:'Thời gian rảnh · Gieo gì gặt nấy',title:'Cuối tuần này bạn làm gì?',art:art('freetime'),story:'Một buổi chiều cuối tuần hiếm hoi không phải làm việc. Cách bạn dùng thời gian hôm nay sẽ quyết định cơ hội của bạn ngày mai.',inl,
     body:`<div class="rows">${opts.map((o,i)=>`<div class="row"><div class="grow"><b>${o.label}</b><small>${Object.entries(o.eff).map(([k,v])=>`<span style="color:${v>0?STATS[k].c:'var(--danger)'}">${STATS[k].n} ${v>0?'+':''}${v}</span>`).join(' · ')}${o.cost?` · tốn ${fmt(o.cost)}`:''}${o.cash?` · <span class="pos">+${fmt(o.cash())}</span>`:''}<br>${o.note}</small></div><button class="btn sm ${i===0?'green':''}" data-i="${i}">Chọn</button></div>`).join('')}</div>`,
     lesson:'Gieo gì gặt nấy: thời gian đầu tư cho con cái, kiến thức, sức khỏe và các mối quan hệ sẽ quay lại thành cơ hội sau này.',advice:()=>`Chỉ số thấp nhất của bạn là <b>${STATS[Object.entries(S(p)).sort((a,b)=>a[1]-b[1])[0][0]].n}</b>. ${p.cash<calc(p).totalExp*3?'Tiền mặt đang mỏng, làm thêm sẽ giúp an toàn hơn.':'Nên đầu tư thời gian vào chỉ số này.'}`,bot:()=>pickO(botFree(p,opts))});}
-const FREE_QUOTES={kids:'Con là tài sản quý nhất, mà tài sản này không mất giá!',news:'Biết người biết ta, trăm trận trăm thắng!',coffee:'Buôn có bạn, bán có phường!',work:'Tay làm hàm nhai, tay quai miệng trễ!',gym:'Có sức khỏe là có tất cả!',rest:'Nghỉ ngơi cũng là đầu tư… vào giấc ngủ!',course:'Đầu tư vào kiến thức sinh lời cao nhất!'};
+const FREE_QUOTES={kids:'Con là tài sản quý nhất, mà tài sản này không mất giá!',news:'Biết người biết ta, trăm trận trăm thắng!',coffee:'Buôn có bạn, bán có phường!',work:'Tay làm hàm nhai, tay quai miệng trễ!',gym:'Có sức khỏe là có tất cả!',rest:'Nghỉ ngơi cũng là đầu tư… vào giấc ngủ!',course:'Đầu tư vào kiến thức sinh lời cao nhất!',pro:'Học từ người đi trước là con đường ngắn nhất!'};
 
 /* ================= UI: toasts, modal, viewer ================= */
 function toast(text,kind=''){const el=document.createElement('div');el.className='toast '+kind;el.textContent=text;$('#toasts').appendChild(el);setTimeout(()=>el.remove(),3400);while($('#toasts').children.length>3)$('#toasts').firstChild.remove();}
@@ -810,7 +813,7 @@ function renderChips(){
   const bar=(v,k,col)=>`<div class="mb"><i><b style="width:${Math.max(v?4:0,Math.min(100,Math.abs(v)/M[k]*100))}%;background:${col}"></b></i><span style="color:${col}">${k==='cf'?sgn(v):fmt(v)}</span></div>`;
   el.innerHTML=`<div class="rk cols"><span></span><span></span><span>Người chơi</span><span>Tiền mặt</span><span>Dòng tiền</span><span>Thụ động</span><span>Chi phí</span></div>`+rows.map((r,i)=>{const p=r.p,idx=G.players.indexOf(p);
     const tag=p.won?'THẮNG':p.ft?'TỰ DO TÀI CHÍNH':p.out?'ĐÃ NGHỈ HƯU':p.bot?'MÁY':'';
-    return `<button class="rk ${idx===G.cur?'on':''} ${i===0?'top':''}" data-p="${idx}"><span class="n">${i+1}</span>${pBadge(p,30)}<span class="nm" style="color:${p.color}">${esc(p.name)}<small>${Math.floor(p.age)} tuổi · TS ${fmt(netWorth(p))}${tag?' · '+tag:''}</small></span>${bar(r.cash,'cash','#e9b949')}${bar(r.cf,'cf',r.cf>=0?'#4fd18b':'#ff6b6b')}${bar(r.pas,'pas','#5fe0a0')}${bar(r.exp,'exp','#ff8a8a')}</button>`;}).join('');
+    return `<button class="rk ${idx===G.cur?'on':''} ${i===0?'top':''}" data-p="${idx}"><span class="n">${i+1}</span>${pBadge(p,30)}<span class="nm" style="color:${p.color}">${esc(p.name)}${p.pro?' 👑':''}<small>${Math.floor(p.age)} tuổi · TS ${fmt(netWorth(p))}${tag?' · '+tag:''}</small></span>${bar(r.cash,'cash','#e9b949')}${bar(r.cf,'cf',r.cf>=0?'#4fd18b':'#ff6b6b')}${bar(r.pas,'pas','#5fe0a0')}${bar(r.exp,'exp','#ff8a8a')}</button>`;}).join('');
 }
 $('#rank').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b)showStatement(G.players[+b.dataset.p]);});
 $('#rankToggle').addEventListener('click',()=>{rankOpen=!rankOpen;try{localStorage.setItem('dongtien3d.rank',rankOpen?'1':'0')}catch(e){}if(G&&G.players){renderChips();layoutCamera();}});
@@ -1008,7 +1011,7 @@ function showSummary(){
   const rows=G.players.map(p=>{const best=p.deals.slice().sort((a,b)=>b.pl-a.pl)[0],worst=p.deals.slice().sort((a,b)=>a.pl-b.pl)[0];
     return `<div class="row" style="align-items:flex-start"><span class="dot" style="background:${p.color};margin-top:5px"></span><div class="grow"><b>${esc(p.name)}</b> · ${Math.floor(p.age)} tuổi · tài sản ròng <b class="num">${fmt(netWorth(p))}</b>
       <small>${p.won?'Chiến thắng':p.ft?`Tự do tài chính lúc ${Math.floor(p.freeAge)} tuổi`:p.out?'Nghỉ hưu khi chưa tự do tài chính':'Đang ở vòng Người lao động'} · ${Object.keys(p.ach).length} thành tích</small>
-      ${bioHTML(p)}${recHTML(p,REC)}${statsHTML(p,true)}${proReview(p)}${best&&best.pl>0?`<small>Quyết định tốt nhất: ${esc(best.name)} <span class="pos">+${fmt(best.pl)}</span></small>`:''}${worst&&worst.pl<0?`<small>Bài học đắt giá: ${esc(worst.name)} <span class="neg">${fmt(worst.pl)}</span></small>`:''}</div></div>`;}).join('');
+      ${bioHTML(p)}${recHTML(p,REC)}${statsHTML(p,true)}${p.bot||p.pro||!PROS.available?proReview(p):'<p class="lesson">🔒 Tư vấn chuyên sâu sau ván (điểm mạnh, điểm yếu, bài học) dành cho bản PRO. Bấm vương miện 👑 ở góc trên.</p>'}${best&&best.pl>0?`<small>Quyết định tốt nhất: ${esc(best.name)} <span class="pos">+${fmt(best.pl)}</span></small>`:''}${worst&&worst.pl<0?`<small>Bài học đắt giá: ${esc(worst.name)} <span class="neg">${fmt(worst.pl)}</span></small>`:''}</div></div>`;}).join('');
   openViewer({tone:'ft',key:'sum',eyebrow:'Tổng kết ván · Tư vấn PRO của Gà Vàng',title:'Hành trình tài chính',body:`<canvas class="spark" id="sumChart" style="height:160px"></canvas><div class="legend">${G.players.map(p=>`<span><i style="background:${p.color}"></i>${esc(p.name)}</span>`).join('')}</div><p class="lesson">Đường biểu diễn tài sản ròng (tài sản − nợ) của mỗi người qua từng lượt.</p><div class="rows">${rows}</div>`});
   const cv=$('#sumChart');const dpr=Math.min(devicePixelRatio,2),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;const x=cv.getContext('2d');x.scale(dpr,dpr);
   const all=G.players.map(p=>[...p.hist.map(d=>num(d.nw)),netWorth(p)]);const mx=Math.max(1,...all.flat()),mn=Math.min(0,...all.flat()),n=Math.max(2,...all.map(a=>a.length)),pad=10;
@@ -1148,7 +1151,7 @@ function loanNote(p,amt){const L=needLoan(p,Math.max(0,amt-p.dep));if(!L)return 
   return `<div class="note">${over?`<b class="neg">Vượt hạn mức vay tiêu dùng (${fmt(loanCap(p))}).</b> Ngân hàng không cho vay thêm ${fmt(L)}.`:`Thiếu tiền: ${p.dep?'rút hết tiết kiệm và ':''}vay tiêu dùng ${fmt(L)}, lãi ${fmt(L*clr())}/tháng (${pct(clr()*12,0)}/năm).`}</div>`;}
 const canAfford=(p,amt)=>p.loan+needLoan(p,Math.max(0,amt-p.dep))<=loanCap(p);
 
-function showDeal(p,d){
+function showDeal(p,d){if(d.k==='proad')return proAdCard(p);
   if(d.k==='stock')return dealStock(p,d);
   if(d.k==='bond')return dealBond(p,d);
   if(d.k==='gold')return dealGold(p,d);
@@ -1595,7 +1598,7 @@ function ftDice(bonus=0){const v=[1+Math.floor(Math.random()*6),1+Math.floor(Mat
 const diceHTML=R=>`<div style="font-size:64px;line-height:1;text-align:center;letter-spacing:8px">${R.v.map(x=>DIEF[x-1]).join('')}</div><p style="text-align:center"><b class="num">${R.raw}</b>${R.bonus?` ${R.bonus>0?'+':'−'} ${Math.abs(R.bonus)} (kỹ năng, quan hệ, di sản)`:''} = <b class="num">${R.sum}</b></p>`;
 const relBonus=p=>(S(p).rel>=70?1:0)+(p.golfClub?1:0);
 /* mở modal "Tung xúc xắc" rồi hiện kết quả; outcome(R) trả về {title,text,good} và tự áp dụng thay đổi */
-function ftGamble(p,o){const go=()=>{const R=ftDice((o.bonus||0)+(o.noLegacy?0:legacyBonus(p)));sfx('dice');const res=o.outcome(R);ftRecalc(p);renderHUD();save();
+function ftGamble(p,o){const go=()=>{const R=ftDice((o.bonus||0)+(o.noLegacy?0:legacyBonus(p)+(p.pro?1:0)));sfx('dice');const res=o.outcome(R);ftRecalc(p);renderHUD();save();
     openModal({tone:res.good?'ft':'doodad',eyebrow:o.eyebrow,title:res.title,art:art(res.art||o.art),body:diceHTML(R)+`<p>${res.text}</p>`,lesson:res.lesson||'',acts:[{label:'Tiếp tục',cls:'primary',fn:()=>{if(p.cash<0&&p.ft)ftDistress(p);(o.after||endTurn)();}}],bot:()=>{if(p.cash<0&&p.ft)ftDistress(p);(o.after||endTurn)();}});};
   openModal({tone:'ft',eyebrow:o.eyebrow,title:o.title,art:art(o.art),body:o.body,lesson:o.lesson||'',acts:[{label:'🎲 Tung xúc xắc',cls:'primary',fn:go}],bot:go});}
 /* công nghệ mới: góp vốn bây giờ, ngày lĩnh lương sau tự tung xúc xắc */
@@ -1827,8 +1830,8 @@ function ledgerQuiz(p,items,cont,intro){
 const HINTS={easy:10,hard:3};
 const CHICKEN_SVG=(s=1)=>`<svg viewBox="0 0 64 64" width="${44*s}" height="${44*s}" aria-hidden="true"><defs><radialGradient id="gch" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fff1b8"/><stop offset="1" stop-color="#d99a1e"/></radialGradient></defs><ellipse cx="34" cy="40" rx="20" ry="16" fill="url(#gch)"/><circle cx="20" cy="22" r="11" fill="url(#gch)"/><path d="M14 12 q3 -8 6 -1 q3 -8 6 0 q3 -6 4 2" fill="#e8423f"/><path d="M9 22 l-7 3 l7 3z" fill="#ff9f43"/><circle cx="17" cy="20" r="2" fill="#1b2a44"/><path d="M30 38 q10 -10 18 2 q-8 8 -18 -2z" fill="#e0a52a"/><path d="M50 30 q10 -6 10 6 q-6 -2 -10 2z" fill="#e8423f"/><path d="M28 55 v6 M38 55 v6" stroke="#ff9f43" stroke-width="3" stroke-linecap="round"/><path d="M12 30 q-2 6 3 6" fill="#e8423f"/></svg>`;
 let adviceTitle=null;
-function hintsLeft(p){if(p.hints==null)p.hints=HINTS[G.mode]||3;return p.hints;}
-function useHint(p){if(hintsLeft(p)<=0)return false;p.hints--;p.st=p.st||{};p.st.hint=(p.st.hint||0)+1;chickenHop();sfx('cash');return true;}
+function hintsLeft(p){if(p.pro)return 99;if(p.hints==null)p.hints=HINTS[G.mode]||3;return p.hints;}
+function useHint(p){if(p.pro){chickenHop();sfx('cash');return true;}if(hintsLeft(p)<=0)return false;p.hints--;p.st=p.st||{};p.st.hint=(p.st.hint||0)+1;chickenHop();sfx('cash');return true;}
 function adviceBox(html){return `<div class="advice">${CHICKEN_SVG(1)}<div><b>Gà Vàng:</b> ${html}</div></div>`;}
 /* lời khuyên cho từng loại thẻ */
 function adviseDeal(p,d){
@@ -1867,7 +1870,45 @@ function adviseGeneral(p){const c=calc(p),L=[];
   return L.length?L.map(x=>'• '+x).join('<br>'):'Tình hình tài chính của bạn đang rất ổn. Tiếp tục tìm thương vụ có dòng tiền dương.';}
 function askChicken(){const p=curP();if(!p||isBotTurn())return;
   if(!useHint(p)){openViewer({tone:'payday',eyebrow:'Gà Vàng',title:'Hết lượt hỏi',body:`${adviceBox('Bạn đã dùng hết lượt hỏi. Ghi sổ đúng 3 lần sẽ được thêm 1 lượt. Ngoài đời, không phải lúc nào cũng có người khuyên.')}`});return;}
-  openViewer({tone:'payday',eyebrow:`Gà Vàng · còn ${hintsLeft(p)} lượt hỏi`,title:'Khám sức khỏe tài chính',body:adviceBox(adviseGeneral(p))});save();renderHUD();}
+  openViewer({tone:'payday',eyebrow:p.pro?'Gà Vàng · chuyên gia PRO':`Gà Vàng · còn ${hintsLeft(p)} lượt hỏi`,title:'Khám sức khỏe tài chính',body:adviceBox(adviseGeneral(p))+(proOffer()?'<p class="lesson">Bản PRO: hỏi không giới hạn và phân tích chuyên sâu. Bấm vương miện 👑 ở góc trên.</p>':'')});save();renderHUD();}
+/* ================= Bản PRO (mua trong ứng dụng iOS) ================= */
+/* Ứng dụng iOS báo trạng thái qua window.proUpdate({available,owned,price}). Khi App Store chưa có sản phẩm,
+   available=false và mọi lời mời mua đều ẩn. Trên web, thêm #pro vào địa chỉ để thử các tính năng PRO. */
+const PROS={available:false,owned:false,price:''};
+const proBridge=()=>window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.pro;
+const isPro=()=>!!PROS.owned||/[#&]pro\b/.test(location.hash);
+const proOffer=()=>PROS.available&&!isPro();
+function proPerks(p){if(p.bot||p.proPerk)return;p.pro=true;p.proPerk=1;const s=S(p);s.luck=clamp(s.luck+10,0,100);s.happy=clamp(s.happy+10,0,100);}
+window.proUpdate=st=>{const was=isPro();Object.assign(PROS,st||{});
+  if(isPro()&&G&&G.players){G.players.forEach(proPerks);if(!was){if(typeof window.__proDone==='function')window.__proDone();moment('trophy','Chào mừng thành viên PRO! 👑','Gà Vàng giờ là chuyên gia tài chính riêng của bạn');save();}}
+  if(st&&st.error)toast(st.error,'neg');const b=$('#proBtn');if(b)b.hidden=!(PROS.available||isPro());if(G&&G.players)renderHUD();};
+function proBuy(){const b=proBridge();if(b)b.postMessage({action:'buy'});}
+function proRestore(){const b=proBridge();if(b)b.postMessage({action:'restore'});}
+const PRO_PERKS=[['Gà Vàng thành chuyên gia tài chính','Hỏi không giới hạn và phân tích sâu: giá trị hợp lý của thương vụ, tỷ lệ nợ, phân bổ tài sản, bước đi tiếp theo cụ thể.'],
+  ['Tư vấn sau mỗi ván','Điểm mạnh, điểm yếu trong cách đầu tư của bạn, rút ra từ cả ván chơi.'],
+  ['Cuộc sống VIP','Khởi đầu với May mắn và Hạnh phúc +10, vương miện 👑 trên bảng xếp hạng.'],
+  ['Lợi thế của người có cố vấn','Thương vụ tốt xuất hiện thường hơn một chút, +1 điểm xúc xắc ở các kèo lớn của Vòng Thịnh Vượng.'],
+  ['Ủng hộ người làm game','Giúp Cash to Freedom tiếp tục có tính năng mới.']];
+function showPro(done){const own=isPro(),fin=()=>{window.__proDone=null;closeModal();if(done)done();};window.__proDone=fin;
+  openModal({tone:'ft',eyebrow:'Cash to Freedom PRO',title:own?'Bạn đang dùng bản PRO 👑':'Chơi như nhà đầu tư có cố vấn riêng',art:art('trophy'),
+    body:`<div class="rows">${PRO_PERKS.map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${own?'':`<p class="lesson">Mua một lần, dùng mãi trên mọi thiết bị cùng Apple ID.${PROS.price?` Giá ${esc(PROS.price)}.`:''}</p>`}`,
+    acts:own?[{label:'Tuyệt!',cls:'primary',fn:fin}]:[{label:`Mua PRO${PROS.price?' · '+PROS.price:''}`,cls:'primary',disabled:!PROS.available,fn:proBuy},{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau',fn:fin}],bot:fin});}
+function proAdCard(p){if(p.bot||!proOffer())return endTurn();
+  openModal({tone:'opp',eyebrow:'Cơ hội · Đầu tư vào chính mình',title:'Cash to Freedom PRO',art:art('scholar'),
+    body:'<p>Người giàu đầu tư vào kiến thức trước khi đầu tư vào tài sản. Bản PRO biến Gà Vàng thành chuyên gia tài chính riêng: phân tích từng thương vụ, chỉ ra bước đi tiếp theo, tư vấn sau mỗi ván. Cuộc chơi của bạn sẽ dễ thở hơn một chút.</p>',
+    lesson:'Một lời khuyên đúng lúc có thể đáng giá hơn nhiều năm tự mò mẫm.',acts:[{label:'Xem bản PRO',cls:'primary',fn:()=>showPro(endTurn)},{label:'Bỏ qua',fn:endTurn}],bot:endTurn});}
+/* chuyên gia: phân tích sâu hơn cho người chơi PRO */
+function expertGeneral(p){const c=calc(p),L=[];if(p.ft)return '';
+  const inc=Math.max(1,c.income),save=c.cashflow/inc;L.push(`Tỷ lệ tiết kiệm ${pct(save)} thu nhập: ${save>=.3?'rất tốt, người tự do sớm thường để dành trên 30%':save>=.15?'ổn, cố gắng lên 30%':'thấp, hãy cắt chi tiêu không cần thiết trước khi tìm cách kiếm thêm'}.`);
+  const dti=(c.liabPay+c.loanPay+p.assets.reduce((s,a)=>s+(a.left>0?num(a.pay):0),0))/inc;L.push(`Nợ phải trả mỗi tháng bằng ${pct(dti)} thu nhập${dti>.4?': vượt ngưỡng an toàn 40%, ưu tiên trả bớt nợ lãi cao':''}.`);
+  const val={};p.assets.forEach(a=>{const k=a.type==='re'?'Bất động sản':a.type==='biz'?'Kinh doanh':a.type==='stock'?'Cổ phiếu':a.type==='gold'?'Vàng':a.type==='crypto'?'Bitcoin':'Khác';val[k]=(val[k]||0)+Math.max(0,assetValue(a)-num(a.loan));});
+  const tot=Object.values(val).reduce((a,b)=>a+b,0);if(tot>0){const parts=Object.entries(val).sort((a,b)=>b[1]-a[1]);L.push(`Phân bổ tài sản: ${parts.map(([k,v])=>`${k} ${pct(v/tot,0)}`).join(', ')}.${parts[0][1]/tot>.7?' Quá tập trung vào một loại, một biến cố có thể kéo bạn lùi nhiều năm.':''}`);}
+  const gap=c.totalExp-c.passive;if(gap>0){const need=gap*12/.1;L.push(`Bước tiếp theo: cần thêm ${fmt(gap)}/tháng thu nhập thụ động, tương đương sở hữu khoảng ${fmt(need)} tài sản lợi suất 10%/năm. Với ${fmt(p.cash)} tiền mặt, hãy tìm thương vụ có lợi suất trên vốn từ 15% để rút ngắn thời gian.`);}
+  return `<br><br><b>Chuyên gia PRO:</b><br>${L.map(x=>'• '+x).join('<br>')}`;}
+function expertDeal(p,d){if(d.k!=='prop')return '';const a=d.a,R=analyze(a,d.ltvs[d.ltvs.length-1]),fair=Math.max(0,R.net*12/.1),diff=fair?a.price/fair-1:0;
+  return `<br><br><b>Chuyên gia PRO:</b> với lợi suất mục tiêu 10%/năm, giá hợp lý khoảng <b>${fmt(fair)}</b>; giá chào ${fmt(a.price)} ${diff>0?`đắt hơn ${pct(diff,0)}`:`rẻ hơn ${pct(-diff,0)}`}. ${R.cfAfter<R.cf?`Sau ưu đãi, dòng tiền còn ${sgn(R.cfAfter)}/tháng: tính theo con số này.`:''} ${p.cash<R.equity*1.5?'Mua xong tiền mặt còn mỏng: giữ lại ít nhất 3 tháng chi phí.':''}`;}
+{const base=adviseDeal;adviseDeal=function(p,d){const h=base(p,d);return p.pro?h+expertDeal(p,d):h;};}
+{const base=adviseGeneral;adviseGeneral=function(p){const h=base(p);return p.pro?h+expertGeneral(p):h;};}
 /* tư vấn sau ván (PRO) */
 function proReview(p){const c=calc(p),st=p.st||{},good=[],bad=[];
   const buys=st.buys||0,neg=st.neg||0,quizOk=p.fq||0,quizN=p.quizN||0;
@@ -2749,7 +2790,8 @@ function tickerItems(){if(!G||!G.players||!G.cyc)return [];const L=[],add=(k,t)=
   TK_FUN.slice().sort(()=>Math.random()-.5).slice(0,2).forEach(t=>add('fun',t));
   TK_RUMOR.slice().sort(()=>Math.random()-.5).slice(0,3).forEach(f=>add('rumor',f()));
   return L.sort(()=>Math.random()-.5);}
-function renderTicker(){const box=$('#ticker'),el=$('#tickerIn');if(!box||!el)return;const on=!!(G&&G.players&&G.players.length);box.hidden=!on;document.body.classList.toggle('tk-on',on);if(!on)return;
+function proButtonSync(){const b=$('#proBtn');if(b)b.hidden=!(PROS.available||isPro());}
+function renderTicker(){proButtonSync();const box=$('#ticker'),el=$('#tickerIn');if(!box||!el)return;const on=!!(G&&G.players&&G.players.length);box.hidden=!on;document.body.classList.toggle('tk-on',on);if(!on)return;
   const items=tickerItems();el.innerHTML=items.map(i=>`<span class="tk ${i.k}"><b>${esc(i.src)}</b>${esc(i.t)}</span>`).join('<i>◆</i>');
   el.style.animation='none';void el.offsetWidth;el.style.animation=`tick ${Math.max(40,Math.round(el.scrollWidth/70))}s linear 1`;}
 document.addEventListener('animationend',e=>{if(e.target&&e.target.id==='tickerIn')renderTicker();});

@@ -166,12 +166,13 @@ DEMO_RESET = """<script>if(location.hash.indexOf('#demo-')===0){try{localStorage
 DEMO_DRIVE = """<script>
 (async function(){const m=location.hash.match(/^#demo-(\\w+)/);if(!m)return;const k=m[1];
   const wait=ms=>new Promise(r=>setTimeout(r,ms)),click=s=>{const b=document.querySelector(s);if(b)b.click();return !!b;};
-  await wait(3000);if(k==='home')return;
+  for(let i=0;i<60&&!(document.querySelector('#startBtn')&&typeof draft!=='undefined'&&draft.length);i++)await wait(250);await wait(800);if(k==='home')return;
   click('[data-n="4"]');await wait(300);click(k==='ledger'?'[data-quiz="1"]':'[data-quiz="0"]');await wait(300);
   click('#startBtn');await wait(3500);
   if(k==='deal'){showDeal(curP(),drawBig());}
   else if(k==='statement'){showStatement(curP());}
   else if(k==='rules'){showRules();}
+  else if(k==='pro'){PROS.available=true;PROS.price=PROS.price||(document.documentElement.lang==='vi'?'129.000 đ':'$4.99');showPro();}
 })();
 </script>
 """

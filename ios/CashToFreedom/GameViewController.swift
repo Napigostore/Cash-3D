@@ -6,6 +6,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
     private var webView: WKWebView!
     private static let background = UIColor(red: 0.043, green: 0.071, blue: 0.125, alpha: 1)
     private static let languageKey = "language"
+    private let pro = ProStore()
 
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
@@ -17,6 +18,7 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
         config.userContentController.add(LanguageHandler(owner: self), name: "lang")
+        config.userContentController.add(ProHandler(owner: self), name: "pro")
 
         webView = WKWebView(frame: .zero, configuration: config)
         webView.isOpaque = false
@@ -43,6 +45,28 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
     override func viewDidLoad() {
         super.viewDidLoad()
         load(language: UserDefaults.standard.string(forKey: Self.languageKey) ?? Self.deviceLanguage)
+        pro.onChange = { [weak self] in self?.sendProState() }
+        Task { await pro.refresh() }
+    }
+
+    // MARK: PRO (in-app purchase)
+
+    private func sendProState(error: String? = nil) {
+        webView.evaluateJavaScript("window.proUpdate&&window.proUpdate(\(pro.stateJSON(error: error)))")
+    }
+
+    func handlePro(_ action: String) {
+        Task {
+            switch action {
+            case "buy": sendProState(error: await pro.buy())
+            case "restore": sendProState(error: await pro.restore())
+            default: sendProState()
+            }
+        }
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        sendProState()
     }
 
     private static var deviceLanguage: String {
@@ -102,6 +126,17 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
 
     private var cancelTitle: String {
         webView.url?.lastPathComponent == "vi.html" ? "Huỷ" : "Cancel"
+    }
+}
+
+/// Receives PRO purchase requests (webkit.messageHandlers.pro: {action: "buy" | "restore" | "status"}).
+private final class ProHandler: NSObject, WKScriptMessageHandler {
+    weak var owner: GameViewController?
+    init(owner: GameViewController) { self.owner = owner }
+
+    func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
+        let action = (message.body as? [String: Any])?["action"] as? String ?? "status"
+        owner?.handlePro(action)
     }
 }
 

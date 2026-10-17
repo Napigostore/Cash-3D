@@ -60,7 +60,7 @@ def main(version_string):
     detail = call('GET', f'/v1/appStoreVersions/{version["id"]}/appStoreReviewDetail').get('data')
     notes = ('No account or sign-in is needed; the game is fully offline and stores progress on the device only. '
              'Tap "Start a new game" (1 player vs 3 bots by default), then "Roll the dice". It is an educational board game about '
-             'personal finance: all prices, stocks and companies are fictional simulations, no real money, no purchases, no ads. '
+             'personal finance: all prices, stocks and companies are fictional simulations, no ads. The only purchase is the optional non-consumable Cash to Freedom PRO (crown button, top right; also offered on the Free time tile), with Restore. '
              'The app is in English or Vietnamese following the device language; the EN/VI button at the top right switches it.')
     attributes = {'demoAccountRequired': False, 'notes': notes}
     if detail:
@@ -69,6 +69,14 @@ def main(version_string):
         call('POST', '/v1/appStoreReviewDetails', {'data': {'type': 'appStoreReviewDetails', 'attributes': attributes,
              'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version['id']}}}}})
     print('review details: no sign-in required, notes set')
+
+    # In-app purchases (Cash to Freedom PRO): a first one can only be reviewed together with an app version.
+    for iap in call('GET', f'/v1/apps/{app_id}/inAppPurchasesV2?limit=50')['data']:
+        state = iap['attributes'].get('state')
+        print('in-app purchase', iap['attributes'].get('productId'), state)
+        if state in ('READY_TO_SUBMIT', 'DEVELOPER_ACTION_NEEDED', 'REJECTED'):
+            call_ok('POST', '/v1/inAppPurchaseSubmissions', {'data': {'type': 'inAppPurchaseSubmissions', 'relationships': {
+                'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iap['id']}}}}}, allow=(400, 403, 409, 422))
 
     # One review submission for the app, holding the version.
     open_ones = call('GET', f'/v1/apps/{app_id}/reviewSubmissions?filter[platform]=IOS&filter[state]=READY_FOR_REVIEW,UNRESOLVED_ISSUES')['data']
