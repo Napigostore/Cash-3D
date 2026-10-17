@@ -1,1 +1,1 @@
-First release.
+First release: a 3D board game about money, assets and the road to financial freedom.
