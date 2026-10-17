@@ -1,4 +1,6 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>Dòng Tiền 3D</title>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><style>html,body{margin:0;background:#0b1220;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}</style></head>
+<script>if(location.hash.indexOf('#demo-')===0){try{localStorage.clear()}catch(e){}}</script>
+<title>Dòng Tiền 3D</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Be+Vietnam+Pro:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
@@ -23,6 +25,21 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
 .pos{color:var(--money)} .neg{color:var(--danger)} .warn{color:var(--gold)}
 
+#moment{position:fixed;inset:0;z-index:300;display:grid;place-items:center;background:radial-gradient(circle,rgba(11,18,32,.55),rgba(5,9,18,.92));animation:mIn .35s ease-out}
+#moment .mcard{width:min(86vw,380px);text-align:center;animation:mPop .6s cubic-bezier(.2,1.4,.4,1)}#moment .mart{border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 0 3px var(--gold)}
+#moment h2{font:800 30px/1.15 'Bricolage Grotesque','Be Vietnam Pro',sans-serif;color:#ffe08a;margin:18px 0 6px;text-shadow:0 4px 18px rgba(233,185,73,.5)}#moment p{color:#dbe4f3;margin:0}
+@keyframes mIn{from{opacity:0}to{opacity:1}}@keyframes mPop{from{transform:scale(.6) translateY(30px);opacity:0}to{transform:none;opacity:1}}
+#chick{position:fixed;left:12px;top:34%;z-index:290;display:flex;gap:6px;align-items:flex-end;max-width:min(78vw,330px);pointer-events:none;animation:mPop .45s cubic-bezier(.2,1.4,.4,1)}
+#chick .bub{background:#fff8dc;color:#2a1e05;border-radius:16px 16px 16px 4px;padding:9px 12px;font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+body.swan #app,body.swan canvas{animation:shake .12s linear 10}@keyframes shake{0%,100%{transform:translate(0)}25%{transform:translate(-6px,3px)}75%{transform:translate(6px,-3px)}}
+#ticker.alert{background:#4a0a0a;border-bottom-color:#ff4d4d}
+.bio{background:linear-gradient(160deg,#f7f0de,#e9dfc4);color:#2b2316;border-radius:14px;padding:12px 14px;margin:8px 0;font-family:'Be Vietnam Pro',sans-serif}.bio h4{margin:0 0 4px;font:800 15px/1.25 'Bricolage Grotesque','Be Vietnam Pro',sans-serif;color:#5a3d0c;text-transform:uppercase;letter-spacing:.04em}.bio p{color:#2b2316!important;margin:0;font-size:14px;line-height:1.5}
+.mis{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--line)}.mis b{min-width:20px}.mis.done{color:var(--money)}
+#ticker{position:fixed;left:0;right:0;top:0;z-index:6;height:calc(env(safe-area-inset-top,0px) + 24px);padding-top:env(safe-area-inset-top,0px);overflow:hidden;background:#070d18;border-bottom:1px solid rgba(233,185,73,.35);font-size:12px;line-height:24px;white-space:nowrap}
+#ticker[hidden]{display:none!important}#tickerIn{display:inline-block;padding-left:100%;animation:tick 60s linear infinite}#ticker:active #tickerIn{animation-play-state:paused}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.tk{margin:0 6px}.tk b{font-weight:800;margin-right:5px;padding:1px 6px;border-radius:6px;font-size:10px;letter-spacing:.04em;text-transform:uppercase}.tk.real b{background:#1d4ed8;color:#fff}.tk.mkt b{background:#0f766e;color:#fff}.tk.fun b{background:#b45309;color:#fff}.tk.rumor b{background:#7f1d1d;color:#ffd5d5}.tk.hot b{background:#e9b949;color:#1a1200}#tickerIn i{color:#e9b949;font-style:normal;margin:0 8px}
+body.tk-on #topbar{padding-top:calc(env(safe-area-inset-top,0px) + 30px)}
 #topbar{position:fixed;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px;display:flex;gap:8px;align-items:center;z-index:5;background:linear-gradient(var(--ink),rgba(11,20,36,0))}
 #topbar{flex-wrap:wrap}
 .rankhead{flex:1;min-width:0;text-align:left;background:none;border:0;padding:0 4px;font-size:11px;letter-spacing:.12em;font-weight:800;color:var(--gold);text-transform:uppercase}
@@ -74,6 +91,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .sheet h2{font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.15;margin:2px 0 8px;text-wrap:balance}
 .sheet p{line-height:1.55;color:#d3dbea;margin:0 0 10px;max-width:62ch}
 .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ledger td .acts{margin-top:6px;gap:6px}.ledger td .acts .btn{padding:6px 10px;font-size:12px}
 .acts .btn{flex:1 1 140px}
 .facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:10px 0}
 .fact{background:var(--ink);border-radius:10px;padding:8px 10px;border:1px solid var(--line);min-width:0}
@@ -256,8 +274,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.sheet,.toast,#rollNum.pop,.botbar i,#paySlip.in,#coinFly i{animation:none}}
 </style>
 
-</head><body><canvas id="scene" aria-label="Bàn cờ 3D"></canvas>
-<header id="topbar"><button class="rankhead" id="rankToggle" aria-expanded="true"><span>▾</span> Xếp hạng</button><button class="iconbtn" id="rulesBtn" title="Luật chơi" aria-label="Luật chơi">?</button><button class="iconbtn" id="soundBtn" title="Âm thanh" aria-label="Bật tắt âm thanh">♪</button><button class="iconbtn" id="menuBtn" title="Ván mới" aria-label="Ván mới">⟲</button><div id="rank"></div></header>
+<canvas id="scene" aria-label="Bàn cờ 3D"></canvas>
+<div id="ticker" hidden aria-label="Bản tin thị trường"><div id="tickerIn"></div></div><header id="topbar"><button class="rankhead" id="rankToggle" aria-expanded="true"><span>▾</span> Xếp hạng</button><button class="iconbtn" id="proBtn" hidden title="PRO" aria-label="PRO" onclick="showPro()">👑</button><button class="iconbtn" id="rulesBtn" title="Luật chơi" aria-label="Luật chơi">?</button><button class="iconbtn" id="soundBtn" title="Âm thanh" aria-label="Bật tắt âm thanh">♪</button><button class="iconbtn" id="menuBtn" title="Ván mới" aria-label="Ván mới">⟲</button><button class="iconbtn" id="langBtn" title="English" aria-label="English" style="font-size:11px;font-weight:800" onclick="const h=window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.lang;if(h)h.postMessage('en');else location.href='en.html'">EN</button><div id="rank"></div></header>
 <section id="hud"></section>
 <div id="toasts"></div>
 <div id="rollNum" hidden></div>
@@ -298,8 +316,8 @@ function pmt(P,rate,years){if(P<=0)return 0;const r=rate/12,n=Math.max(1,Math.ro
 const mpt=()=>mode().mpt;     // số tháng cuộc đời mỗi lượt
 const START_YEAR=2026;
 const MODES={
- easy:{n:'Dễ',sub:'Tập chơi',mpt:4,yMul:1,sMul:1,rMul:1,ftGoal:2e9,infl:0,raise:[.05,.05],promo:0,clRate:.01,scam:false,life:false,teaser:false,news:false,retire:false,insurance:false,goodBias:.6,downSkip:1,benefit:.6,midBonus:[.5,.5],tetBonus:[1,1],doodadMul:.7},
- hard:{n:'Khó',sub:'Như cuộc đời',mpt:4,yMul:.52,sMul:.34,bizRisk:true,rMul:.85,ftGoal:1e9,infl:.035,raise:[0,.08],promo:.08,clRate:.015,scam:true,life:true,teaser:true,news:true,retire:true,insurance:true,goodBias:0,downSkip:2,benefit:.6,midBonus:[0,1],tetBonus:[0,2],doodadMul:1}};
+ easy:{n:'Dễ',sub:'Tập chơi',mpt:4,yMul:1,sMul:1,rMul:1,ftGoal:1e9,infl:0,raise:[.05,.05],promo:0,clRate:.01,scam:false,life:false,teaser:false,news:false,retire:false,insurance:false,goodBias:.6,downSkip:1,benefit:.6,midBonus:[.5,.5],tetBonus:[1,1],doodadMul:.7},
+ hard:{n:'Khó',sub:'Như cuộc đời',mpt:4,yMul:.52,sMul:.34,bizRisk:true,rMul:.85,ftGoal:2e9,infl:.035,raise:[0,.08],promo:.08,clRate:.015,scam:true,life:true,teaser:true,news:true,retire:true,insurance:true,goodBias:0,downSkip:2,benefit:.6,midBonus:[0,1],tetBonus:[0,2],doodadMul:1}};
 const mode=()=>MODES[(G&&G.mode)||'easy'];
 const clr=()=>mode().clRate;
 const yearOf=()=>START_YEAR+Math.floor((G&&G.month||0)/12);
@@ -368,9 +386,18 @@ const SYMS=Object.keys(STOCKS);
 const GOLD_REF=15*TR;
 
 const FT_BIZ_NAMES=['Chuỗi rửa xe','Chuỗi cà phê','Tiệm giặt sấy','Phòng gym','Chuỗi bánh mì','Vườn sầu riêng','Khách sạn mini','Xưởng in 3D','Bãi đỗ xe','Trung tâm Anh ngữ','Nhà hàng hải sản','Siêu thị mini','Công ty phần mềm','Trạm sạc xe điện','Spa thư giãn','Homestay Đà Lạt','Kho lạnh','Studio podcast','Xưởng nội thất','Phòng khám nha','Điện mặt trời'];
-const FT_SIDES=[['cf','biz','biz','dream','biz','lawsuit','biz','biz'],['cf','biz','charity','biz','dream','biz','audit','biz'],['cf','biz','biz','dream','biz','divorce','biz','biz'],['cf','biz','biz','biz','dream','biz','biz','biz']];
-const FT=[];(()=>{let b=0,d=0;FT_SIDES.flat().forEach(t=>{if(t==='biz'){const i=b++;const cost=TY+((i*7)%9)*.5*TY;FT.push({t,name:FT_BIZ_NAMES[i],cost,cf:Math.round(cost*(.03+((i*3)%5)*.01)/(10*TR))*10*TR});}else if(t==='dream')FT.push({t,slot:d++});else FT.push({t});});})();
-const FT_INFO={cf:{lines:['NGÀY','LĨNH LƯƠNG'],col:'#23905a',desc:'Ngày lĩnh lương: nhận toàn bộ dòng tiền Vòng Thịnh Vượng.'},biz:{col:'#1c3a68',desc:'Đầu tư doanh nghiệp lớn để tăng dòng tiền.'},dream:{col:'#6c45b5',desc:'Ô giấc mơ: mua được giấc mơ của mình là thắng.'},lawsuit:{lines:['BỊ KIỆN'],col:'#b23c4b',desc:'Bị kiện: mất 1/x tiền mặt, x là số điểm xúc xắc vừa tung.'},audit:{lines:['KIỂM TOÁN','THUẾ'],col:'#b23c4b',desc:'Kiểm toán thuế: mất một nửa tiền mặt.'},divorce:{lines:['LY HÔN'],col:'#8a2535',desc:'Ly hôn: mất một nửa tiền mặt.'},charity:{lines:['TỪ','THIỆN'],col:'#8a5bd0',desc:'Từ thiện: góp 1 tỷ, May mắn +20.'}};
+const FT_SIDES=[['cf','biz','tech','golf','dream','lawsuit','kcn','law'],['cf','ipo','fun','crash','dream','tech','inspect','biz'],['cf','fun','fraud','biz','dream','legacy','divorce','kcn'],['cf','legacy','charity','tech','dream','audit','ipo','fun']];
+/* Ngành của từng doanh nghiệp: khủng hoảng và luật mới đánh vào cả một ngành, nên đa dạng hóa giúp sống sót. */
+const SECTORS={bds:'Bất động sản',fnb:'Ăn uống',dv:'Dịch vụ',cn:'Công nghệ',nn:'Nông nghiệp',gd:'Giáo dục'};
+const FT_SECTOR={'Chuỗi rửa xe':'dv','Chuỗi cà phê':'fnb','Tiệm giặt sấy':'dv','Phòng gym':'dv','Chuỗi bánh mì':'fnb','Vườn sầu riêng':'nn','Khách sạn mini':'bds','Xưởng in 3D':'cn','Bãi đỗ xe':'bds','Trung tâm Anh ngữ':'gd'};
+/* Công nghệ mới: tung 2 xúc xắc ở ngày lĩnh lương sau. Mỗi ngành có bảng kết quả riêng (tổng 2..12). */
+const TECH=[{name:'Trí tuệ nhân tạo (AI)',icon:'Công ty phần mềm',art:'startup',m:[0,0,0,0,.5,.5,1,2,3,6,20],d:'Rủi ro cao nhất: đa số mất trắng, nhưng một kỳ lân AI nhân 20 lần.'},
+  {name:'Xe điện',icon:'Trạm sạc xe điện',art:'scooter',m:[0,0,0,.3,.5,1,1.5,2,3,5,8],d:'Cuộc chiến giá khốc liệt: nhiều hãng phá sản, hãng thắng chiếm thị trường.'},
+  {name:'Robot công nghiệp',icon:'Xưởng in 3D',art:'garment',m:[0,.3,.5,.7,1,1.2,1.5,2,2.5,3,5],d:'Ổn định hơn: nhà máy cần robot, nhưng biên lợi nhuận mỏng.'},
+  {name:'Chip bán dẫn',icon:'Điện mặt trời',art:'chartup',m:[0,0,.2,.5,.8,1,1.5,2.5,4,6,12],d:'Chu kỳ lên xuống mạnh, phụ thuộc đơn hàng toàn cầu.'}];
+const KCN=[{name:'Khu công nghiệp Đông Nam',cost:20*TY,cf:TY},{name:'Khu công nghiệp ven cảng',cost:30*TY,cf:1.6*TY}];
+const FT=[];(()=>{let b=0,d=0,v=0;FT_SIDES.flat().forEach(t=>{if(t==='biz'){const i=b++;const cost=TY+((i*7)%9)*.5*TY,name=FT_BIZ_NAMES[i];FT.push({t,name,sector:FT_SECTOR[name]||'dv',cost,cf:Math.round(cost*(.03+((i*3)%5)*.01)/(10*TR))*10*TR});}else if(t==='dream')FT.push({t,slot:d++});else if(t==='tech')FT.push({t,...TECH[v++%TECH.length]});else if(t==='kcn'){const k=KCN[(FT.filter(x=>x.t==='kcn').length)%KCN.length];FT.push({t,...k});}else FT.push({t});});})();
+const FT_INFO={cf:{lines:['NGÀY','LĨNH LƯƠNG'],col:'#23905a',desc:'Ngày lĩnh lương: nhận toàn bộ dòng tiền Vòng Thịnh Vượng.'},biz:{col:'#1c3a68',desc:'Đầu tư doanh nghiệp lớn để tăng dòng tiền.'},dream:{col:'#6c45b5',desc:'Ô giấc mơ: mua được giấc mơ của mình là thắng.'},lawsuit:{lines:['BỊ KIỆN'],col:'#b23c4b',desc:'Bị kiện: mất 1/x tiền mặt, x là số điểm xúc xắc vừa tung. Có đội pháp chế thì mất một nửa số đó.'},audit:{lines:['KIỂM TOÁN','THUẾ'],col:'#b23c4b',desc:'Kiểm toán thuế: mất một nửa tiền mặt.'},divorce:{lines:['LY HÔN'],col:'#8a2535',desc:'Ly hôn: mất một nửa tiền mặt.'},charity:{lines:['TỪ','THIỆN'],col:'#8a5bd0',desc:'Từ thiện: góp 1 tỷ, May mắn +20.'},tech:{lines:['CÔNG NGHỆ','MỚI'],col:'#6b3fb8',desc:'Công nghệ mới: góp vốn, ngày lĩnh lương sau tự tung xúc xắc xem mất trắng hay nhân nhiều lần.'},ipo:{lines:['IPO'],col:'#0f7a6b',desc:'IPO: đưa doanh nghiệp lên sàn. Xúc xắc quyết định được định giá cao hay thất bại.'},kcn:{lines:['KHU CÔNG','NGHIỆP'],col:'#4b5d77',desc:'Khu công nghiệp: vốn khủng, dòng tiền lớn. Làm hồ sơ đúng luật (chậm) hay chạy giấy phép (đỏ đen)?'},fun:{lines:['GIẢI','TRÍ'],col:'#e0663a',desc:'Giải trí: kỳ nghỉ, siêu xe, đấu giá đồ cổ. Người giàu cũng cần vui để khỏi kiệt sức.'},legacy:{lines:['CÔNG TRÌNH','ĐỂ ĐỜI'],col:'#b8892a',desc:'Công trình để đời: trường học, bệnh viện, cây cầu mang dấu ấn của bạn. Tăng Di sản, điều kiện để chiến thắng.'},golf:{lines:['SÂN','GÔN'],col:'#2f8f3a',desc:'Sân gôn: chơi với giới chủ doanh nghiệp để tăng quan hệ, có thể được kèo nội bộ.'},inspect:{lines:['THANH','TRA'],col:'#7a1f2b',desc:'Thanh tra: ai từng chạy giấy phép có thể bị lộ, mất tài sản và đi tù.'},law:{lines:['LUẬT','MỚI'],col:'#8a6d1d',desc:'Luật mới: thuế, tín dụng, chính sách thay đổi. Có đội pháp chế thì thiệt hại ít hơn.'},crash:{lines:['KHỦNG','HOẢNG'],col:'#9b2c2c',desc:'Khủng hoảng: một ngành sụt giảm dòng tiền; ai có sẵn tiền mặt được mua tài sản giá rẻ.'},fraud:{lines:['ĐỐI TÁC','GIAN LẬN'],col:'#7d2a4a',desc:'Đối tác gian lận: mất một doanh nghiệp, trừ khi có đội pháp chế hoặc hiểu biết cao.'}};
 const ftGoal=()=>mode().ftGoal;
 
 /* ================= state ================= */
@@ -379,7 +406,7 @@ const SAVE_KEY='dongtien3d.v4',STATE_V=4;
 function save(){try{if(!G||!G.online)localStorage.setItem(SAVE_KEY,JSON.stringify(G))}catch(e){}if(typeof pushState==='function')pushState();}
 function validState(s){return s&&s.v===STATE_V&&Array.isArray(s.players)&&s.players.length&&s.players.every(p=>'living' in p&&'age' in p);}
 function sanitize(s){['turn','cur','stockIdx','rateAdj'].forEach(k=>s[k]=num(s[k]));if(!s.stockIdx)s.stockIdx=1;s.cyc=s.cyc||{land:'normal',re:'normal',stock:'normal'};
-  s.players.forEach(p=>{['cash','loan','salary','rent','living','childPer','kids','pos','ftPos','ftCF','ftStart','charity','skip','age','dep','cpi','net','parentCare'].forEach(k=>p[k]=num(p[k]));
+  s.players.forEach(p=>{['cash','loan','salary','rent','living','childPer','kids','pos','ftPos','ftCF','ftStart','ftBase','ftExp','ftLap','charity','skip','age','dep','cpi','net','parentCare'].forEach(k=>p[k]=num(p[k]));
   p.liabs=(p.liabs||[]).filter(l=>l).map(l=>({...l,bal:num(l.bal),pay:num(l.pay)}));p.assets=(p.assets||[]).filter(a=>a&&(a.type!=='stock'||STOCKS[a.sym]));
   p.assets.forEach(a=>['price','value','loan','pay','left','rent','opex','profit','equity','shares','cost','units','face','coupon','qty','rate','amount','paid','turns'].forEach(k=>{if(k in a)a[k]=num(a[k]);}));
   p.kidAges=(p.kidAges||[]).map(num);if(p.zod==null)p.zod=p.id%12;S(p);p.gift=num(p.gift);p.sides=p.sides||[];p.risk=num(p.risk);p.schoolPrem=num(p.schoolPrem);p.ach=p.ach||{};p.deals=p.deals||[];p.events=p.events||[];});return s;}
@@ -431,6 +458,8 @@ function newPlayer(i,d,prof,name,scen){
   for(const k in prof.L){const [b,pay]=prof.L[k];p.liabs.push({key:k,label:LIAB_LABEL[k],bal:T(b),pay:T(pay)});}
   let sav=T(prof.sav);
   if(scen==='grad'){p.age=22;sav=5*TR;p.liabs.push({key:'study',label:'Vay học phí đại học',bal:50*TR,pay:1*TR});}
+  if(!p.bot&&isPro())proPerks(p);
+  p.age0=p.age;p.sal0=p.salary;p.prof0=p.prof;p.missions=pickMissions();p.mDone=[];
   p.cash=sav+calc(p).cashflow;
   p.hist.push(snapHist(p));
   return p;
@@ -445,7 +474,7 @@ function pay(p,amt,why){
   if(!p.ft&&p.cash<amt&&p.loan+needLoan(p,amt)>loanCap(p))liquidate(p,amt);
   if(!p.ft&&p.cash<amt&&p.dep>0){const w=Math.min(p.dep,amt-p.cash);p.dep-=w;p.cash+=w;}
   const need=needLoan(p,amt);
-  if(need){p.loan+=need;p.cash+=need;p.st=p.st||{};p.st.loanMax=Math.max(p.st.loanMax||0,p.loan);toast(`${p.name} vay tiêu dùng tự động ${fmt(need)} (lãi ${fmt(need*clr())}/tháng)`,'neg');log(`Vay tiêu dùng ${fmt(need)} để trả: ${why}`,p);}
+  if(need){p.loan+=need;p.cash+=need;p.st=p.st||{};p.st.loanMax=Math.max(p.st.loanMax||0,p.loan);if(Math.random()<.4)chickSay('autoLoan',p);toast(`${p.name} vay tiêu dùng tự động ${fmt(need)} (lãi ${fmt(need*clr())}/tháng)`,'neg');log(`Vay tiêu dùng ${fmt(need)} để trả: ${why}`,p);}
   p.cash-=amt;sfx('pay');
 }
 function liquidate(p,amt){
@@ -503,6 +532,7 @@ function newYear(){
   if(M.bizRisk)G.players.forEach(p=>p.assets.forEach(a=>{if(a.type==='biz'&&a.kind!=='startup'){const base=a.profit0||(a.profit0=a.profit);let f=rf(.75,1.2);if(Math.random()<.06){f=.2;p.events.push({k:'bizbad',name:a.name});}a.profit=Math.round(clamp(a.profit*f,base*.3,base*1.5)/1e5)*1e5;}}));
   news.unshift(`Đất nền: ${CYC_LABEL[G.cyc.land]}. Nhà ở và căn hộ: ${CYC_LABEL[G.cyc.re]}. Chứng khoán: ${CYC_LABEL[G.cyc.stock]}.`);
   if(M.infl)news.push(`Lạm phát ${pct(M.infl)}: sinh hoạt phí, tiền nhà, chi phí nuôi con tăng theo.`);
+  swanRoll(news);
   G.news={year:yr,lines:news};
 }
 
@@ -520,7 +550,7 @@ function botPick(p,d){const L=BOT_LVL[p.botLvl||'normal'];const a=d.a;let best=n
     if(a.kind==='land'||a.kind==='startup'){if(p.cash>R.equity*3&&Math.random()<L.spec)best={x,real:0};continue;}
     if(real>0&&coc>=L.coc&&(!best||real>best.real))best={x,real};}
   return best?best.x:null;}
-function botHousekeeping(p){
+function botHousekeeping(p){if(p.ft){ftFix(p);if(!p.ftGuard&&p.ftStart>=4*TY)p.ftGuard=true;return;}
   if(p.ft)return;const c=calc(p),cushion=c.totalExp*(mode().life?6:3);
   while(p.loan>=CL_STEP&&p.cash-CL_STEP>c.totalExp*2){p.loan-=CL_STEP;p.cash-=CL_STEP;}
   p.liabs.slice().sort((a,b)=>b.pay/b.bal-a.pay/a.bal).forEach(l=>{if(p.cash-l.bal>cushion*1.5){p.cash-=l.bal;p.liabs.splice(p.liabs.indexOf(l),1);}});
@@ -539,6 +569,7 @@ function re(title,text,kind,price,rent,opex,term,o={}){rent=Math.round(rent*mode
   return {k:'prop',title,text,art:o.art,label:o.label,a,ltvs:kind==='land'?[0,.5]:[0,.5,.7]};}
 function biz(title,text,kind,price,profit,ltvs,term,rate,o={}){profit=Math.round(profit*(kind==='small'?mode().sMul:mode().yMul)/1e5)*1e5;return {k:'prop',title,text,art:o.art,a:{type:'biz',kind,name:title,price,value:price,profit,rate:(rate||.11)+(G&&G.rateAdj||0),term},ltvs};}
 function drawSmallRaw(){
+  if(proOffer()&&p0()&&!p0().bot&&Math.random()<.04)return {k:'proad',title:'Cash to Freedom PRO'};
   const r=Math.random(),M=mode();
   if(M.scam&&r<.05)return pick([{k:'scam',name:'Sàn tiền ảo VanaCoin',promise:.05,title:'Sàn tiền ảo lãi 5%/tháng',text:`${cap(who())} khoe ảnh chụp tài khoản lãi đều mỗi tháng, rủ bạn "vào sớm kẻo hết suất". Sàn không có giấy phép.`},
     {k:'scam',name:'Dự án nông nghiệp đa cấp',promise:.04,title:'Góp vốn trồng sâm, cam kết lãi 4%/tháng',text:'Hội thảo ở khách sạn 5 sao, diễn giả hứa "càng giới thiệu nhiều người càng giàu". Hợp đồng không ghi rõ ai chịu rủi ro.'}]);
@@ -607,7 +638,7 @@ function drawBigRaw(){
   return re('Lô đất 500 m² gần sân bay Long Thành','Đất thổ cư mặt đường, giá đã tăng mạnh nhiều năm qua. Không có dòng tiền.','land',rnd(20,50)*100*TR,0,0,15,{art:'land',label:'Long Thành, Đồng Nai'});
 }
 function bestCoc(d){if(d.k!=='prop')return 1;return Math.max(...d.ltvs.map(x=>analyze(d.a,x).coc));}
-function drawDeal(big){let d=big?drawBigRaw():drawSmallRaw();{const pp=p0();if(pp&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<Math.max(0,(S(pp).luck-50)/200+(d.a.type==='re'?(S(pp).rel-40)/120:0)))d=big?drawBigRaw():drawSmallRaw();}const gb=mode().goodBias;if(gb&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<gb)d=big?drawBigRaw():drawSmallRaw();if(gb&&d.k==='scam')d=drawSmallRaw();return d;}
+function drawDeal(big){let d=big?drawBigRaw():drawSmallRaw();{const pp=p0();if(pp&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<Math.max(0,(S(pp).luck-50)/200+(d.a.type==='re'?(S(pp).rel-40)/120:0)))d=big?drawBigRaw():drawSmallRaw();}{const pp=p0();if(pp&&pp.pro&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<.15)d=big?drawBigRaw():drawSmallRaw();}const gb=mode().goodBias;if(gb&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<gb)d=big?drawBigRaw():drawSmallRaw();if(gb&&d.k==='scam')d=drawSmallRaw();return d;}
 const drawSmall=()=>drawDeal(false),drawBig=()=>drawDeal(true);
 const RE_GROUP={room:'phòng trọ, ki-ốt, căn hộ dịch vụ',apt:'căn hộ chung cư',shop:'nhà phố',land:'đất nền'};
 function drawMarket(){
@@ -693,8 +724,9 @@ function checkAch(p){const got=[];const c=calc(p),nw=netWorth(p);
 
 /* ================= Chỉ số cuộc sống: GIEO GÌ GẶT NẤY ================= */
 const STATS={happy:{n:'Hạnh phúc',c:'#ff8fab',d:'Kéo May mắn đi lên mỗi năm'},luck:{n:'May mắn',c:'#ffd23f',d:'Cơ hội tốt xuất hiện nhiều hơn, có thể thoát nạn'},health:{n:'Sức khỏe',c:'#4fd18b',d:'Ít ốm, viện phí thấp hơn'},
-  kids:{n:'Con cái',c:'#7fd0ff',d:'Con ít tốn kém; trưởng thành sẽ báo hiếu'},know:{n:'Hiểu biết đầu tư',c:'#b98cff',d:'Gặp cổ phiếu giá tốt nhiều hơn'},rel:{n:'Quan hệ',c:'#ff9f43',d:'Được giới thiệu bất động sản tốt hơn'}};
-function S(p){if(!p.S)p.S={happy:50,luck:50,health:60,kids:50,know:40,rel:40};return p.S;}
+  kids:{n:'Con cái',c:'#7fd0ff',d:'Con ít tốn kém; trưởng thành sẽ báo hiếu'},know:{n:'Hiểu biết đầu tư',c:'#b98cff',d:'Gặp cổ phiếu giá tốt nhiều hơn'},rel:{n:'Quan hệ',c:'#ff9f43',d:'Được giới thiệu bất động sản tốt hơn'},
+  legacy:{n:'Di sản',c:'#f5c542',d:'Công trình để đời, từ thiện, giúp đỡ người khác. Ở Vòng Thịnh Vượng phải đủ Di sản mới chiến thắng.'}};
+function S(p){if(!p.S)p.S={happy:50,luck:50,health:60,kids:50,know:40,rel:40,legacy:0};if(p.S.legacy==null)p.S.legacy=0;return p.S;}
 const sv=(p,k)=>S(p)[k]/100;
 function addS(p,ch,why){const s=S(p),parts=[];let neg=false;for(const k in ch){const v=Math.round(ch[k]);if(!v)continue;s[k]=clamp(s[k]+v,0,100);parts.push(`${STATS[k].n} ${v>0?'+':''}${v}`);if(v<0)neg=true;}
   if(!parts.length)return;if(!p.bot&&typeof toast==='function')toast(parts.join(' · '),neg?'neg':'pos');if(typeof log==='function'&&G&&G.log)log(`${why?why+': ':''}${parts.join(', ')}`,p);}
@@ -713,17 +745,18 @@ function freeOptions(p){const L=[
   {id:'work',label:'Làm thêm cuối tuần',eff:{happy:-4,health:-3},cash:()=>Math.round(p.salary*.5/1e5)*1e5,note:'Có tiền ngay, nhưng hơi mệt'},
   {id:'gym',label:'Tập thể dục, chạy bộ',eff:{health:10,happy:3},note:'Ít ốm vặt, viện phí thấp hơn'},
   {id:'rest',label:'Ngủ nướng, xem phim',eff:{happy:10,luck:2},note:'Vui vẻ thì may mắn đến'},
-  {id:'course',label:'Học khóa đầu tư online',eff:{know:18},cost:2*TR,note:'Hiểu sâu về cổ phiếu, trái phiếu'}];
+  {id:'course',label:'Học khóa đầu tư online',eff:{know:18},cost:2*TR,note:'Hiểu sâu về cổ phiếu, trái phiếu'},
+  ...(!p.bot&&(proOffer()||isPro())?[{id:'pro',label:isPro()?'Chơi Cash to Freedom PRO, học với chuyên gia':'Học tài chính với chuyên gia trong Cash to Freedom PRO',eff:{know:isPro()?20:6,happy:4},note:isPro()?'Kinh nghiệm thực tế từ chuyên gia':'Xem bản PRO giúp bạn chơi giỏi hơn thế nào'}]:[])];
   return L.filter(o=>!o.need||o.need());}
 function botFree(p,opts){const s=S(p),f=id=>opts.find(o=>o.id===id);
   if(p.kids&&s.kids<60&&f('kids'))return f('kids');if(p.cash<calc(p).totalExp*3)return f('work');if(s.health<45)return f('gym');if(s.know<55)return f('news');if(s.rel<55)return f('coffee');return f('rest');}
 function cardFree(p){const opts=freeOptions(p);
-  const pickO=o=>{if(o.cost)pay(p,o.cost,o.label);if(o.cash){const c=o.cash();gain(p,c);toast(`${p.name}: +${fmt(c)} từ làm thêm`,'pos');}addS(p,o.eff,o.label);if(!p.bot)quoteToast(FREE_QUOTES[o.id]);endTurn();};
+  const pickO=o=>{if(o.id==='pro'&&!isPro()){addS(p,o.eff,o.label);return showPro(endTurn);}if(o.cost)pay(p,o.cost,o.label);if(o.cash){const c=o.cash();gain(p,c);toast(`${p.name}: +${fmt(c)} từ làm thêm`,'pos');}addS(p,o.eff,o.label);if(!p.bot)quoteToast(FREE_QUOTES[o.id]);endTurn();};
   const inl=opts.map(o=>()=>pickO(o));
   openModal({tone:'charity',eyebrow:'Thời gian rảnh · Gieo gì gặt nấy',title:'Cuối tuần này bạn làm gì?',art:art('freetime'),story:'Một buổi chiều cuối tuần hiếm hoi không phải làm việc. Cách bạn dùng thời gian hôm nay sẽ quyết định cơ hội của bạn ngày mai.',inl,
     body:`<div class="rows">${opts.map((o,i)=>`<div class="row"><div class="grow"><b>${o.label}</b><small>${Object.entries(o.eff).map(([k,v])=>`<span style="color:${v>0?STATS[k].c:'var(--danger)'}">${STATS[k].n} ${v>0?'+':''}${v}</span>`).join(' · ')}${o.cost?` · tốn ${fmt(o.cost)}`:''}${o.cash?` · <span class="pos">+${fmt(o.cash())}</span>`:''}<br>${o.note}</small></div><button class="btn sm ${i===0?'green':''}" data-i="${i}">Chọn</button></div>`).join('')}</div>`,
     lesson:'Gieo gì gặt nấy: thời gian đầu tư cho con cái, kiến thức, sức khỏe và các mối quan hệ sẽ quay lại thành cơ hội sau này.',advice:()=>`Chỉ số thấp nhất của bạn là <b>${STATS[Object.entries(S(p)).sort((a,b)=>a[1]-b[1])[0][0]].n}</b>. ${p.cash<calc(p).totalExp*3?'Tiền mặt đang mỏng, làm thêm sẽ giúp an toàn hơn.':'Nên đầu tư thời gian vào chỉ số này.'}`,bot:()=>pickO(botFree(p,opts))});}
-const FREE_QUOTES={kids:'Con là tài sản quý nhất, mà tài sản này không mất giá!',news:'Biết người biết ta, trăm trận trăm thắng!',coffee:'Buôn có bạn, bán có phường!',work:'Tay làm hàm nhai, tay quai miệng trễ!',gym:'Có sức khỏe là có tất cả!',rest:'Nghỉ ngơi cũng là đầu tư… vào giấc ngủ!',course:'Đầu tư vào kiến thức sinh lời cao nhất!'};
+const FREE_QUOTES={kids:'Con là tài sản quý nhất, mà tài sản này không mất giá!',news:'Biết người biết ta, trăm trận trăm thắng!',coffee:'Buôn có bạn, bán có phường!',work:'Tay làm hàm nhai, tay quai miệng trễ!',gym:'Có sức khỏe là có tất cả!',rest:'Nghỉ ngơi cũng là đầu tư… vào giấc ngủ!',course:'Đầu tư vào kiến thức sinh lời cao nhất!',pro:'Học từ người đi trước là con đường ngắn nhất!'};
 
 /* ================= UI: toasts, modal, viewer ================= */
 function toast(text,kind=''){const el=document.createElement('div');el.className='toast '+kind;el.textContent=text;$('#toasts').appendChild(el);setTimeout(()=>el.remove(),3400);while($('#toasts').children.length>3)$('#toasts').firstChild.remove();}
@@ -767,7 +800,7 @@ function refreshViewer(){if(!viewing||!G||!G.players)return;if(viewing.startsWit
 const fact=(l,v,cls='',sm='')=>`<div class="fact"><label>${l}</label><b class="${cls}">${v}</b>${sm?`<small>${sm}</small>`:''}</div>`;
 const line=(l,v,cls='',tot)=>`<div class="${tot?'tot':''}"><span>${l}</span><b class="${cls}">${v}</b></div>`;
 function walletBar(p){if(!p||!G||!G.players)return '';const c=calc(p);
-  if(p.ft)return `<div class="wallet"><div><label>Tiền mặt</label><b>${fmt(p.cash)}</b></div><div><label>Ngày lĩnh lương</label><b class="pos">+${fmt(p.ftCF)}</b></div><div><label>Mục tiêu</label><b>${fmt(p.ftStart+ftGoal())}</b></div></div>`;
+  if(p.ft)return `<div class="wallet"><div><label>Tiền mặt</label><b>${fmt(p.cash)}</b></div><div><label>Nhận ròng</label><b class="${ftNet(p)>=0?'pos':'neg'}">${sgn(ftNet(p))}</b></div><div><label>Mục tiêu</label><b>${fmt(p.ftStart+ftGoal())}</b></div></div>`;
   return `<div class="wallet"><div><label>Tiền mặt${p.dep?' + tiết kiệm':''}</label><b>${fmt(p.cash)}${p.dep?`<small> +${fmt(p.dep)}</small>`:''}</b></div><div><label>Dòng tiền/tháng</label><b class="${c.cashflow>=0?'pos':'neg'}">${sgn(c.cashflow)}</b></div><div><label>Thụ động / chi phí</label><b><span class="pos">${fmt(c.passive)}</span>/${fmt(c.totalExp)}</b></div><div><label>Còn được vay</label><b>${fmt(Math.max(0,loanCap(p)-p.loan))}</b></div></div>`;}
 function afterLine(p,amt){const left=p.cash+p.dep-amt;return line('Tiền mặt còn lại sau khi mua',left>=0?fmt(left):`${fmt(0)} (phải vay ${fmt(needLoan(p,Math.max(0,amt-p.dep)))})`,left>=0?'':'neg');}
 function calLabel(){if(!G||!G.players)return '';const m=(G.month||0)%12+1;return `T${m}–T${Math.min(12,m+mpt()-1)}/${yearOf()}`;}
@@ -782,7 +815,7 @@ function renderChips(){
   const bar=(v,k,col)=>`<div class="mb"><i><b style="width:${Math.max(v?4:0,Math.min(100,Math.abs(v)/M[k]*100))}%;background:${col}"></b></i><span style="color:${col}">${k==='cf'?sgn(v):fmt(v)}</span></div>`;
   el.innerHTML=`<div class="rk cols"><span></span><span></span><span>Người chơi</span><span>Tiền mặt</span><span>Dòng tiền</span><span>Thụ động</span><span>Chi phí</span></div>`+rows.map((r,i)=>{const p=r.p,idx=G.players.indexOf(p);
     const tag=p.won?'THẮNG':p.ft?'TỰ DO TÀI CHÍNH':p.out?'ĐÃ NGHỈ HƯU':p.bot?'MÁY':'';
-    return `<button class="rk ${idx===G.cur?'on':''} ${i===0?'top':''}" data-p="${idx}"><span class="n">${i+1}</span>${pBadge(p,30)}<span class="nm" style="color:${p.color}">${esc(p.name)}<small>${Math.floor(p.age)} tuổi · TS ${fmt(netWorth(p))}${tag?' · '+tag:''}</small></span>${bar(r.cash,'cash','#e9b949')}${bar(r.cf,'cf',r.cf>=0?'#4fd18b':'#ff6b6b')}${bar(r.pas,'pas','#5fe0a0')}${bar(r.exp,'exp','#ff8a8a')}</button>`;}).join('');
+    return `<button class="rk ${idx===G.cur?'on':''} ${i===0?'top':''}" data-p="${idx}"><span class="n">${i+1}</span>${pBadge(p,30)}<span class="nm" style="color:${p.color}">${esc(p.name)}${p.pro?' 👑':''}<small>${Math.floor(p.age)} tuổi · TS ${fmt(netWorth(p))}${tag?' · '+tag:''}</small></span>${bar(r.cash,'cash','#e9b949')}${bar(r.cf,'cf',r.cf>=0?'#4fd18b':'#ff6b6b')}${bar(r.pas,'pas','#5fe0a0')}${bar(r.exp,'exp','#ff8a8a')}</button>`;}).join('');
 }
 $('#rank').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b)showStatement(G.players[+b.dataset.p]);});
 $('#rankToggle').addEventListener('click',()=>{rankOpen=!rankOpen;try{localStorage.setItem('dongtien3d.rank',rankOpen?'1':'0')}catch(e){}if(G&&G.players){renderChips();layoutCamera();}});
@@ -795,9 +828,9 @@ function renderHUD(){
     stats=`<div class="stat"><label>Tiền mặt</label><strong>${fmt(p.cash)}</strong></div><div class="stat"><label>Dòng tiền/tháng</label><strong class="${c.cashflow>=0?'pos':'neg'}">${sgn(c.cashflow)}</strong></div><div class="stat"><label>Thụ động / Chi phí</label><strong><span class="pos">${fmt(c.passive)}</span>/${fmt(c.totalExp)}</strong></div>`;
     prog=`<div class="bar"><i style="width:${pc}%"></i></div><p>${c.passive>c.totalExp?'Thu nhập thụ động đã vượt chi phí!':`Cần thêm <b class="num" style="color:var(--text)">${fmt(c.totalExp-c.passive)}</b>/tháng thu nhập thụ động để tự do tài chính.`}${p.loan?` · Nợ tiêu dùng <b class="num neg">${fmt(p.loan)}</b>`:''}</p>`;
   }else{
-    const goal=p.ftStart+ftGoal(),pc=Math.min(100,(p.ftCF-p.ftStart)/ftGoal()*100),d=G.dreams[p.dream];
-    stats=`<div class="stat"><label>Tiền mặt</label><strong>${fmt(p.cash)}</strong></div><div class="stat"><label>Ngày lĩnh lương</label><strong class="pos">+${fmt(p.ftCF)}</strong></div><div class="stat"><label>Giấc mơ</label><strong>${fmt(d.c)}</strong></div>`;
-    prog=`<div class="bar"><i style="width:${pc}%"></i></div><p>Vòng Thịnh Vượng: đạt <b class="num" style="color:var(--text)">${fmt(goal)}</b> dòng tiền hoặc mua “${esc(d.n)}” để thắng.</p>`;
+    ftFix(p);const goal=p.ftStart+ftGoal(),pc=Math.min(100,(p.ftCF-p.ftStart)/ftGoal()*100),d=G.dreams[p.dream];
+    stats=`<div class="stat"><label>Tiền mặt</label><strong>${fmt(p.cash)}</strong></div><div class="stat"><label>Nhận ròng</label><strong class="${ftNet(p)>=0?'pos':'neg'}">${sgn(ftNet(p))}</strong></div><div class="stat"><label>Giấc mơ</label><strong>${fmt(dreamCost(p))}</strong></div>`;
+    prog=`<div class="bar"><i style="width:${pc}%"></i></div><p>Vòng Thịnh Vượng: đạt <b class="num" style="color:var(--text)">${fmt(goal)}</b> dòng tiền hoặc mua “${esc(d.n)}”, và Di sản <b class="num ${S(p).legacy>=legacyNeed()?'pos':'neg'}">${S(p).legacy}/${legacyNeed()}</b> để thắng.</p>`;
   }
   const nd=p.ft?2:1;
   const rollBtns=remote?`<button class="btn primary" disabled>${p.bot?'Máy đang chơi…':'Chờ '+esc(p.name)+'…'}</button>`:p.charity>0?`<button class="btn primary" data-roll="${nd}" ${busy?'disabled':''}>${nd} xúc xắc</button><button class="btn primary" data-roll="${nd+1}" ${busy?'disabled':''}>${nd+1} xúc xắc</button>`
@@ -841,12 +874,74 @@ function assetLabel(a){
   if(a.type==='scam')return `${a.name} (cam kết ${pct(a.promise)}/tháng)`;
   return a.name+(a.share?` (${pct(a.share,0)})`:'');
 }
+/* ================= Giao dịch tức thì: mua bán, vay, trả nợ bất cứ lúc nào ================= */
+/* Ngoài đời giao dịch lúc nào cũng được, chỉ là giá bao nhiêu. Bán ngay cho môi giới/ngân hàng rẻ hơn
+   giá người mua trên thẻ Thị trường; mua ngay trên sàn đắt hơn giá trên thẻ Cơ hội. */
+const QUICK={re:{boom:.97,normal:.9,bust:.8},biz:.7,gold:.97,crypto:.98,bond:.95,buy:1.02,goldBuy:1.03};
+let armed=null;
+const reCyc=a=>(G.cyc&&G.cyc[a.kind==='land'?'land':'re'])||'normal';
+function quickQuote(a){let price,net,basis;
+  if(a.type==='re'){price=round1(assetValue(a)*QUICK.re[reCyc(a)]);net=price-a.loan-price*TAX_SELL_RE;basis=a.equity||0;}
+  else if(a.type==='biz'){if(a.kind==='startup')return null;price=round1(assetValue(a)*QUICK.biz);net=price-a.loan;basis=a.equity||0;}
+  else if(a.type==='stock'){price=Math.round(a.shares*STOCKS[a.sym].base*(G.stockIdx||1));net=price*(1-STK_FEE-STK_TAX);basis=a.shares*a.cost;}
+  else if(a.type==='gold'){price=Math.round(a.qty*GOLD_REF*QUICK.gold);net=price;basis=a.cost;}
+  else if(a.type==='crypto'){price=Math.round(a.qty*btcPrice()*QUICK.crypto);net=price;basis=a.cost;}
+  else if(a.type==='bond'){price=Math.round(a.units*a.face*(a.def?.4:QUICK.bond));net=price;basis=a.units*a.face;}
+  else return null;
+  net=Math.round(net);return {price,net,basis,profit:net-basis};}
+function quickSell(p,a){const Q=quickQuote(a);if(!Q)return;
+  if(Q.net<0&&p.cash<-Q.net)return toast(`Cần ${fmt(-Q.net)} tiền mặt để tất toán khoản vay khi bán`,'neg');
+  p.assets.splice(p.assets.indexOf(a),1);p.cash+=Q.net;sfx(Q.net>0?'cash':'pay');
+  p.deals.push({name:'Bán ngay '+assetLabel(a),pl:Q.profit});if(Q.profit<0)chickSay('lossSell',p);
+  toast(`Bán ngay ${assetLabel(a)}: nhận ${fmt(Q.net)} (${Q.profit>=0?'lãi':'lỗ'} ${fmt(Math.abs(Q.profit))})`,Q.profit>=0?'pos':'neg');
+  log(`Bán ngay ${assetLabel(a)} giá ${fmt(Q.price)}, nhận về ${fmt(Q.net)} (${Q.profit>=0?'lãi':'lỗ'} ${fmt(Math.abs(Q.profit))})`,p);}
+function prepay(p,a,amt){amt=Math.min(amt,a.loan,p.cash);if(amt<=0)return;a.loan-=amt;p.cash-=amt;
+  if(a.loan<1){a.loan=0;a.left=0;a.pay=0;}else a.pay=pmt(a.loan,a.rate,a.left/12);
+  sfx('pay');log(`Trả bớt nợ vay ${a.name}: ${fmt(amt)}, góp còn ${fmt(a.pay)}/tháng`,p);toast(`Trả bớt ${fmt(amt)}: góp còn ${fmt(a.pay)}/tháng`,'pos');}
+const equityRoom=a=>Math.max(0,Math.floor((assetValue(a)*(a.type==='biz'||a.kind==='land'?.5:.7)-a.loan)/(10*TR))*10*TR);
+function equityLoan(p,a,amt){if(amt<=0)return;const r=Math.max(.06,.1+(G.rateAdj||0));
+  a.rate=(a.loan*(a.rate||r)+amt*r)/(a.loan+amt);a.loan+=amt;a.left=Math.max(a.left||0,15*12);a.teaserLeft=0;a.pay=pmt(a.loan,a.rate,a.left/12);p.cash+=amt;sfx('cash');
+  log(`Vay thế chấp ${a.name}: ${fmt(amt)} (lãi ${pct(r)}/năm), góp ${fmt(a.pay)}/tháng`,p);toast(`Vay thế chấp ${fmt(amt)}: góp ${fmt(a.pay)}/tháng`,'neg');}
+function payDown(p,i,amt){const l=p.liabs[i];amt=Math.min(amt,l.bal,p.cash);if(amt<=0)return;const k=(l.bal-amt)/l.bal;p.cash-=amt;l.bal-=amt;l.pay=Math.round(l.pay*k);
+  if(l.bal<1)p.liabs.splice(i,1);sfx('pay');log(`Trả bớt ${l.label}: ${fmt(amt)}`,p);toast(`Trả bớt ${l.label}: chi phí còn ${fmt(l.pay)}/tháng`,'pos');}
+const stockAsk=sym=>Math.round(STOCKS[sym].base*(G.stockIdx||1)*QUICK.buy/100)*100;
+function quickBuy(p,kind,sym,n){
+  if(kind==='stock'){const px=stockAsk(sym),total=Math.round(n*px*(1+STK_FEE));if(p.cash<total)return;p.cash-=total;
+    const h=p.assets.find(a=>a.type==='stock'&&a.sym===sym);if(h){h.cost=(h.cost*h.shares+total)/(h.shares+n);h.shares+=n;}else p.assets.push({type:'stock',sym,shares:n,cost:total/n});
+    log(`Mua ngay ${n} cp ${sym} @ ${fmtD(px)} = ${fmt(total)}`,p);}
+  else if(kind==='gold'){const total=Math.round(n*GOLD_REF*QUICK.goldBuy);if(p.cash<total)return;p.cash-=total;const g=p.assets.find(a=>a.type==='gold');if(g){g.qty+=n;g.cost+=total;}else p.assets.push({type:'gold',qty:n,cost:total});log(`Mua ngay ${n} chỉ vàng ${fmt(total)}`,p);}
+  else if(kind==='crypto'){const total=Math.round(n*btcPrice()*QUICK.buy);if(p.cash<total)return;p.cash-=total;const h=p.assets.find(a=>a.type==='crypto');if(h){h.qty+=n;h.cost+=total;}else p.assets.push({type:'crypto',qty:n,cost:total});log(`Mua ngay ${trimNum(n,2)} BTC ${fmt(total)}`,p);}
+  sfx('pay');}
+/* Hỏi mua tài sản của người chơi khác theo giá thị trường × k. Người mua nhận luôn khoản vay còn lại. */
+const offerFor=(a,k)=>round1(assetValue(a)*k);
+function botAccepts(q,a,offer){const Q=quickQuote(a),r=offer/Math.max(1,assetValue(a)),cf=assetCF(a),gain=offer-num(a.loan)-(Q?Q.basis:0);
+  return r>=1.25||(r>=1.1&&(cf<=0||gain>(Q?Q.basis:0)*.2))||(r>=1&&cf<0);}
+function tradeAsset(buyer,seller,a,offer){const loan=num(a.loan),fee=a.type==='re'?Math.round(offer*FEE_BUY_RE):0,pay=offer-loan+fee,get=Math.round(offer-loan-(a.type==='re'?offer*TAX_SELL_RE:0));
+  if(buyer.cash<pay)return toast(`Cần ${fmt(pay)} tiền mặt (giá ${fmt(offer)} − dư nợ ${fmt(loan)}${fee?' + phí 1%':''})`,'neg');
+  if(get<0&&seller.cash<-get)return toast(`${seller.name} không đủ tiền tất toán khoản vay`,'neg');
+  const ok=seller.bot?botAccepts(seller,a,offer):confirm(`${seller.name} ơi, ${buyer.name} muốn mua ${assetLabel(a)} giá ${fmt(offer)}.\nBạn nhận về ${fmt(get)} (đã trừ dư nợ${a.type==='re'?' và thuế 2%':''}). Đồng ý bán?`);
+  if(!ok){toast(`${seller.name} từ chối bán ${assetLabel(a)} giá ${fmt(offer)}`,'neg');log(`Hỏi mua ${assetLabel(a)} của ${seller.name} giá ${fmt(offer)}: bị từ chối`,buyer);return;}
+  const Q=quickQuote(a);seller.assets.splice(seller.assets.indexOf(a),1);seller.cash+=get;seller.deals.push({name:'Bán cho '+buyer.name+': '+assetLabel(a),pl:get-(Q?Q.basis:0)});
+  buyer.cash-=pay;if(a.type==='re'||a.type==='biz'){a.price=offer;a.value=offer;a.equity=pay;}else if(a.type==='gold'||a.type==='crypto')a.cost=pay;buyer.assets.push(a);sfx('cash');
+  toast(`${buyer.name} mua ${assetLabel(a)} của ${seller.name} giá ${fmt(offer)}`,'pos');
+  log(`Mua ${assetLabel(a)} của ${seller.name} giá ${fmt(offer)}: trả ${fmt(pay)}, nhận nợ vay ${fmt(loan)}`,buyer);log(`Bán ${assetLabel(a)} cho ${buyer.name} giá ${fmt(offer)}, nhận về ${fmt(get)}`,seller);}
 function showStatement(p){
   const c=calc(p),isCur=p===curP()&&G.phase==='roll'&&!isBotTurn(),M=mode();
-  if(p.ft){
-    openViewer({tone:'ft',key:'st:'+p.id,eyebrow:`Báo cáo · Vòng Thịnh Vượng · ${Math.floor(p.age)} tuổi`,title:esc(p.name),
-      body:`<div class="ledger"><div class="facts">${fact('Tiền mặt',fmt(p.cash))}${fact('Ngày lĩnh lương','+'+fmt(p.ftCF),'pos')}${fact('Mục tiêu',fmt(p.ftStart+ftGoal()))}${fact('Giấc mơ',fmt(G.dreams[p.dream].c))}</div>
-      <p>Giấc mơ: <b>${esc(G.dreams[p.dream].n)}</b>. Tự do tài chính lúc ${Math.floor(p.freeAge||p.age)} tuổi.</p><h3>Khoản đầu tư</h3><table>${p.ftAssets.map(a=>`<tr><td>${esc(a.name)}</td><td class="pos">+${fmt(a.cf)}</td></tr>`).join('')||'<tr><td>Chưa có</td><td></td></tr>'}</table>${sparkHTML()}${achHTML(p)}</div>`});
+  const buyer=!isOnline()&&G.phase==='roll'&&!isBotTurn()&&curP()!==p&&!curP().ft&&!p.ft?curP():null;
+  if(p.ft){ftFix(p);const fee=guardFee(p),me=p===curP()&&G.phase==='roll'&&!isBotTurn(),inl=[];
+    const btn=(label,fn,cls='')=>{inl.push(()=>{fn();renderHUD();save();showStatement(p);});return `<button class="btn sm ${cls}" data-i="${inl.length-1}">${label}</button>`;};
+    const secs=[...new Set(p.ftAssets.map(a=>a.sector))];
+    openViewer({tone:'ft',key:'st:'+p.id,eyebrow:`Báo cáo · Vòng Thịnh Vượng · ${Math.floor(p.age)} tuổi`,title:esc(p.name),inl,
+      body:`<div class="ledger"><div class="facts">${fact('Tiền mặt',fmt(p.cash))}${fact('Ngày lĩnh lương','+'+fmt(p.ftCF),'pos')}${fact('Chi tiêu lối sống','−'+fmt(p.ftExp),'neg',`${LIFESTYLE[p.ftStyle||'comfort'].n}, +${pct(FT_INFL,0)} mỗi lần`)}${fee?fact('Đội pháp chế & thuế','−'+fmt(fee),'neg'):''}${fact('Nhận ròng',sgn(ftNet(p)),ftNet(p)>=0?'pos':'neg')}${fact('Mục tiêu',fmt(p.ftStart+ftGoal()))}${fact('Giấc mơ',fmt(dreamCost(p)))}${fact('Đa dạng hóa',`${secs.length} ngành`,secs.length>=3?'pos':'warn')}${fact('Di sản',`${S(p).legacy}/${legacyNeed()}`,S(p).legacy>=legacyNeed()?'pos':'warn','cần để chiến thắng')}${fact('Bộ sưu tập',`${collOwned(p).size}/${COLL.length}`)}</div>
+      <p>Giấc mơ: <b>${esc(G.dreams[p.dream].n)}</b>. Tự do tài chính lúc ${Math.floor(p.freeAge||p.age)} tuổi.${p.ftFell?` Đã từng rơi lại Vòng Cối Xay ${p.ftFell} lần.`:''}${p.jail?` <span class="neg">Đang ngồi tù: còn ${p.jail} lượt.</span>`:''}${p.bribes?` <span class="neg">Hồ sơ chạy giấy phép: ${p.bribes} lần (Thanh tra dễ phát hiện).</span>`:''}${p.golfClub?' Hội viên câu lạc bộ gôn.':''}${p.ipos?` Đã IPO ${p.ipos} lần.`:''}</p>
+      <h3>Đội pháp chế & thuế</h3><p>${p.ftGuard?`Đang thuê luật sư và kế toán thuế: ${fmt(fee)} mỗi ngày lĩnh lương. Bị kiện, kiểm toán, gian lận, luật mới đều nhẹ hơn; kèo mạo hiểm được thẩm định sẵn.`:`Chưa có. Người giàu là mục tiêu của kiện tụng và kiểm toán: thuê đội pháp chế tốn ${fmt(Math.round(p.ftStart*GUARD/1e6)*1e6)} mỗi ngày lĩnh lương.`}</p>${me?`<div class="acts">${p.ftGuard?btn('Cho nghỉ đội pháp chế',()=>{p.ftGuard=false;log('Cho nghỉ đội pháp chế & thuế',p);}):btn('Thuê đội pháp chế & thuế',()=>{p.ftGuard=true;log('Thuê đội pháp chế & thuế',p);},'primary')}</div>`:''}
+      <h3>Doanh nghiệp</h3><table>${p.ftAssets.map(a=>`<tr><td>${esc(a.name)}<br><small>${SECTORS[a.sector]||''} · vốn ${fmt(a.cost||0)}${a.ramp?` · chờ thủ tục ${a.ramp} kỳ`:''}${a.ipo?' · đã niêm yết':''}${a.bribe?' · <span class="neg">giấy phép “chạy”</span>':''}</small></td><td class="pos">+${fmt(a.cf)}</td></tr>`).join('')||'<tr><td>Chưa có</td><td></td></tr>'}<tr><td>Danh mục từ Vòng Cối Xay</td><td class="pos">+${fmt(p.ftBase)}</td></tr></table>
+      ${p.ftVentures.length?`<h3>Kèo đang chờ chốt</h3><table>${p.ftVentures.map(v=>`<tr><td>${esc(v.name)}<br><small>${v.dd?'đã thẩm định':'chưa thẩm định'} · ${v.due?'tới hạn: tung xúc xắc ở lượt tới':'chốt ở ngày lĩnh lương tới'}</small></td><td>${fmt(v.stake)}</td></tr>`).join('')}</table>`:''}
+      ${missionsHTML(p)}
+      <h3>Chỉ số cuộc sống</h3>${statsHTML(p)}
+      ${(p.works||[]).length?`<h3>Công trình để đời</h3><table>${p.works.map(w=>`<tr><td>${esc(w)}</td><td>★</td></tr>`).join('')}</table>`:''}
+      <div class="acts">${(inl.push(()=>showCollection(p)),`<button class="btn sm" data-i="${inl.length-1}">Xem bộ sưu tập</button>`)}</div>
+      ${sparkHTML()}${achHTML(p)}</div>`});
     drawSpark(p);return;
   }
   const inl=[];const btn=(label,fn,dis,cls='')=>{inl.push(()=>{fn();renderHUD();save();showStatement(p);});return `<button class="btn sm ${cls}" data-i="${inl.length-1}" ${dis?'disabled':''}>${label}</button>`;};
@@ -861,15 +956,22 @@ function showStatement(p){
     if(a.type==='bond')d=`Mệnh giá ${fmt(a.face)}/lô · lãi ${pct(a.coupon)}/năm`;
     if(a.type==='gold')d=`Giá vốn ${fmt(a.cost)}`;
     if(a.type==='scam')d=`Đã nhận lại ${fmt(a.paid)}`;
-    return `<tr><td>${esc(assetLabel(a))}<br><small>${d}</small></td><td>${fmt(assetValue(a))}</td></tr>`;}).join('')||'<tr><td style="color:var(--muted)">Chưa có tài sản. Hãy tìm thương vụ ở ô Cơ hội.</td><td></td></tr>';
-  const liabRows=p.liabs.map((l,i)=>`<tr><td>${esc(l.label)}<br><small>Trả ${fmt(l.pay)}/tháng</small></td><td>${fmt(l.bal)} ${isCur?btn('Trả hết',()=>payOff(p,i),p.cash<l.bal):''}</td></tr>`).join('')
+    const Q=quickQuote(a);let acts='';
+    if(isCur&&Q){acts+=armed===a?btn(`Xác nhận bán: nhận ${fmt(Q.net)}`,()=>{armed=null;quickSell(p,a);},Q.net<0&&p.cash<-Q.net,'primary'):btn(`Bán ngay ${fmt(Q.price)}`,()=>{armed=a;});
+      if(a.loan>0){const part=Math.min(a.loan,Math.max(10*TR,Math.round(a.loan/4/(10*TR))*10*TR));acts+=btn(`Trả bớt nợ ${fmt(part)}`,()=>prepay(p,a,part),p.cash<part,'green');if(part<a.loan)acts+=btn('Trả hết nợ vay',()=>prepay(p,a,a.loan),p.cash<a.loan,'green');}
+      const room=(a.type==='re'||a.type==='biz')&&a.kind!=='startup'?equityRoom(a):0;if(room>=10*TR)acts+=btn(`Vay thế chấp ${fmt(room)}`,()=>equityLoan(p,a,room));}
+    if(buyer&&Q&&a.type!=='stock')acts+=[1,1.1,1.25].map(k=>{const o=offerFor(a,k);return btn(`Hỏi mua ${fmt(o)}`,()=>tradeAsset(buyer,p,a,o),buyer.cash<o-num(a.loan));}).join('');
+    const qd=Q&&isCur?`<br><small>Bán ngay: giá ${fmt(Q.price)}${a.loan?` − dư nợ ${fmt(a.loan)}`:''}${a.type==='re'?' − thuế 2%':''} = nhận ${fmt(Q.net)} · <span class="${Q.profit>=0?'pos':'neg'}">${Q.profit>=0?'lãi':'lỗ'} ${fmt(Math.abs(Q.profit))}</span></small>`:'';
+    return `<tr><td>${esc(assetLabel(a))}<br><small>${d}</small>${qd}${acts?`<div class="acts">${acts}</div>`:''}</td><td>${fmt(assetValue(a))}</td></tr>`;}).join('')||'<tr><td style="color:var(--muted)">Chưa có tài sản. Hãy tìm thương vụ ở ô Cơ hội.</td><td></td></tr>';
+  const liabRows=p.liabs.map((l,i)=>`<tr><td>${esc(l.label)}<br><small>Trả ${fmt(l.pay)}/tháng</small></td><td>${fmt(l.bal)} ${isCur?btn('Trả hết',()=>payOff(p,i),p.cash<l.bal):''}${isCur&&l.bal>10*TR?btn(`Trả bớt ${fmt(Math.max(10*TR,Math.round(l.bal/4/TR)*TR))}`,()=>payDown(p,i,Math.max(10*TR,Math.round(l.bal/4/TR)*TR)),p.cash<Math.max(10*TR,Math.round(l.bal/4/TR)*TR),'green'):''}</td></tr>`).join('')
     +`<tr><td>Vay tiêu dùng<br><small>Lãi ${pct(clr())}/tháng, hạn mức ${fmt(loanCap(p))}</small></td><td>${fmt(p.loan)}</td></tr>`;
-  const loanBtns=isCur?`<div class="acts">${btn('Vay thêm 10 tr',()=>{p.loan+=CL_STEP;p.cash+=CL_STEP;log('Vay tiêu dùng 10 tr',p);},p.loan+CL_STEP>loanCap(p))}${btn('Trả bớt nợ 10 tr',()=>{p.loan-=CL_STEP;p.cash-=CL_STEP;log('Trả nợ tiêu dùng 10 tr',p);},p.loan<CL_STEP||p.cash<CL_STEP,'green')}</div>`:'';
+  const loanBtns=isCur?`<div class="acts">${btn('Vay thêm 10 tr',()=>{p.loan+=CL_STEP;p.cash+=CL_STEP;log('Vay tiêu dùng 10 tr',p);},p.loan+CL_STEP>loanCap(p))}${btn('Trả bớt nợ 10 tr',()=>{p.loan-=CL_STEP;p.cash-=CL_STEP;log('Trả nợ tiêu dùng 10 tr',p);},p.loan<CL_STEP||p.cash<CL_STEP,'green')}${btn('Vay thêm 100 tr',()=>{p.loan+=10*CL_STEP;p.cash+=10*CL_STEP;log('Vay tiêu dùng 100 tr',p);},p.loan+10*CL_STEP>loanCap(p))}${btn('Trả hết nợ tiêu dùng',()=>{const v=p.loan;p.cash-=v;p.loan=0;log(`Trả hết nợ tiêu dùng ${fmt(v)}`,p);},!p.loan||p.cash<p.loan,'green')}</div>`:'';
   const depBtns=isCur?`<div class="acts">${btn('Gửi 10 tr',()=>{p.cash-=10*TR;p.dep+=10*TR;},p.cash<10*TR)}${btn('Gửi 100 tr',()=>{p.cash-=100*TR;p.dep+=100*TR;},p.cash<100*TR)}${btn('Rút hết',()=>{p.cash+=p.dep;p.dep=0;},!p.dep,'green')}</div>`:'';
   const insRow=M.insurance?`<h3>Bảo hiểm sức khỏe</h3><p>${p.hins?`Đang có bảo hiểm, phí ${fmt(c.insPrem)}/tháng, chi trả 80% viện phí.`:'Chưa có bảo hiểm. Một lần nằm viện có thể tốn 30–90 tr.'}</p>${isCur?`<div class="acts">${p.hins?btn('Hủy bảo hiểm',()=>{p.hins=false;}):btn('Mua bảo hiểm',()=>{p.hins=true;log('Mua bảo hiểm sức khỏe',p);},false,'green')}</div>`:''}`:'';
   openViewer({tone:'payday',key:'st:'+p.id,eyebrow:`Báo cáo tài chính · ${p.retired?'Nghỉ hưu':p.prof} · ${Math.floor(p.age)} tuổi${p.bot?' · máy':''}`,title:esc(p.name),inl,
     body:`<div class="ledger">
     <div class="facts">${fact('Tiền mặt',fmt(p.cash))}${fact('Dòng tiền/tháng',sgn(c.cashflow),c.cashflow>=0?'pos':'neg')}${fact('Tài sản ròng',fmt(netWorth(p)),netWorth(p)>=0?'':'neg','tài sản − nợ')}${fact('Giai đoạn',TIERS[tier(p)].n,'',tier(p)<3?`lên tiếp khi vốn đầu tư ≥ ${fmt(TIER_NW[tier(p)+1])}`:'cao nhất')}${fact('Rủi ro tích lũy',String(p.risk),p.risk>=3?'neg':p.risk?'warn':'pos','do chọn phương án rẻ')}${fact('Quan hệ',String(p.net),'pos','được xem 2 thương vụ khi gặp Cơ hội')}${fact('Quỹ khẩn cấp',trimNum((p.cash+p.dep)/Math.max(1,c.totalExp),1)+' tháng',(p.cash+p.dep)>=c.totalExp*6?'pos':'warn','nên có ≥ 6 tháng chi phí')}</div>
+    ${missionsHTML(p)}
     <h3>Chỉ số cuộc sống · Gieo gì gặt nấy</h3>${statsHTML(p)}
     <h3>Thu nhập hằng tháng</h3><table><tr><td>${p.retired?'Lương hưu':'Lương gộp'}</td><td>${fmt(p.salary)}</td></tr>${p.gift?`<tr><td>Con báo hiếu</td><td>${fmt(p.gift)}</td></tr>`:''}${p.sides.map((x,i)=>`<tr><td>Làm thêm: ${esc(x.name)}<br><small>thu nhập chủ động</small></td><td>${fmt(x.inc)} ${isCur?btn('Nghỉ',()=>{p.sides.splice(i,1);}):''}</td></tr>`).join('')}${c.spouseNet?`<tr><td>Lương vợ/chồng (sau thuế)</td><td>${fmt(c.spouseNet)}</td></tr>`:''}${incomeRows}<tr class="total"><td>Thu nhập thụ động (sau thuế)</td><td class="pos">${fmt(c.passive)}</td></tr><tr class="total"><td>Tổng thu nhập</td><td>${fmt(c.income)}</td></tr></table>
     <h3>Chi phí hằng tháng</h3><table>${expRows}<tr class="total"><td>Tổng chi phí</td><td class="neg">${fmt(c.totalExp)}</td></tr></table>
@@ -877,10 +979,16 @@ function showStatement(p){
     <h3>Diễn biến</h3>${sparkHTML()}
     <h3>Tiết kiệm ngân hàng</h3><p>Đang gửi <b class="num">${fmt(p.dep)}</b>, lãi ${pct(DEP_RATE,0)}/năm, rút được bất cứ lúc nào. Lãi tiết kiệm tính là thu nhập thụ động.</p>${depBtns}
     ${insRow}
-    <h3>Tài sản</h3><table>${assetRows}</table>
+    <h3>Tài sản</h3>${isCur?'<p class="lesson">Bán ngay cho môi giới thì nhanh nhưng rẻ hơn giá người mua trên thẻ Thị trường. Bấm lần hai để xác nhận.</p>':buyer?`<p class="lesson">${esc(buyer.name)} có thể hỏi mua tài sản của ${esc(p.name)} theo giá thị trường ×1, ×1,1 hoặc ×1,25. Trả giá càng cao càng dễ được đồng ý; người mua nhận luôn khoản vay còn lại.</p>`:''}<table>${assetRows}</table>${isCur?buyNowHTML(p,btn):''}
     <h3>Nợ cá nhân</h3><table>${liabRows}</table>${loanBtns}${achHTML(p)}</div>`});
   drawSpark(p);
 }
+function buyNowHTML(p,btn){
+  const rows=SYMS.map(sym=>{const px=stockAsk(sym);return `<tr><td>${sym}<br><small>${esc(STOCKS[sym].n)} · cổ tức ${pct(STOCKS[sym].div/px)}/năm</small><div class="acts">${[100,1000].map(n=>btn(`+${n} cp`,()=>quickBuy(p,'stock',sym,n),p.cash<n*px*(1+STK_FEE))).join('')}</div></td><td>${fmtD(px)}</td></tr>`;}).join('');
+  const gold=Math.round(GOLD_REF*QUICK.goldBuy),btc=Math.round(btcPrice()*QUICK.buy);
+  return `<h3>Mua ngay trên sàn</h3><p class="lesson">Giá khớp lệnh cao hơn giá tham chiếu 2–3%. Muốn giá tốt hơn, hãy chờ thẻ Cơ hội.</p><table>${rows}
+    <tr><td>Vàng nhẫn<br><small>giá mua ${fmt(gold)}/chỉ</small><div class="acts">${[1,10].map(n=>btn(`+${n} chỉ`,()=>quickBuy(p,'gold',null,n),p.cash<n*gold)).join('')}</div></td><td>${fmt(gold)}</td></tr>
+    <tr><td>Bitcoin<br><small>giá mua ${fmt(btc)}/BTC</small><div class="acts">${[.01,.1].map(n=>btn(`+${trimNum(n,2)} BTC`,()=>quickBuy(p,'crypto',null,n),p.cash<n*btc)).join('')}</div></td><td>${fmt(btc)}</td></tr></table>`;}
 function achHTML(p){const ks=Object.keys(ACH);return `<h3>Thành tích (${ks.filter(k=>p.ach[k]).length}/${ks.length})</h3><div class="achs">${ks.map(k=>`<span class="ach ${p.ach[k]?'got':''}" title="${esc(ACH[k].d)}">${p.ach[k]?'★':'☆'} ${ACH[k].n}</span>`).join('')}</div>`;}
 function payOff(p,i){const l=p.liabs[i];if(p.cash<l.bal)return;p.cash-=l.bal;p.liabs.splice(i,1);toast(`${p.name} trả hết ${l.label}: chi phí giảm ${fmt(l.pay)}/tháng`,'pos');log(`Trả hết ${l.label} (${fmt(l.bal)}), giảm ${fmt(l.pay)}/tháng`,p);}
 function sparkHTML(){return `<canvas class="spark" id="spark"></canvas><div class="legend"><span><i style="background:var(--money)"></i>Thu nhập thụ động</span><span><i style="background:var(--danger)"></i>Tổng chi phí / mục tiêu</span></div>`;}
@@ -901,10 +1009,11 @@ function showLog(){
 }
 function showSummary(){
   if(!G||!G.players)return;
+  const REC=recordsUpdate();
   const rows=G.players.map(p=>{const best=p.deals.slice().sort((a,b)=>b.pl-a.pl)[0],worst=p.deals.slice().sort((a,b)=>a.pl-b.pl)[0];
     return `<div class="row" style="align-items:flex-start"><span class="dot" style="background:${p.color};margin-top:5px"></span><div class="grow"><b>${esc(p.name)}</b> · ${Math.floor(p.age)} tuổi · tài sản ròng <b class="num">${fmt(netWorth(p))}</b>
       <small>${p.won?'Chiến thắng':p.ft?`Tự do tài chính lúc ${Math.floor(p.freeAge)} tuổi`:p.out?'Nghỉ hưu khi chưa tự do tài chính':'Đang ở vòng Người lao động'} · ${Object.keys(p.ach).length} thành tích</small>
-      ${statsHTML(p,true)}${proReview(p)}${best&&best.pl>0?`<small>Quyết định tốt nhất: ${esc(best.name)} <span class="pos">+${fmt(best.pl)}</span></small>`:''}${worst&&worst.pl<0?`<small>Bài học đắt giá: ${esc(worst.name)} <span class="neg">${fmt(worst.pl)}</span></small>`:''}</div></div>`;}).join('');
+      ${bioHTML(p)}${recHTML(p,REC)}${statsHTML(p,true)}${p.bot||p.pro||!PROS.available?proReview(p):'<p class="lesson">🔒 Tư vấn chuyên sâu sau ván (điểm mạnh, điểm yếu, bài học) dành cho bản PRO. Bấm vương miện 👑 ở góc trên.</p>'}${best&&best.pl>0?`<small>Quyết định tốt nhất: ${esc(best.name)} <span class="pos">+${fmt(best.pl)}</span></small>`:''}${worst&&worst.pl<0?`<small>Bài học đắt giá: ${esc(worst.name)} <span class="neg">${fmt(worst.pl)}</span></small>`:''}</div></div>`;}).join('');
   openViewer({tone:'ft',key:'sum',eyebrow:'Tổng kết ván · Tư vấn PRO của Gà Vàng',title:'Hành trình tài chính',body:`<canvas class="spark" id="sumChart" style="height:160px"></canvas><div class="legend">${G.players.map(p=>`<span><i style="background:${p.color}"></i>${esc(p.name)}</span>`).join('')}</div><p class="lesson">Đường biểu diễn tài sản ròng (tài sản − nợ) của mỗi người qua từng lượt.</p><div class="rows">${rows}</div>`});
   const cv=$('#sumChart');const dpr=Math.min(devicePixelRatio,2),w=cv.clientWidth,h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;const x=cv.getContext('2d');x.scale(dpr,dpr);
   const all=G.players.map(p=>[...p.hist.map(d=>num(d.nw)),netWorth(p)]);const mx=Math.max(1,...all.flat()),mn=Math.min(0,...all.flat()),n=Math.max(2,...all.map(a=>a.length)),pad=10;
@@ -915,9 +1024,10 @@ function showSummary(){
 
 /* ================= turn flow ================= */
 function startTurn(){
-  const p=curP();G.phase='busy';renderHUD();focusOn(p);save();
+  const p=curP();G.phase='busy';if(isOnline()){G.turnAt=Date.now();G.takeover=0;}renderHUD();focusOn(p);save();
   const seq=[];
   if(G.news&&!G.news.seen)seq.push(done=>showNews(done));
+  if(G.swan&&!G.swan.seen)seq.push(done=>showSwan(done));
   if(!p.ft&&!p.out){const unemp=p.skip>0,c=calc(p,{noSalary:unemp,benefit:unemp&&p.benefitLeft>0?mode().benefit:0});const r=advanceTurn(p);if(r)showPaySlip(p,c,r);log(`Lương ${mpt()} tháng: ${sgn(r.delta)}`,p);renderHUD();}
   else if(p.ft){p.age+=mpt()/12;}
   seq.push(done=>runEvents(p,done));
@@ -926,6 +1036,7 @@ function startTurn(){
 }
 function afterEvents(p){
   if(p.out){nextTurn();return;}
+  if(p.jail>0){p.jail--;toast(`${p.name} đang ngồi tù, mất lượt (còn ${p.jail})`,'neg');log('Ngồi tù, mất một lượt',p);renderHUD();setTimeout(nextTurn,1400);return;}
   if(p.skip>0){p.skip--;toast(`${p.name} đang thất nghiệp, nghỉ lượt này (còn ${p.skip})`,'neg');log('Thất nghiệp, nghỉ một lượt',p);renderHUD();setTimeout(nextTurn,1400);return;}
   if(!p.bot&&G.quiz&&!p.introDone&&mastered(p))p.introDone=true;
   if(!p.bot&&G.quiz&&!p.introDone){p.introDone=true;return ledgerQuiz(p,introItems(p),()=>afterEvents(p),true);}
@@ -939,7 +1050,7 @@ async function roll(n,byBot){
   if(G.phase!=='roll')return;const p=curP();if(isBotTurn()&&!byBot)return;G.phase='busy';renderHUD();ensureAudio();
   const vals=Array.from({length:n},()=>1+Math.floor(Math.random()*6));
   if(p.charity>0)p.charity--;
-  sfx('dice');await animDice(vals);
+  sfx('dice');await animDice(vals);collRoll(p,vals);diceTalk(p,vals);
   let sum=vals.reduce((a,b)=>a+b,0);const lucky=S(p).luck>=LUCK_X2;if(lucky){sum*=2;addS(p,{luck:-30},'Dùng may mắn nhân đôi xúc xắc');}p.lastRoll=sum;showRoll(vals,sum);if(lucky)$('#rollNum').innerHTML=`<b>${sum}</b><span>${vals.join(' + ')} × 2 · may mắn</span>`;if(lucky&&!p.bot)quoteToast('May mắn gõ cửa: điểm xúc xắc nhân đôi!');
   await moveSteps(p,sum);
   if(p.ft)ftLanding(p);else landing(p);
@@ -951,34 +1062,35 @@ function bonus(p,kind,landed){const M=mode(),r=rf(...(kind==='tet'?M.tetBonus:M.
   renderHUD();return amt;}
 async function moveSteps(p,steps){
   for(let s=0;s<steps;s++){
-    if(p.ft){p.ftPos=(p.ftPos+1)%FT.length;await hopTo(p);if(FT[p.ftPos].t==='cf'){gain(p,p.ftCF);toast(`Ngày lĩnh lương: +${fmt(p.ftCF)}`,'pos');log(`Ngày lĩnh lương +${fmt(p.ftCF)}`,p);renderHUD();}}
+    if(p.ft){p.ftPos=(p.ftPos+1)%FT.length;await hopTo(p);if(FT[p.ftPos].t==='cf'){ftPayday(p);if(!p.ft)break;}}
     else{p.pos=(p.pos+1)%BOARD.length;await hopTo(p);const t=BOARD[p.pos];if(s<steps-1&&(t==='midbonus'||t==='tetbonus'))bonus(p,t==='tetbonus'?'tet':'mid',false);}
   }
   sfx('land');arrangeTokens();if(typeof celebrateTile==='function')celebrateTile(p);
 }
 function endTurn(){
-  closeModal();const p=curP();const c=calc(p);
+  closeModal();const p=curP();missionsCheck();const c=calc(p);
   [...G.players].forEach(q=>checkAch(q).forEach(k=>{toast(`${q.name} đạt thành tích: ${ACH[k].n}`,'pos');log(`Thành tích: ${ACH[k].n}`,q);}));
-  if(!p.ft&&!p.out&&c.passive>c.totalExp){
+  if(!p.ft&&!p.out&&c.passive>c.totalExp&&!(needPaywall(p)&&p.ftWait&&G.turn-p.ftWait<4*G.players.length)){
     sfx('win');coinRain(40);
     const ftc=Math.max(TY,Math.round(c.passive*200/(10*TR))*10*TR);
-    const go=async()=>{closeModal();p.ft=true;p.freeAge=p.age;addS(p,{happy:20},'Tự do tài chính');if(!p.bot){setMastered(p);if(G.quiz)toast(`${p.name} đã nắm vững tài sản và tiêu sản: từ nay không cần ghi sổ nữa`,'pos');}p.ftCF=ftc;p.ftStart=ftc;p.cash+=ftc;p.ftPos=0;checkAch(p);log(`Tự do tài chính lúc ${Math.floor(p.age)} tuổi! Ngày lĩnh lương ${fmt(ftc)}`,p);await hopTo(p,true);arrangeTokens();nextTurn();};
+    const go=async()=>{closeModal();p.ft=true;p.freeAge=p.age;addS(p,{happy:20},'Tự do tài chính');moment('escape','TỰ DO TÀI CHÍNH!',`${esc(p.name)} thoát Vòng Cối Xay lúc ${Math.floor(p.age)} tuổi`);chickSay('freedom',p);if(!p.bot){setMastered(p);if(G.quiz)toast(`${p.name} đã nắm vững tài sản và tiêu sản: từ nay không cần ghi sổ nữa`,'pos');}p.ftCF=ftc;p.ftStart=ftc;p.ftBase=ftc;p.ftLap=0;p.ftVentures=[];p.ftAssets=[];p.cash+=ftc;p.ftPos=0;checkAch(p);log(`Tự do tài chính lúc ${Math.floor(p.age)} tuổi! Ngày lĩnh lương ${fmt(ftc)}`,p);await hopTo(p,true);arrangeTokens();ftChooseLifestyle(p,nextTurn);};
     openModal({tone:'ft',eyebrow:'Hoàn thành vòng Người lao động',title:`${esc(p.name)} tự do tài chính lúc ${Math.floor(p.age)} tuổi!`,art:art('escape'),quote:QUOTES.ctx.free,
-      body:`<p>Thu nhập thụ động <b class="num pos">${fmt(c.passive)}</b>/tháng đã vượt tổng chi phí <b class="num">${fmt(c.totalExp)}</b>. Không còn phải đi làm vì tiền.</p><div class="facts">${fact('Ngày lĩnh lương mới',fmt(ftc),'pos','= thu nhập thụ động × 200')}${fact('Mục tiêu thắng',fmt(ftc+ftGoal()))}</div><p>Ở Vòng Thịnh Vượng (vòng ngoài), mua được giấc mơ “${esc(G.dreams[p.dream].n)}” hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())} để thắng.</p>`,
-      acts:[{label:'Vào Vòng Thịnh Vượng',cls:'primary',fn:go}],bot:go});
+      body:`<p>Thu nhập thụ động <b class="num pos">${fmt(c.passive)}</b>/tháng đã vượt tổng chi phí <b class="num">${fmt(c.totalExp)}</b>. Không còn phải đi làm vì tiền.</p><div class="facts">${fact('Ngày lĩnh lương mới',fmt(ftc),'pos','= thu nhập thụ động × 200')}${fact('Mục tiêu thắng',fmt(ftc+ftGoal()))}</div><p>Ở Vòng Thịnh Vượng (vòng ngoài), mua được giấc mơ “${esc(G.dreams[p.dream].n)}” hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())} để thắng. Cẩn thận: chi tiêu phình to, kiện tụng, thuế, khủng hoảng và kèo mạo hiểm có thể đẩy bạn về lại Vòng Cối Xay.</p>`,
+      acts:[{label:'Vào Vòng Thịnh Vượng',cls:'primary',fn:()=>needPaywall(p)?showPaywall(p,go):go()}],bot:go});
     return;
   }
-  if(p.ft&&p.ftCF>=p.ftStart+ftGoal()&&!p.won){win(p,`Ngày lĩnh lương đạt ${fmt(p.ftCF)}.`);return;}
+  if(p.ft&&p.ftCF>=p.ftStart+ftGoal()&&!p.won){if(S(p).legacy>=legacyNeed()){win(p,`Ngày lĩnh lương đạt ${fmt(p.ftCF)}, Di sản ${S(p).legacy}.`);return;}if(!p.legacyHint){p.legacyHint=1;toast(`${p.name} đủ dòng tiền nhưng Di sản mới ${S(p).legacy}/${legacyNeed()}: hãy làm từ thiện, xây công trình để đời`,'neg');}}
   nextTurn();
 }
 function nextTurn(){
+  if(G&&G.players)G.players.forEach(q=>{if(q.tmpBot){q.bot=false;q.tmpBot=false;}});
   const p=curP();p.hist.push(snapHist(p));if(p.hist.length>120)p.hist.shift();
   if(!G.players.some(q=>!q.won&&!q.out)){save();showSummary();return;}
   let i=G.cur;do{i=(i+1)%G.players.length;if(i===0){G.turn++;const m0=G.month;G.month+=mpt();if(Math.floor(G.month/12)>Math.floor(m0/12))newYear();}}while(G.players[i].won||G.players[i].out);
   G.cur=i;if(isOnline()&&!iControl()){G.phase='await';save();renderHUD();return;}startTurn();
 }
 function win(p,why){
-  p.won=true;checkAch(p);sfx('win');coinRain(120);log(`CHIẾN THẮNG lúc ${Math.floor(p.age)} tuổi! ${why}`,p);save();
+  p.won=true;checkAch(p);sfx('win');coinRain(120);moment('trophy','CHIẾN THẮNG!',`${esc(p.name)} chạm tới giấc mơ lúc ${Math.floor(p.age)} tuổi`);log(`CHIẾN THẮNG lúc ${Math.floor(p.age)} tuổi! ${why}`,p);save();
   const left=G.players.filter(q=>!q.won&&!q.out).length;
   openModal({tone:'ft',eyebrow:'Chiến thắng',title:`${esc(p.name)} thắng ván này lúc ${Math.floor(p.age)} tuổi!`,art:art('trophy'),quote:QUOTES.ctx.win,body:`<p>${esc(why)} Từ ${p.prof} trở thành nhà đầu tư tự do.</p>`,
     acts:[{label:'Xem tổng kết',fn:()=>showSummary()},...(left?[{label:'Người khác chơi tiếp',fn:()=>{closeModal();nextTurn();}}]:[]),{label:'Ván mới',cls:'primary',fn:()=>{closeModal();G={dreams:G.dreams};draft=[];showSetup();}}]});
@@ -990,7 +1102,7 @@ function runEvents(p,done){
   if(!p.events.length)return done();
   const e=p.events.shift();const next=()=>{closeModal();renderHUD();runEvents(p,done);};
   const info=(o)=>openModal({tone:o.tone||'baby',eyebrow:o.eyebrow||'Cuộc sống',title:o.title,art:art(o.art),story:o.story,body:o.body||'',lesson:o.lesson,acts:[{label:o.btn||'Tiếp tục',cls:'primary',fn:next}],bot:next});
-  if(e.k==='marry'){const sal=rnd(8,20)*TR,cost=60*TR,ok=()=>{pay(p,cost,'đám cưới');p.spouse=sal;p.living=Math.round(p.living*1.8/1e5)*1e5;log(`Kết hôn. Vợ/chồng lương ${fmt(sal)}, sinh hoạt phí tăng 80%`,p);addS(p,{happy:20,luck:10},'Kết hôn');next();},no=()=>{p.living=Math.round(p.living*.95/1e5)*1e5;addS(p,{happy:-5,luck:-5},'Vẫn độc thân');if(Math.random()<.3)p.single=true;next();};
+  if(e.k==='marry'){const sal=rnd(8,20)*TR,cost=60*TR,ok=()=>{pay(p,cost,'đám cưới');p.spouse=sal;p.living=Math.round(p.living*1.8/1e5)*1e5;log(`Kết hôn. Vợ/chồng lương ${fmt(sal)}, sinh hoạt phí tăng 80%`,p);moment('wedding','Về chung một nhà!',`${esc(p.name)} kết hôn lúc ${Math.floor(p.age)} tuổi`);addS(p,{happy:20,luck:10},'Kết hôn');next();},no=()=>{p.living=Math.round(p.living*.95/1e5)*1e5;addS(p,{happy:-5,luck:-5},'Vẫn độc thân');if(Math.random()<.3)p.single=true;next();};
     return openModal({tone:'baby',eyebrow:'Cuộc sống',title:'Gặp đúng người',art:art('wedding'),quote:QUOTES.ctx.marry,story:`Sau ${pick(['3 năm hẹn hò','một chuyến du lịch Phú Quốc','buổi mai mối của dì út'])}, hai người quyết định về chung một nhà. Người ấy làm ${pick(['kế toán','giáo viên','nhân viên ngân hàng','dược sĩ','kỹ sư phần mềm'])}, lương ${fmt(sal)}/tháng.`,
       body:`<div class="facts">${fact('Chi phí đám cưới (sau tiền mừng)',fmt(cost),'neg')}${fact('Thu nhập gia đình',`+${fmt(sal)}/tháng`,'pos','trước thuế')}${fact('Sinh hoạt phí','+80% (vợ/chồng tiêu)','warn')}${fact('Hạnh phúc / May mắn','+20 / +10','pos','độc thân: −5 / −5 nhưng sinh hoạt phí −5%')}${fact('Tuổi',Math.floor(p.age)+'')}</div>`,lesson:'Hai người cùng kiếm tiền và cùng mục tiêu tài chính sẽ đi nhanh hơn.',acts:[{label:'Cưới thôi!',cls:'primary',fn:ok},{label:'Chưa sẵn sàng',fn:no}],bot:()=>p.cash>cost||Math.random()<.5?ok():no()});}
   if(e.k==='parents'){const monthly=Math.round(3*TR*p.cpi/1e5)*1e5,once=60*TR,a=()=>{p.parentCare=monthly;log(`Chu cấp bố mẹ ${fmt(monthly)}/tháng`,p);next();},b=()=>{pay(p,p.hins?once*.6:once,'viện phí bố mẹ');log('Trả viện phí cho bố mẹ',p);next();};
@@ -1042,7 +1154,7 @@ function loanNote(p,amt){const L=needLoan(p,Math.max(0,amt-p.dep));if(!L)return 
   return `<div class="note">${over?`<b class="neg">Vượt hạn mức vay tiêu dùng (${fmt(loanCap(p))}).</b> Ngân hàng không cho vay thêm ${fmt(L)}.`:`Thiếu tiền: ${p.dep?'rút hết tiết kiệm và ':''}vay tiêu dùng ${fmt(L)}, lãi ${fmt(L*clr())}/tháng (${pct(clr()*12,0)}/năm).`}</div>`;}
 const canAfford=(p,amt)=>p.loan+needLoan(p,Math.max(0,amt-p.dep))<=loanCap(p);
 
-function showDeal(p,d){
+function showDeal(p,d){if(d.k==='proad')return proAdCard(p);
   if(d.k==='stock')return dealStock(p,d);
   if(d.k==='bond')return dealBond(p,d);
   if(d.k==='gold')return dealGold(p,d);
@@ -1070,7 +1182,7 @@ function dealCrypto(p,d){
   render();
 }
 function dealScam(p,d){
-  const inv=amt=>{p.st=p.st||{};p.st.scam=1;if(!p.bot)quoteToast(QUOTES.ctx.scamYes);pay(p,amt,d.name);p.assets.push({type:'scam',name:d.name,amount:amt,promise:d.promise,paid:0,turns:rnd(1,3)});log(`Góp ${fmt(amt)} vào ${d.name}`,p);endTurn();};
+  const inv=amt=>{p.st=p.st||{};p.st.scam=1;chickSay('scam',p);if(!p.bot)quoteToast(QUOTES.ctx.scamYes);pay(p,amt,d.name);p.assets.push({type:'scam',name:d.name,amount:amt,promise:d.promise,paid:0,turns:rnd(1,3)});log(`Góp ${fmt(amt)} vào ${d.name}`,p);endTurn();};
   const no=()=>{p.st=p.st||{};p.st.scamNo=1;if(!p.bot)quoteToast(QUOTES.ctx.scamNo);p.ach.noscam=p.ach.noscam||G.turn;log('Từ chối lời mời đầu tư đáng ngờ',p);endTurn();};
   openModal({tone:'opp',eyebrow:'Cơ hội nhỏ · ?',title:d.title,art:art('scam'),story:d.text,body:`<div class="facts">${fact('Lãi cam kết',pct(d.promise)+'/tháng','pos',pct(d.promise*12,0)+'/năm')}${fact('Giấy phép','Không có','neg')}</div>`,
     hint:'Lãi suất cam kết quá cao so với gửi tiết kiệm 5%/năm là dấu hiệu lừa đảo.',advice:()=>adviseDeal(p,d),acts:[{label:'Góp 20 tr',fn:()=>inv(20*TR)},{label:'Góp 50 tr',fn:()=>inv(50*TR)},{label:'Từ chối',cls:'primary',fn:no}],bot:()=>p.botLvl==='risky'&&Math.random()<.3?inv(20*TR):no()});
@@ -1129,8 +1241,9 @@ function buyAsset(p,a,ltv,share=1,fee=0,from=null){
   const as={...A,loan:R.loan,pay:R.pmtM,left:R.loan?A.term*12:0,equity:R.equity+fee};if(A.teaser&&R.loan){as.rate=A.teaser.rate;as.teaserLeft=A.teaser.months;}delete as.teaser;
   p.assets.push(as);log(`Mua ${A.name}${share<1?' (góp '+pct(share,0)+')':''} ${fmt(A.price)}: vốn ${fmt(R.equity)}, vay ${fmt(R.loan)}, dòng tiền ${sgn(R.cf)}`,p);toast(`${p.name}: thu nhập thụ động ${sgn(R.cf)}/tháng`,R.cf>=0?'pos':'neg');return R;}
 function dealProp(p,d,opt={}){
-  const a=d.a;let ltv=d.ltvs[d.ltvs.length-1];const fee=opt.fee||0;
-  const buy=()=>{const R=buyAsset(p,a,ltv,1,fee,opt.from);quizThen(p,quizItemsForAsset(a,R),endTurn);};
+  const a=d.a;let ltv=d.ltvs[d.ltvs.length-1];const fee=opt.fee||0;flashSetup(p,d,opt);
+  const buy=()=>{flashDone(d);const c=G.cyc[a.kind==='land'?'land':'re'];if(a.type==='re'&&c==='boom')chickSay('boomBuy',p);else if(a.type==='re'&&c==='bust')chickSay('bustBuy',p);
+    const go=A=>{const R=buyAsset(p,A||a,ltv,1,fee,opt.from);quizThen(p,quizItemsForAsset(A||a,R),endTurn);};fee?go(null):bidWar(p,d,ltv,go);};
   const partners=G.players.filter(q=>q!==p&&!q.ft&&!q.out&&!q.won);
   const share=()=>{const inl=[],rows=partners.map(q=>{const nf=Math.round(analyze(a,ltv).equity*.05/1e5)*1e5;
       inl.push(()=>transfer(q,nf));inl.push(()=>coinvest(q));
@@ -1149,14 +1262,14 @@ function dealProp(p,d,opt={}){
     const rows=a.type==='re'?line('Tiền thuê/tháng',fmt(a.rent))+(a.rent?line(`Quản lý, sửa chữa, trống phòng (${pct(a.opex,0)})`,'-'+fmt(a.rent*a.opex),'neg'):''):line('Lợi nhuận kinh doanh/tháng',fmt(a.profit));
     const hintTxt=real>0&&R.coc>=.1?`Nên mua${ltv?` với vay ${pct(ltv,0)}`:''}: dòng tiền dương ${sgn(real)}/tháng, lợi suất ${pct(R.coc)}/năm.`:R.cf<0?'Không nên: tài sản này làm bạn mất tiền mỗi tháng. Thử chọn vay ít hơn.':'Lợi suất thấp, cân nhắc bỏ qua để giữ tiền cho cơ hội tốt hơn.';
     const shareBtn=!opt.noShare&&!fee&&partners.length&&!p.bot?[{label:'Nhường / góp vốn',fn:share}]:[];
-    openModal({tone:'opp',eyebrow:(fee?`Thương vụ ${esc(opt.from.name)} nhường lại · `:'')+(a.price>=300*TR?'Cơ hội lớn':'Cơ hội nhỏ')+(a.type==='biz'?' · Kinh doanh':' · Bất động sản'),title:d.title,inl,art:art(d.art,{label:d.label}),lesson:LESSON.opp,hint:hintTxt,
-      body:`<p>${d.text}</p>${mode().goodBias?`<span class="verdict ${v[0]}">${v[1]}</span>`:''}
+    openModal({tone:'opp',eyebrow:(fee?`Thương vụ ${esc(opt.from.name)} nhường lại · `:'')+(a.price>=300*TR?'Cơ hội lớn':'Cơ hội nhỏ')+(a.type==='biz'?' · Kinh doanh':' · Bất động sản'),title:(d.flash?'⚡ ':'')+d.title,inl,art:art(d.art,{label:d.label}),lesson:LESSON.opp,hint:hintTxt,
+      body:`${d.flash&&!d.done?`<div class="note" style="border-color:var(--gold)">⚡ <b>Cơ hội chớp nhoáng:</b> giảm 15% cho người quyết nhanh. Còn <b id="flashT" class="num">${Math.max(0,Math.ceil((d.flashEnd-Date.now())/1000))}</b> giây!</div>`:''}<p>${d.text}</p>${mode().goodBias?`<span class="verdict ${v[0]}">${v[1]}</span>`:''}
       <div class="facts">${fact('Giá mua',fmt(a.price),'',a.units>1?`${a.units} phòng/căn`:'')}${a.type==='re'?fact('Lợi suất cho thuê gộp',pct(R.gy)+'/năm',R.gy>=.08?'pos':R.gy<.06?'neg':'warn'):fact('Lợi nhuận/vốn',pct(a.profit*12/a.price)+'/năm','pos')}</div>${seg}
       <div class="calc">${rows}${line('Trả góp ngân hàng/tháng',R.pmtM?'-'+fmt(R.pmtM):'0đ',R.pmtM?'neg':'')}${line('Dòng tiền ròng/tháng',sgn(R.cf),R.cf>=0?'pos':'neg',1)}${a.teaser&&R.loan?line('Sau khi hết ưu đãi',`${sgn(R.cfAfter)}/tháng`,R.cfAfter>=0?'pos':'neg'):''}</div>
       <div class="calc">${line('Khoản vay',fmt(R.loan))}${R.fees?line('Phí công chứng, trước bạ (1%)',fmt(R.fees)):''}${fee?line('Phí nhượng thương vụ',fmt(fee)):''}${line('Vốn tự bỏ ra',fmt(R.equity+fee),'',1)}${afterLine(p,R.equity+fee)}${line('Dòng tiền/tháng của bạn sau khi mua',sgn(calc(p).cashflow+R.cf),calc(p).cashflow+R.cf>=0?'pos':'neg')}${line('Lợi suất trên vốn (năm)',pct(R.coc),R.coc>=0?'pos':'neg')}${line('Thời gian hoàn vốn',R.cf>0?trimNum(R.equity/(R.cf*12),1)+' năm':'Không hoàn vốn bằng dòng tiền')}</div>
       ${a.type==='re'&&a.rent?'<p class="lesson">Nếu tổng tiền cho thuê của bạn vượt 100 tr/năm, phải nộp thêm thuế 10% trên doanh thu cho thuê (tự động tính trong bảng tài chính).</p>':''}
       ${loanNote(p,R.equity+fee)}${L&&ok?`<div class="note">Dòng tiền thực sau lãi vay tiêu dùng: <b class="${real>=0?'pos':'neg'}">${sgn(real)}</b>/tháng.</div>`:''}`,
-      advice:()=>adviseDeal(p,d),acts:[{label:`Mua · bỏ vốn ${fmt(R.equity+fee)}`,cls:'primary',disabled:!ok,fn:buy},...shareBtn,{label:'Bỏ qua',fn:endTurn}],bot:()=>{const x=botPick(p,d);if(x!=null){ltv=x;buy();}else endTurn();}});};
+      advice:()=>adviseDeal(p,d),acts:[{label:`Mua · bỏ vốn ${fmt(R.equity+fee)}`,cls:'primary',disabled:!ok,fn:buy},...shareBtn.map(b=>({...b,fn:()=>{flashDone(d);b.fn();}})),{label:'Bỏ qua',fn:()=>{flashDone(d);endTurn();}}],bot:()=>{const x=botPick(p,d);if(x!=null){ltv=x;buy();}else endTurn();}});};
   render();
 }
 function cardMarket(p){
@@ -1213,7 +1326,7 @@ function cardCharity(p){
 function cardBaby(p){
   const can=p.kidAges.filter(a=>a<22).length<3&&p.age<46;let delta=0;
   if(can){const before=calc(p);p.kidAges.push(0);const after=calc(p);p.kidAges.pop();delta=after.totalExp-before.totalExp;}
-  const go=()=>{if(can){addS(p,{happy:10,kids:5},'Có em bé');p.kidAges.push(0);p.kids=p.kidAges.filter(a=>a<22).length;log(`Có em bé, chi phí +${fmt(delta)}/tháng`,p);}endTurn();};
+  const go=()=>{if(can){addS(p,{happy:10,kids:5},'Có em bé');p.kidAges.push(0);p.kids=p.kidAges.filter(a=>a<22).length;log(`Có em bé, chi phí +${fmt(delta)}/tháng`,p);moment('baby','Chào thành viên mới!',`Gia đình ${esc(p.name)} có thêm em bé`);}endTurn();};
   openModal({tone:'baby',eyebrow:'Em bé',title:can?'Chúc mừng, gia đình có thêm em bé!':'Gia đình đã đủ đầy',art:art('baby'),quote:can?QUOTES.ctx.baby:'',story:can?`Em bé ${pick(['nặng 3,2 kg','khóc rất to','giống bố như đúc','có má lúm đồng tiền'])} chào đời ở bệnh viện phụ sản. Ông bà đặt tên là ${pick(['Bin','Su','Bống','Na','Cốm','Tôm'])}.`:'',lesson:LESSON.baby,
     body:can?`<p>Chi phí nuôi con tăng ${fmt(p.childPer)}/tháng (bỉm sữa, tiêm chủng, gửi trẻ)${mode().life?', thêm học phí khi con đi học và đại học':''}. Bạn được giảm trừ gia cảnh 6,2 tr khi tính thuế, nên tổng chi phí thực tăng <b class="num neg">${fmt(delta)}</b>/tháng.</p>`:'<p>Không có thay đổi về chi phí.</p>',
     acts:[{label:'Tuyệt vời',cls:'primary',fn:go}],bot:go});
@@ -1227,21 +1340,367 @@ function cardDown(p){
 }
 
 /* ================= Vòng Thịnh Vượng ================= */
+/* ================= Vòng Thịnh Vượng: cuộc sống thật của người giàu ================= */
+/* Tự do tài chính chưa phải là đích: chi tiêu phình to theo tài sản, người giàu là mục tiêu của kiện tụng, thuế,
+   lừa đảo; kèo lớn phần đông mất trắng. Ai giữ lối sống vừa phải, có đội pháp chế, đa dạng hóa và
+   thẩm định kỹ thì mới đi tiếp được. Hết tiền thì bán tháo, rồi có thể rơi lại Vòng Cối Xay. */
+const LIFESTYLE={simple:{n:'Giản dị',r:.2,stat:{happy:-5,rel:-5},d:'Chi tiêu 20% ngày lĩnh lương. Ít người biết bạn giàu.'},
+  comfort:{n:'Thoải mái',r:.35,stat:{happy:5},d:'Chi tiêu 35%: nhà đẹp, du lịch, trường tốt cho con.'},
+  lavish:{n:'Xa hoa',r:.6,stat:{happy:12,rel:15},d:'Chi tiêu 60%: biệt thự, siêu xe, tiệc tùng. Quan hệ rộng, kèo mạo hiểm tốt hơn.'}};
+const FT_INFL=.05,GUARD=.05,DD_FEE=.05;
+const VOUT=[0,.5,2,4,10],VOUT_TABLE=[0,0,0,0,.5,.5,1,2,3,4,10];
+function ftFix(p){p.jail=num(p.jail);p.bribes=num(p.bribes);const own=(p.ftAssets||[]).reduce((s,a)=>s+num(a.cf),0);if(!Number.isFinite(p.ftBase)||p.ftBase<=0&&p.ftCF>own)p.ftBase=p.ftCF-own;
+  if(!p.ftExp)p.ftExp=Math.round(p.ftStart*.35/1e6)*1e6;p.ftLap=num(p.ftLap);p.ftVentures=p.ftVentures||[];p.ftAssets=p.ftAssets||[];}
+function ftRecalc(p){p.ftCF=Math.max(0,Math.round(p.ftBase+p.ftAssets.reduce((s,a)=>s+a.cf,0)));}
+const guardFee=p=>p.ftGuard?Math.round(p.ftStart*GUARD/1e6)*1e6:0;
+const ftNet=p=>p.ftCF-p.ftExp-guardFee(p);
+const dreamCost=p=>{const d=G.dreams[p.dream];return d.c+(p.ft?3*p.ftStart:0);};
+function ventureOdds(p,dd){const w=dd?[38,22,25,10,5]:[50,20,18,8,4];if(S(p).know>=70){w[0]-=5;w[2]+=5;}if(S(p).rel>=70){w[0]-=4;w[3]+=4;}if(G.ftCredit>0){w[0]+=10;w[2]-=10;}return w.map(x=>Math.max(0,x));}
+function ftPayday(p){ftFix(p);const fee=guardFee(p),net=ftNet(p);p.cash+=net;p.ftLap++;
+  toast(`Ngày lĩnh lương: ${fmt(p.ftCF)} − chi tiêu ${fmt(p.ftExp)}${fee?` − pháp chế ${fmt(fee)}`:''} = ${sgn(net)}`,net>=0?'pos':'neg');
+  log(`Ngày lĩnh lương ${fmt(p.ftCF)}, chi tiêu lối sống ${fmt(p.ftExp)}${fee?`, pháp chế ${fmt(fee)}`:''}: ${sgn(net)}`,p);
+  p.ftVentures.forEach(v=>{if(v.lap<p.ftLap)v.due=true;});
+  p.ftAssets.forEach(a=>{if(a.ramp>0){a.ramp--;if(!a.ramp){a.cf=a.cf0;toast(`${a.name} đủ thủ tục: dòng tiền +${fmt(a.cf)}`,'pos');}}});ftRecalc(p);
+  if(G.ftCredit>0)G.ftCredit--;
+  p.ftExp=Math.round(p.ftExp*(1+FT_INFL)/1e6)*1e6;
+  addS(p,{happy:-6},'Áp lực điều hành');if(S(p).happy<30){const cut=Math.round(Math.max(0,net)*.1);p.cash-=cut;addS(p,{health:-8},'Kiệt sức');chickSay('burnout',p);toast(`${p.name} kiệt sức: mất ${fmt(cut)} và Sức khỏe −8. Hãy dành thời gian giải trí!`,'neg');log(`Kiệt sức: mất ${fmt(cut)}`,p);}
+  if(p.cash<0)ftDistress(p);renderHUD();}
+/* thiếu tiền: bán tháo doanh nghiệp 50% giá; vẫn thiếu thì mất tự do tài chính */
+function ftDistress(p){
+  p.ftAssets.slice().sort((a,b)=>a.cf/a.cost-b.cf/b.cost).forEach(a=>{if(p.cash>=0)return;const v=Math.round(a.cost*.5);p.ftAssets.splice(p.ftAssets.indexOf(a),1);p.cash+=v;
+    p.deals.push({name:'Bán tháo '+a.name,pl:v-a.cost});toast(`Bán tháo ${a.name}: chỉ thu ${fmt(v)}`,'neg');log(`Thiếu tiền, bán tháo ${a.name} được ${fmt(v)} (50% vốn)`,p);});
+  ftRecalc(p);if(p.cash>=0)return;
+  p.ft=false;p.ftFell=(p.ftFell||0)+1;p.cash=0;p.ftAssets=[];p.ftVentures=[];p.pos=0;
+  const rich=p.assets.slice().sort((a,b)=>assetCF(b)-assetCF(a));for(const a of rich){const c=calc(p);if(c.passive<=c.totalExp)break;p.assets.splice(p.assets.indexOf(a),1);}
+  addS(p,{happy:-25,luck:-10},'Mất tự do tài chính');moment('fired','Trắng tay!',`${esc(p.name)} rơi lại Vòng Cối Xay`);chickSay('distress',p);
+  toast(`${p.name} cạn tiền, ngân hàng phát mãi tài sản: rơi lại Vòng Cối Xay!`,'neg');log('Cạn tiền ở Vòng Thịnh Vượng: phát mãi tài sản, rơi lại Vòng Cối Xay',p);
+  if(typeof hopTo==='function')hopTo(p,true).then(arrangeTokens);}
+function ftChooseLifestyle(p,done){const pick=k=>{const L=LIFESTYLE[k];p.ftStyle=k;p.ftExp=Math.round(p.ftStart*L.r/1e6)*1e6;addS(p,L.stat,'Lối sống '+L.n);log(`Chọn lối sống ${L.n}: chi tiêu ${fmt(p.ftExp)} mỗi ngày lĩnh lương`,p);closeModal();done();};
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Lối sống',title:'Giàu rồi, sống thế nào?',art:art('villa'),
+    body:`<p>Người giàu ngoài đời mất tự do tài chính phần nhiều vì chi tiêu phình to theo tài sản. Chi tiêu tăng thêm ${pct(FT_INFL,0)} mỗi ngày lĩnh lương.</p><div class="rows">${Object.entries(LIFESTYLE).map(([k,L])=>`<div class="row"><div class="grow"><b>${L.n}</b> · ${fmt(Math.round(p.ftStart*L.r/1e6)*1e6)}/ngày lĩnh lương<small>${L.d}</small></div></div>`).join('')}</div>`,
+    lesson:'Những người giữ được tài sản qua nhiều thế hệ thường sống dưới mức thu nhập và tái đầu tư phần còn lại.',
+    acts:Object.entries(LIFESTYLE).map(([k,L])=>({label:L.n,cls:k==='simple'?'primary':'',fn:()=>pick(k)})),bot:()=>pick('comfort')});}
+function ftVenture(p,t){let dd=!!p.ftGuard;const render=()=>{const w=ventureOdds(p,dd),tot=w.reduce((a,b)=>a+b,0);
+  const stakes=[TY,3*TY,10*TY],go=st=>{const fee=dd?Math.round(st*DD_FEE):0;p.cash-=st+fee;p.ftVentures.push({name:t.name,stake:st,dd,lap:p.ftLap});log(`Góp ${fmt(st)} vào ${t.name}${dd?` (thẩm định ${fmt(fee)})`:''}`,p);sfx('pay');endTurn();};
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Kèo mạo hiểm',title:esc(t.name),art:art(t.art),
+    body:`<p>Tiền góp vào sẽ được chốt ở ngày lĩnh lương tới. Ngoài đời, đa số khoản đầu tư mạo hiểm mất trắng; lợi nhuận đến từ số ít kèo nhân nhiều lần.</p><div class="facts">${VOUT.map((m,i)=>fact(m?'×'+trimNum(m,1):'Mất trắng',pct(w[i]/tot,0),m>=2?'pos':m?'':'neg')).join('')}</div>
+      <p>${dd?`Đã thẩm định kỹ (phí ${pct(DD_FEE,0)} số tiền góp): bớt kèo mất trắng.`:'Chưa thẩm định: dễ gặp kèo "đẹp trên giấy".'}${S(p).know>=70?' Hiểu biết đầu tư cao giúp lọc kèo tốt.':''}${G.ftCredit>0?' <span class="neg">Tín dụng đang bị siết: kèo dễ hỏng hơn.</span>':''}</p>`,
+    acts:[...stakes.map(st=>({label:`Góp ${fmt(st)}`,cls:st===TY?'primary':'',disabled:p.cash<st*(1+(dd?DD_FEE:0)),fn:()=>go(st)})),{label:dd?'Bỏ thẩm định':`Thẩm định kỹ (+${pct(DD_FEE,0)})`,fn:()=>{dd=!dd;render();}},{label:'Bỏ qua',fn:endTurn}],
+    bot:()=>{dd=true;p.cash>4*TY*(1+DD_FEE)?go(TY):endTurn();}});};render();}
+function ftHit(p,kind){const g=!!p.ftGuard,know=S(p).know>=70;
+  if(kind==='law'){const laws=[
+    {t:'Luật thuế bất động sản mới',x:'Nhà nước đánh thuế người sở hữu nhiều bất động sản. Dòng tiền ngành Bất động sản của mọi người giảm.',f:()=>G.players.filter(q=>q.ft).forEach(q=>{q.ftAssets.filter(a=>a.sector==='bds').forEach(a=>a.cf=Math.round(a.cf*(q.ftGuard?.9:.75)));ftRecalc(q);})},
+    {t:'Thuế lãi vốn trên tài sản lớn',x:`Bạn phải nộp ${g?'5%':'10%'} tiền mặt.`,f:()=>{p.cash-=Math.round(p.cash*(g?.05:.1));}},
+    {t:'Ngân hàng siết tín dụng',x:'Trong 2 ngày lĩnh lương tới, kèo mạo hiểm dễ mất trắng hơn. Kèo đang chờ của bạn mất một nửa giá trị.',f:()=>{G.ftCredit=2;if(!g)p.ftVentures.forEach(v=>v.stake=Math.round(v.stake/2));}},
+    {t:'Ưu đãi chuyển đổi số',x:'Doanh nghiệp Công nghệ và Giáo dục được giảm thuế: dòng tiền tăng 30%.',f:()=>G.players.filter(q=>q.ft).forEach(q=>{q.ftAssets.filter(a=>a.sector==='cn'||a.sector==='gd').forEach(a=>a.cf=Math.round(a.cf*1.3));ftRecalc(q);})},
+    {t:'Siết quy định thực phẩm',x:'Ngành Ăn uống phải đầu tư lại bếp và giấy phép: dòng tiền giảm.',f:()=>G.players.filter(q=>q.ft).forEach(q=>{q.ftAssets.filter(a=>a.sector==='fnb').forEach(a=>a.cf=Math.round(a.cf*(q.ftGuard?.9:.7)));ftRecalc(q);})}];
+    return pick(laws);}
+  if(kind==='crash'){const sec=pick(Object.keys(SECTORS));return {t:`Khủng hoảng ngành ${SECTORS[sec]}`,x:`Ngành ${SECTORS[sec]} sụt giảm: dòng tiền doanh nghiệp ngành này của mọi người giảm 40%, danh mục gốc giảm 5%.`,sec,
+    f:()=>G.players.filter(q=>q.ft).forEach(q=>{q.ftAssets.filter(a=>a.sector===sec).forEach(a=>a.cf=Math.round(a.cf*.6));if(q===p)q.ftBase=Math.round(q.ftBase*.95);ftRecalc(q);})};}
+  if(kind==='fraud'){const big=p.ftAssets.slice().sort((a,b)=>b.cf-a.cf)[0];
+    if(!big){const r=g?.1:.2;return {t:'Bị lừa góp vốn',x:`Một "cơ hội độc quyền" hóa ra là lừa đảo: mất ${pct(r,0)} tiền mặt.`,f:()=>{p.cash-=Math.round(p.cash*r);}};}
+    const keep=g?.7:know?.5:0;return {t:'Giám đốc điều hành gian lận',x:`Người quản lý ${big.name} rút ruột công ty. ${g?'Đội pháp chế phát hiện sớm: chỉ mất 30% dòng tiền.':know?'Bạn đọc báo cáo kỹ nên phát hiện sớm: mất một nửa dòng tiền.':'Bạn mất trắng doanh nghiệp này.'}`,
+      f:()=>{if(keep)big.cf=Math.round(big.cf*keep);else p.ftAssets.splice(p.ftAssets.indexOf(big),1);ftRecalc(p);}};}
+  if(kind==='lawsuit'){const f=1/Math.max(1,p.lastRoll||2)*(g?.5:1);return {t:'Bị kiện',x:`Đối tác kiện vi phạm hợp đồng. Mất 1/x tiền mặt, x = ${p.lastRoll||2}.${g?' Luật sư giúp giảm một nửa.':''}`,f:()=>{p.cash-=Math.round(p.cash*f);}};}
+  if(kind==='audit'){const f=g?.15:.5;return {t:'Kiểm toán thuế',x:g?'Có kế toán thuế chuyên nghiệp: chỉ truy thu 15% tiền mặt.':'Cơ quan thuế truy thu và phạt chậm nộp: mất một nửa tiền mặt.',f:()=>{p.cash-=Math.round(p.cash*f);}};}
+  if(kind==='divorce'){const f=!p.spouse?0:S(p).happy>=75?.1:g?.3:.5;return {t:'Ly hôn',x:!p.spouse?'Bạn độc thân: không bị ảnh hưởng.':S(p).happy>=75?'Gia đình hạnh phúc nên hai người hòa giải: chỉ tốn 10% tiền mặt cho chuyến đi hâm nóng tình cảm.':g?'Có hợp đồng tiền hôn nhân: mất 30% tiền mặt.':'Chia tài sản sau ly hôn: mất một nửa tiền mặt.',f:()=>{p.cash-=Math.round(p.cash*f);if(f>=.3)addS(p,{happy:-15},'Ly hôn');}};}}
+function ftHazard(p,kind){const H=ftHit(p,kind),before=p.cash,cf0=p.ftCF;
+  const go=()=>{H.f();ftRecalc(p);sfx('pay');log(`${H.t}: tiền mặt ${sgn(p.cash-before)}${p.ftCF!==cf0?`, ngày lĩnh lương ${sgn(p.ftCF-cf0)}`:''}`,p);
+    if(kind==='crash'){const deals=FT.filter((t,i)=>t.t==='biz'&&t.sector===H.sec&&!G.players.some(q=>q.ftAssets&&q.ftAssets.some(a=>a.idx===i)));const t=deals[0];
+      if(t){const i=FT.indexOf(t),price=Math.round(t.cost*.5),cf=Math.round(t.cf*.6),buy=()=>{p.cash-=price;p.ftAssets.push({idx:i,name:t.name,sector:t.sector,cost:price,cf});ftRecalc(p);log(`Mua đáy ${t.name} giá ${fmt(price)} (50%)`,p);endTurn();};
+        return openModal({tone:'ft',eyebrow:'Khủng hoảng · Cơ hội',title:`Mua đáy ${esc(t.name)}`,art:art('buyer'),body:`<p>Chủ doanh nghiệp cần tiền gấp, bán bằng một nửa giá. Dòng tiền đang giảm còn ${fmt(cf)} nhưng có thể hồi.</p><div class="facts">${fact('Giá',fmt(price))}${fact('Dòng tiền','+'+fmt(cf),'pos')}${fact('Lợi suất',pct(cf/price))}</div>`,
+          lesson:'Người có sẵn tiền mặt khi khủng hoảng thường là người giàu lên nhanh nhất.',acts:[{label:`Mua ${fmt(price)}`,cls:'primary',disabled:p.cash<price,fn:buy},{label:'Bỏ qua',fn:endTurn}],bot:()=>p.cash>=price*2?buy():endTurn()});}}
+    if(p.cash<0)ftDistress(p);endTurn();};
+  openModal({tone:'doodad',eyebrow:'Vòng Thịnh Vượng · '+FT_INFO[kind].lines.join(' '),title:H.t,art:art(kind==='crash'?'chartdown':kind==='law'?'audit':kind==='fraud'?'scam':kind==='lawsuit'?'court':kind),
+    body:`<p>${H.x}</p>${p.ftGuard?'':'<p class="lesson">Có đội pháp chế và thuế (trong báo cáo tài chính) thì những rủi ro này nhẹ hơn nhiều.</p>'}`,acts:[{label:'Chấp nhận',cls:'primary',fn:go}],bot:go});}
+/* ================= Gay cấn mà đơn giản: 8 tính năng ================= */
+/* 6. Khoảnh khắc cuộc đời: hoạt cảnh ngắn, tự tắt sau 3 giây */
+function moment(artKey,title,sub){if(!G||!G.players)return;let m=$('#moment');if(m)m.remove();m=document.createElement('div');m.id='moment';
+  m.innerHTML=`<div class="mcard"><div class="mart">${art(artKey)}</div><h2>${title}</h2><p>${sub||''}</p></div>`;m.onclick=()=>m.remove();document.body.appendChild(m);
+  sfx('win');if(typeof coinRain==='function')coinRain(50);setTimeout(()=>{if(m.isConnected)m.remove();},3200);}
+/* 7. Gà Vàng bình luận theo tình huống */
+const GA={double:['Đôi {v}! Trời thương rồi!','Hai con giống nhau, hên quá trời!'],triple:['BA CON {v}! Gà Vàng đứng hình luôn!'],
+  boomBuy:['Ối, mua lúc sốt nóng là dễ đu đỉnh lắm đấy!','Giá đang sốt, cẩn thận làm “người đến sau” nhé!'],bustBuy:['Mua lúc đóng băng, gan đấy! Người giàu hay làm vậy.'],
+  bribe:['Chạy phong bì à? Gà không thấy gì đâu nhé…','Gà nhắm mắt rồi, nhưng thanh tra thì không!'],lossSell:['Bán lỗ cũng là học phí. Đau nhưng nhớ lâu!'],
+  autoLoan:['Lại vay tiêu dùng à? Lãi cắn đau lắm đó!'],scam:['Lãi mấy phần trăm một tháng? Gà ngửi thấy mùi lừa đảo!'],freedom:['Thoát cối xay rồi! Gà tự hào về bạn!'],
+  jail:['Gà sẽ gửi bánh mì vào trại nhé…'],distress:['Tiêu như tỷ phú, giờ thì cạn tiền rồi…'],burnout:['Làm như trâu thì kiệt sức. Đi nghỉ đi!'],unicorn:['Kỳ lân! Gà xin chữ ký với!'],
+  swan:['Bình tĩnh! Khủng hoảng là lúc người có tiền mặt lên ngôi.'],outbid:['Có người tranh mua kìa! Thương trường là chiến trường!'],flash:['Nhanh tay lên, cơ hội không chờ ai đâu!']};
+let chickT=0;
+function chickSay(k,p,v){if(!G||!G.players||(p&&p.bot&&Math.random()<.7))return;const L=GA[k];if(!L)return;let el=$('#chick');if(el)el.remove();el=document.createElement('div');el.id='chick';
+  el.innerHTML=`${typeof CHICKEN_SVG==='function'?CHICKEN_SVG(1):'🐓'}<div class="bub">${esc(pick(L).replace('{v}',v==null?'':v))}</div>`;document.body.appendChild(el);clearTimeout(chickT);chickT=setTimeout(()=>el.remove(),3400);}
+function diceTalk(p,vals){if(vals.length>=3&&vals.every(x=>x===vals[0]))chickSay('triple',p,vals[0]);else if(p.ft&&vals[0]===vals[1])chickSay('double',p,vals[0]);}
+/* 1. Cơ hội chớp nhoáng: giảm 15% nhưng phải quyết trong vài giây */
+const FLASH_S=()=>((G&&G.mode)==='hard'?12:20);
+function flashSetup(p,d,opt){if(d.flash!==undefined)return;d.flash=!p.bot&&!isOnline()&&!opt.fee&&!opt.noShare&&Math.random()<.22;
+  if(!d.flash)return;d.a.price=round1(d.a.price*.85);d.a.value=d.a.price;d.flashEnd=Date.now()+FLASH_S()*1000;chickSay('flash',p);
+  d.flashTimer=setInterval(()=>{const left=Math.max(0,Math.ceil((d.flashEnd-Date.now())/1000)),el=document.getElementById('flashT');if(el)el.textContent=left;
+    if(left<=0){clearInterval(d.flashTimer);if(!d.done){d.done=1;closeModal();toast('Hết giờ: cơ hội chớp nhoáng đã về tay người khác','neg');log(`Chần chừ, mất cơ hội ${d.a.name}`,p);endTurn();}}},250);}
+const flashDone=d=>{d.done=1;if(d.flashTimer)clearInterval(d.flashTimer);};
+/* 3. Tranh mua: người khác có tiền được trả giá cao hơn 10% một lần */
+function bidWar(p,d,ltv,proceed){const a=d.a;if(isOnline()||d.bid||d.k!=='prop')return proceed(null);d.bid=1;
+  const price2=round1(a.price*1.1),a2={...a,price:price2,value:price2},R2=analyze(a2,ltv);
+  const rivals=G.players.filter(q=>q!==p&&!q.ft&&!q.out&&!q.won&&q.cash>=R2.equity*1.05&&a.price>=200*TR);
+  let rival=null;for(const q of rivals){if(q.bot){if(botPick(q,{...d,a:a2})!=null&&Math.random()<.45){rival=q;break;}}
+    else if(confirm(`${q.name} ơi! ${p.name} sắp mua “${a.name}” giá ${fmt(a.price)}.\nBạn có muốn trả cao hơn 10% (${fmt(price2)}) để giành không?`)){rival=q;break;}}
+  if(!rival)return proceed(null);chickSay('outbid',p);log(`${rival.name} trả giá ${fmt(price2)} để tranh mua ${a.name}`,rival);
+  const give=()=>{const x=rival.bot?(botPick(rival,{...d,a:a2})??ltv):ltv;closeModal();buyAsset(rival,a2,x);toast(`${rival.name} giành được ${a.name} với giá ${fmt(price2)}`,'neg');log(`Nhường ${a.name} cho ${rival.name}`,p);endTurn();};
+  const match=()=>{closeModal();proceed(a2);};
+  const ok2=canAfford(p,R2.equity);
+  openModal({tone:'opp',eyebrow:'Tranh mua',title:`${esc(rival.name)} trả giá cao hơn!`,art:art('buyer'),
+    body:`<p><b>${esc(rival.name)}</b> trả <b class="num">${fmt(price2)}</b> (+10%) để giành <b>${esc(a.name)}</b>. Bạn theo giá hay nhường?</p><div class="facts">${fact('Giá mới',fmt(price2))}${fact('Vốn tự bỏ',fmt(R2.equity))}${fact('Dòng tiền',sgn(R2.cf)+'/th',R2.cf>=0?'pos':'neg')}${fact('Lợi suất',pct(R2.coc),R2.coc>=.1?'pos':'warn')}</div>`,
+    lesson:'Khi nhiều người cùng muốn một tài sản, giá sẽ lên. Đừng để cảm xúc “phải thắng” làm bạn trả quá đắt.',
+    acts:[{label:`Theo giá ${fmt(price2)}`,cls:'primary',disabled:!ok2,fn:match},{label:'Nhường',fn:give}],bot:()=>ok2&&R2.coc>=.1?match():give()});}
+/* 2. Thiên nga đen: sự kiện hiếm, đánh vào cả bàn */
+const SWANS=[
+ {k:'crisis',t:'Khủng hoảng tài chính toàn cầu',x:'Ngân hàng lớn sụp đổ, thị trường hoảng loạn. Chứng khoán −40%, nhà đất đóng băng, lãi suất tăng. Ai vay nhiều và không có quỹ khẩn cấp có thể mất việc.',art:'chartdown',
+  f:()=>{G.cyc={land:'bust',re:'bust',stock:'bust'};G.stockIdx=clamp((G.stockIdx||1)*.6,.3,3);G.btcIdx=(G.btcIdx||1)*.5;G.rateAdj=clamp((G.rateAdj||0)+.02,-.02,.05);
+    G.players.forEach(q=>{if(q.ft){(q.ftAssets||[]).forEach(a=>a.cf=Math.round(a.cf*.8));q.ftBase=Math.round(num(q.ftBase)*.9);ftRecalc(q);return;}
+      const c=calc(q),fund=q.cash+q.dep;if(!q.retired&&(q.loan>0||fund<c.totalExp*3)&&S(q).luck<70&&Math.random()<.6){q.skip=Math.max(q.skip,1);q.benefitLeft=1;log('Khủng hoảng: bị cắt giảm nhân sự',q);}});}},
+ {k:'pandemic',t:'Đại dịch',x:'Dịch bệnh lan rộng, phong tỏa nhiều tháng. Kinh doanh giảm một nửa lợi nhuận, tiền thuê giảm, ai không có bảo hiểm phải trả viện phí. Sức khỏe mọi người giảm.',art:'doctor',
+  f:()=>G.players.forEach(q=>{addS(q,{health:-15,happy:-8},'Đại dịch');if(q.ft){(q.ftAssets||[]).filter(a=>a.sector==='fnb'||a.sector==='dv').forEach(a=>a.cf=Math.round(a.cf*.6));ftRecalc(q);return;}
+    q.assets.forEach(a=>{if(a.type==='biz')a.profit=Math.round(a.profit*.5/1e5)*1e5;if(a.type==='re'&&a.rent)a.rent=Math.round(a.rent*.85/1e5)*1e5;});
+    if(!q.hins&&!q.out){const bill=Math.round(30*TR*q.cpi/1e6)*1e6;pay(q,bill,'viện phí đại dịch');log(`Đại dịch: viện phí ${fmt(bill)}`,q);}})},
+ {k:'boom',t:'Bùng nổ trí tuệ nhân tạo',x:'Làn sóng AI kéo cả thị trường đi lên: chứng khoán +40%, Bitcoin gấp đôi, doanh nghiệp công nghệ tăng dòng tiền 30%. Người đang cầm cổ phiếu hưởng lợi lớn.',art:'chartup',
+  f:()=>{G.cyc.stock='boom';G.stockIdx=clamp((G.stockIdx||1)*1.4,.3,3);G.btcIdx=(G.btcIdx||1)*2;G.players.forEach(q=>{if(q.ft){(q.ftAssets||[]).filter(a=>a.sector==='cn').forEach(a=>a.cf=Math.round(a.cf*1.3));ftRecalc(q);}});}}];
+function swanRoll(news){G.swanCool=Math.max(0,num(G.swanCool)-1);if(yearOf()-START_YEAR<3||G.swanCool>0||Math.random()>=.12)return;
+  const w=pick(SWANS);w.f();G.swan={k:w.k,t:w.t,x:w.x,art:w.art,seen:false,year:yearOf()};G.swanCool=6;news.unshift(`⚠ THIÊN NGA ĐEN: ${w.t}.`);}
+function showSwan(done){const w=G.swan;w.seen=true;document.body.classList.add('swan');setTimeout(()=>document.body.classList.remove('swan'),1400);
+  const tk=$('#ticker');if(tk){tk.classList.add('alert');setTimeout(()=>tk.classList.remove('alert'),60000);}sfx('pay');chickSay('swan',curP());
+  openModal({tone:'doodad',eyebrow:'Thiên nga đen · sự kiện hiếm',title:w.t,art:art(w.art),body:`<p>${w.x}</p>`,lesson:'Thiên nga đen không báo trước. Quỹ khẩn cấp, ít nợ và đa dạng hóa là áo phao của bạn.',acts:[{label:'Tiếp tục',cls:'primary',fn:()=>{closeModal();done();}}],bot:()=>{closeModal();done();}});}
+/* 4. Nhiệm vụ mỗi ván: hoàn thành nhận một món sưu tầm */
+const MISSIONS={
+ early:{n:'Mua tài sản tạo thu nhập trong 2 năm đầu',f:p=>p.assets.some(a=>assetCF(a)>0)&&p.age-num(p.age0||p.age)<=2},
+ nodebt:{n:'10 năm đầu không vay tiêu dùng',f:p=>p.age-num(p.age0||p.age)>=10&&!(p.st&&p.st.loanMax)},
+ emerg:{n:'Có quỹ khẩn cấp đủ 6 tháng chi phí',f:p=>!!p.ach.emerg},
+ half:{n:'Thu nhập thụ động đạt 50% chi phí',f:p=>!!p.ach.half||p.ft},
+ free45:{n:'Tự do tài chính trước 45 tuổi',f:p=>p.ft&&num(p.freeAge)<45},
+ landlord:{n:'Sở hữu 3 bất động sản cho thuê',f:p=>p.assets.filter(a=>a.type==='re'&&a.kind!=='land').length>=3},
+ donor:{n:'Làm từ thiện 3 lần',f:p=>!!p.ach.donor},
+ ipo:{n:'IPO thành công',f:p=>num(p.ipos)>0},
+ legacy:{n:'Đạt 20 Di sản',f:p=>S(p).legacy>=20},
+ collector:{n:'Sưu tầm 2 món trong một ván',f:p=>(p.coll||[]).length>=2},
+ clean:{n:'Vào Vòng Thịnh Vượng mà chưa từng chạy giấy phép',f:p=>p.ft&&!num(p.bribes)&&!num(p.jailCount)}};
+function pickMissions(){return Object.keys(MISSIONS).sort(()=>Math.random()-.5).slice(0,3);}
+function missionsCheck(){G.players.forEach(p=>{if(!p.missions)p.missions=pickMissions();p.mDone=p.mDone||[];
+  p.missions.forEach(k=>{if(p.mDone.includes(k)||!MISSIONS[k].f(p))return;p.mDone.push(k);const it=collGive(p,1,'hoàn thành nhiệm vụ');if(!p.ft)p.pendingItems=[];
+    toast(`🎁 ${p.name} hoàn thành nhiệm vụ “${MISSIONS[k].n}”: nhận ${it.n}`,'pos');log(`Nhiệm vụ hoàn thành: ${MISSIONS[k].n}`,p);});});}
+function missionsHTML(p){if(!p.missions)return '';const d=p.mDone||[];return `<h3>Nhiệm vụ ván này (${d.length}/${p.missions.length})</h3>${p.missions.map(k=>`<div class="mis ${d.includes(k)?'done':''}"><b>${d.includes(k)?'✓':'○'}</b><span>${MISSIONS[k].n}<br><small>Thưởng: một món sưu tầm hiếm</small></span></div>`).join('')}`;}
+/* 5. Kỷ lục cá nhân, lưu theo tên người chơi */
+const REC_KEY='dongtien3d.records';
+function recStore(){try{return JSON.parse(localStorage.getItem(REC_KEY)||'{}')}catch(e){return {}}}
+function recordsUpdate(){const st=recStore(),out={};G.players.filter(p=>!p.bot).forEach(p=>{const r=st[p.name]||{},br=[],nw=netWorth(p);
+    if(p.freeAge&&(!r.free||p.freeAge<r.free)){if(r.free)br.push(`Tự do tài chính sớm nhất: ${Math.floor(p.freeAge)} tuổi (cũ ${Math.floor(r.free)})`);r.free=p.freeAge;}
+    if(nw>(r.nw||0)){if(r.nw)br.push(`Tài sản ròng cao nhất: ${fmt(nw)} (cũ ${fmt(r.nw)})`);r.nw=nw;}
+    if(p.won&&(!r.win||p.age<r.win)){if(r.win)br.push(`Chiến thắng sớm nhất: ${Math.floor(p.age)} tuổi (cũ ${Math.floor(r.win)})`);r.win=p.age;}
+    const cs=collOwned(p).size;if(cs>(r.coll||0))r.coll=cs;r.games=(r.games||0)+(G.recCounted?0:1);st[p.name]=r;out[p.name]={r,br};});
+  G.recCounted=1;try{localStorage.setItem(REC_KEY,JSON.stringify(st));}catch(e){}return out;}
+function recHTML(p,R){const x=R&&R[p.name];if(!x)return '';const r=x.r;
+  return `${x.br.length?`<p class="pos"><b>🏆 PHÁ KỶ LỤC!</b> ${x.br.map(esc).join(' · ')}</p>`:''}<small>Kỷ lục của ${esc(p.name)}: ${r.free?`tự do lúc ${Math.floor(r.free)} tuổi`:'chưa tự do'} · tài sản ròng ${fmt(r.nw||0)}${r.win?` · thắng lúc ${Math.floor(r.win)} tuổi`:''} · ${r.coll||0} món sưu tầm · ${r.games||1} ván</small>`;}
+/* 8. Tiểu sử cuối ván */
+function bioTitle(p){if(num(p.jailCount))return 'Kẻ đánh bạc với pháp luật';if(S(p).legacy>=40)return 'Nhà hảo tâm được cả nước nhớ ơn';if(num(p.ipos))return 'Ông trùm sàn chứng khoán';
+  if((p.ftAssets||[]).some(a=>/Khu công nghiệp/.test(a.name)))return 'Vua khu công nghiệp';if((p.coll||[]).length>=3)return 'Nhà sưu tầm thượng lưu';if(p.won)return 'Người chạm tới giấc mơ';
+  if(p.ft)return 'Nhà đầu tư tự do';if(p.assets.filter(a=>a.type==='re').length>=2)return 'Chủ nhà chăm chỉ';if(p.out)return 'Người lao động cả đời';return 'Người đang trên đường làm giàu';}
+function bioHTML(p){const kids=p.kidAges.length,re=p.assets.filter(a=>a.type==='re').length,bz=p.assets.filter(a=>a.type==='biz').length+(p.ftAssets||[]).length,coll=(p.coll||[]).map(id=>(COLL.find(c=>c.id===id)||{}).n).filter(Boolean),works=p.works||[];
+  const parts=[`${esc(p.name)}, ${Math.floor(p.age)} tuổi. Khởi đầu là ${esc(p.prof0||p.prof)}${p.sal0?` với lương ${fmt(p.sal0)}/tháng`:''}.`];
+  parts.push(p.spouse?`Lập gia đình${kids?`, có ${kids} người con`:''}.`:kids?`Nuôi ${kids} người con.`:'Sống độc thân.');
+  parts.push(p.freeAge?`Thoát Vòng Cối Xay lúc ${Math.floor(p.freeAge)} tuổi.`:'Chưa thoát được Vòng Cối Xay.');
+  if(re||bz)parts.push(`Sở hữu ${re?`${re} bất động sản`:''}${re&&bz?' và ':''}${bz?`${bz} doanh nghiệp`:''}.`);
+  if(num(p.ipos))parts.push(`Đưa tập đoàn lên sàn ${p.ipos} lần.`);
+  if(works.length)parts.push(`Để lại ${works.length} công trình: ${works.map(esc).join(', ')}.`);
+  if(num(p.jailCount))parts.push(`Từng ${p.jailCount} lần vào tù vì chạy giấy phép.`);
+  if(num(p.ftFell))parts.push(`Từng rơi lại Vòng Cối Xay ${p.ftFell} lần rồi gượng dậy.`);
+  if(coll.length)parts.push(`Bộ sưu tập gồm ${coll.map(esc).join(', ')}.`);
+  parts.push(p.won?`Đã chạm tới giấc mơ “${esc(G.dreams[p.dream].n)}”.`:`Tài sản ròng cuối cùng: ${fmt(netWorth(p))}.`);
+  return `<div class="bio"><h4>${bioTitle(p)}</h4><p>${parts.join(' ')}</p></div>`;}
+/* ================= Giải trí, bộ sưu tập, Di sản ================= */
+/* Tháp Maslow: đủ tiền rồi, người ta cần được công nhận và cống hiến. Thắng ở Vòng Thịnh Vượng cần đủ Di sản. */
+const LEGACY_WIN={easy:20,hard:40};
+const legacyNeed=()=>LEGACY_WIN[(G&&G.mode)||'easy'];
+const legacyBonus=p=>Math.floor(S(p).legacy/20);
+/* bộ sưu tập: hiếm (2 xúc xắc giống nhau) và huyền thoại (3 xúc xắc giống nhau) */
+const COLL=[
+ {id:'rolo',n:'Đồng hồ Rolo Submarine',k:'watch',c:'#1f7a4d',t:1},{id:'ring',n:'Nhẫn kim cương 5 carat',k:'ring',c:'#bfe6ff',t:1},
+ {id:'wine',n:'Rượu vang Château 1945',k:'wine',c:'#7a1030',t:1},{id:'vase',n:'Bình gốm men lam thời Lý',k:'vase',c:'#2f5fb3',t:1},
+ {id:'lacquer',n:'Tranh sơn mài cổ',k:'paint',c:'#b3261e',t:1},{id:'classic',n:'Xe cổ Mercedo 1960',k:'car',c:'#d9d2c3',t:1},
+ {id:'bag',n:'Túi Hermy da cá sấu',k:'bag',c:'#c9772b',t:1},{id:'guitar',n:'Đàn guitar của huyền thoại nhạc rock',k:'guitar',c:'#d1462f',t:1},
+ {id:'roro',n:'Siêu xe Roro Spectra',k:'car',c:'#e9b949',t:2},{id:'pink',n:'Kim cương hồng Hồng Ngọc',k:'gem',c:'#ff8fc2',t:2},
+ {id:'patech',n:'Đồng hồ Patech Grand',k:'watch',c:'#e9b949',t:2},{id:'mona',n:'Tranh “Nàng Mo-na”',k:'paint',c:'#6b5a2e',t:2},
+ {id:'seal',n:'Ấn ngọc hoàng gia',k:'seal',c:'#4fd18b',t:2},{id:'yacht',n:'Siêu du thuyền Roro Ocean',k:'yacht',c:'#f4f6fb',t:2}];
+const COLL_KEY='dongtien3d.collection';
+function collStore(){try{return JSON.parse(localStorage.getItem(COLL_KEY)||'{}')}catch(e){return {}}}
+function collOwned(p){const st=collStore();return new Set([...(st[p.name]||[]),...(p.coll||[])]);}
+function collGive(p,tier,why){const own=collOwned(p),pool=COLL.filter(c=>c.t===tier),fresh=pool.filter(c=>!own.has(c.id)),it=pick(fresh.length?fresh:pool);
+  p.coll=p.coll||[];if(!p.coll.includes(it.id))p.coll.push(it.id);
+  if(!p.bot){try{const st=collStore();st[p.name]=[...new Set([...(st[p.name]||[]),it.id])];localStorage.setItem(COLL_KEY,JSON.stringify(st));}catch(e){}}
+  addS(p,{happy:tier===2?12:6},'Bộ sưu tập');log(`Bộ sưu tập: nhận ${it.n} (${tier===2?'huyền thoại':'hiếm'}) · ${why}`,p);(p.pendingItems=p.pendingItems||[]).push({id:it.id,why});return it;}
+/* hình minh họa vật phẩm: SVG có ánh kim */
+function collSVG(it,locked){const c=locked?'#3a4560':it.c,g='g'+it.id+(locked?'L':''),sh=locked?'#2a3348':'#ffffff';
+  const parts={watch:`<circle cx="60" cy="45" r="24" fill="url(#${g})" stroke="#cfd6e4" stroke-width="4"/><circle cx="60" cy="45" r="17" fill="#0b1220"/><line x1="60" y1="45" x2="60" y2="33" stroke="${sh}" stroke-width="3"/><line x1="60" y1="45" x2="69" y2="49" stroke="${sh}" stroke-width="2"/><rect x="52" y="8" width="16" height="14" rx="3" fill="#cfd6e4"/><rect x="52" y="68" width="16" height="14" rx="3" fill="#cfd6e4"/>`,
+    ring:`<ellipse cx="60" cy="58" rx="22" ry="18" fill="none" stroke="#e9b949" stroke-width="7"/><polygon points="60,14 76,30 60,46 44,30" fill="url(#${g})" stroke="#fff" stroke-width="2"/>`,
+    wine:`<rect x="52" y="10" width="16" height="16" fill="#3b2a1a"/><path d="M48 26 h24 v54 a6 6 0 0 1 -6 6 h-12 a6 6 0 0 1 -6 -6z" fill="url(#${g})"/><rect x="50" y="46" width="20" height="18" fill="#f3e6c8"/>`,
+    vase:`<path d="M48 12 h24 v8 c14 10 18 28 10 46 c-4 10 -8 14 -10 16 h-24 c-2 -2 -6 -6 -10 -16 c-8 -18 -4 -36 10 -46z" fill="url(#${g})"/><path d="M42 44 q18 10 36 0" stroke="${sh}" stroke-width="3" fill="none"/>`,
+    paint:`<rect x="20" y="10" width="80" height="70" rx="4" fill="#c9952a"/><rect x="28" y="18" width="64" height="54" fill="url(#${g})"/><circle cx="60" cy="40" r="11" fill="#f1d3a8"/><path d="M40 72 q20 -26 40 0z" fill="#2a1e14"/>`,
+    car:`<path d="M12 58 q6 -22 30 -24 l14 -12 h26 l16 14 q14 2 16 22 v6 h-102z" fill="url(#${g})"/><rect x="58" y="26" width="22" height="12" rx="3" fill="#9fd3ff"/><circle cx="34" cy="66" r="10" fill="#111"/><circle cx="92" cy="66" r="10" fill="#111"/><circle cx="34" cy="66" r="4" fill="#cfd6e4"/><circle cx="92" cy="66" r="4" fill="#cfd6e4"/>`,
+    bag:`<path d="M42 30 q0 -18 18 -18 q18 0 18 18" stroke="#6b3a14" stroke-width="5" fill="none"/><rect x="26" y="30" width="68" height="50" rx="8" fill="url(#${g})"/><rect x="54" y="44" width="12" height="8" rx="2" fill="#e9b949"/>`,
+    guitar:`<rect x="57" y="6" width="6" height="44" fill="#5a3a1a"/><circle cx="50" cy="62" r="16" fill="url(#${g})"/><circle cx="68" cy="56" r="12" fill="url(#${g})"/><circle cx="58" cy="60" r="4" fill="#111"/>`,
+    gem:`<polygon points="40,22 80,22 96,40 60,84 24,40" fill="url(#${g})" stroke="#fff" stroke-width="2"/><polyline points="24,40 96,40" stroke="#fff" stroke-width="2"/><polyline points="40,22 50,40 60,84 70,40 80,22" stroke="#fff" stroke-width="1.5" fill="none"/>`,
+    seal:`<rect x="30" y="44" width="60" height="36" rx="6" fill="url(#${g})"/><path d="M44 44 q0 -30 16 -30 q16 0 16 30" fill="url(#${g})"/><rect x="38" y="56" width="44" height="16" rx="3" fill="none" stroke="#e9b949" stroke-width="3"/>`,
+    yacht:`<path d="M8 60 h104 l-14 18 h-76z" fill="url(#${g})"/><rect x="34" y="40" width="50" height="20" rx="4" fill="#dfe6f2"/><rect x="48" y="28" width="28" height="12" rx="3" fill="#cfd6e4"/><rect x="40" y="46" width="38" height="6" fill="#1f3a64"/>`};
+  return `<svg viewBox="0 0 120 90" width="100%" height="100%"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${locked?c:'#ffffff'}" stop-opacity="${locked?1:.55}"/><stop offset=".35" stop-color="${c}"/><stop offset="1" stop-color="${c}" stop-opacity=".75"/></linearGradient></defs>${parts[it.k]||parts.gem}${locked?'<text x="60" y="54" text-anchor="middle" font-size="30" font-weight="800" fill="#93a3c0">?</text>':''}</svg>`;}
+function collCard(it,locked){return `<div style="background:${locked?'rgba(255,255,255,.03)':it.t===2?'linear-gradient(160deg,#4a3a0e,#1a2338)':'linear-gradient(160deg,#1e3354,#151f33)'};border:1px solid ${it.t===2&&!locked?'#e9b949':'var(--line)'};border-radius:14px;padding:8px;text-align:center"><div style="height:64px">${collSVG(it,locked)}</div><small style="display:block;line-height:1.25;margin-top:4px;${locked?'color:var(--muted)':''}">${locked?(it.t===2?'Huyền thoại':'Hiếm'):esc(it.n)}</small></div>`;}
+function showCollection(p){const own=collOwned(p);
+  openViewer({tone:'ft',key:'coll:'+p.id,eyebrow:`Bộ sưu tập · ${own.size}/${COLL.length}`,title:esc(p.name),
+    body:`<p>Ở Vòng Thịnh Vượng, tung 2 xúc xắc giống nhau nhận một món <b>hiếm</b>; 3 xúc xắc giống nhau nhận món <b>huyền thoại</b>. Bộ sưu tập được lưu mãi theo tên người chơi, qua mọi ván.</p>
+      <h3>Huyền thoại</h3><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${COLL.filter(c=>c.t===2).map(c=>collCard(c,!own.has(c.id))).join('')}</div>
+      <h3>Hiếm</h3><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${COLL.filter(c=>c.t===1).map(c=>collCard(c,!own.has(c.id))).join('')}</div>`});}
+/* mỗi lần tung ở Vòng Thịnh Vượng: đôi thì nhận đồ hiếm, ba con giống nhau thì nhận đồ huyền thoại */
+function collRoll(p,vals){if(!p.ft)return;if(vals.length>=3&&vals.every(v=>v===vals[0]))collGive(p,2,`ba xúc xắc ${vals[0]}`);else if(vals[0]===vals[1])collGive(p,1,`đôi ${vals[0]}`);}
+function collReveal(p,done){const x=(p.pendingItems||[]).shift();if(!x)return done();const it=COLL.find(c=>c.id===x.id);sfx('win');coinRain(it.t===2?100:40);
+  openModal({tone:'ft',eyebrow:it.t===2?'Bộ sưu tập · HUYỀN THOẠI':'Bộ sưu tập · Hiếm',title:esc(it.n),body:`<div style="height:170px;margin:4px 0 8px">${collSVG(it,false)}</div><p style="text-align:center">May mắn tung được ${esc(x.why)}! Món đồ đã vào bộ sưu tập vĩnh viễn của bạn.</p>`,
+    acts:[{label:'Xem bộ sưu tập',fn:()=>{closeModal();showCollection(p);collReveal(p,done);}},{label:'Tuyệt!',cls:'primary',fn:()=>{closeModal();collReveal(p,done);}}],bot:()=>{closeModal();collReveal(p,done);}});}
+/* ô Giải trí */
+const FUN=[
+ {n:'Kỳ nghỉ ở Hawaii',cost:2*TY,stat:{happy:15,health:6},art:'travel',d:'Lướt sóng, ngắm hoàng hôn, tắt điện thoại cả tuần.'},
+ {n:'Thăm Kim tự tháp Ai Cập',cost:1.5*TY,stat:{happy:12,know:6},art:'world',d:'Đứng trước kỳ quan 4.500 năm tuổi, bạn thấy tiền bạc thật nhỏ bé.'},
+ {n:'Ăn tối cùng Hoa hậu',cost:3*TY,stat:{happy:10,rel:10},art:'party',d:'Bữa tối từ thiện cùng Hoa hậu và giới nghệ sĩ. Cẩn thận cánh săn ảnh!',risk:true},
+ {n:'Siêu xe Roro Spectra mới ra mắt',cost:8*TY,stat:{happy:14,rel:6},art:'scooter',d:'Hãng Roro vừa ra mắt mẫu siêu xe mới, chỉ sản xuất 99 chiếc trên thế giới.',item:'roro'},
+ {n:'Du thuyền Địa Trung Hải',cost:4*TY,stat:{happy:15,rel:8},art:'yacht',d:'Một tuần trên du thuyền qua Monaco, Capri, Santorini.'},
+ {n:'Xem chung kết World Cup',cost:TY,stat:{happy:12},art:'football',d:'Ghế VIP, ăn mừng cùng hàng vạn cổ động viên.'},
+ {n:'Bay vào vũ trụ',cost:20*TY,stat:{happy:25,legacy:5},art:'antarctic',d:'Chuyến bay tư nhân ra ngoài khí quyển. Cả thế giới nói về bạn.'},
+ {n:'Phiên đấu giá đồ cổ',cost:5*TY,stat:{happy:8},art:'museum',d:'Mua một món đồ hiếm. Tung 3 xúc xắc: ba con giống nhau thì được món huyền thoại.',auction:true}];
+function ftFun(p){const opts=FUN.slice().sort(()=>Math.random()-.5).slice(0,3);
+  const take=o=>{p.cash-=o.cost;addS(p,o.stat,o.n);log(`Giải trí: ${o.n} (${fmt(o.cost)})`,p);sfx('cash');
+    if(o.item){const it=COLL.find(c=>c.id===o.item);p.coll=p.coll||[];if(!p.coll.includes(it.id)){p.coll.push(it.id);if(!p.bot){try{const st=collStore();st[p.name]=[...new Set([...(st[p.name]||[]),it.id])];localStorage.setItem(COLL_KEY,JSON.stringify(st));}catch(e){}}(p.pendingItems=p.pendingItems||[]).push({id:it.id,why:'mua xe mới'});}return collReveal(p,endTurn);}
+    if(o.auction)return ftGamble(p,{eyebrow:'Đấu giá đồ cổ',title:'Búa gõ, ai trả giá cao nhất?',art:'museum',bonus:0,body:'<p>Bạn chắc chắn mang về một món hiếm. Nếu cả 3 xúc xắc giống nhau, đó là món huyền thoại.</p>',
+      outcome:()=>{const v=[0,0,0].map(()=>1+Math.floor(Math.random()*6)),leg=v.every(x=>x===v[0]),it=collGive(p,leg?2:1,leg?`ba xúc xắc ${v[0]}`:'phiên đấu giá');return {title:esc(it.n),text:`Ba xúc xắc: ${v.join(' · ')}. ${leg?'HUYỀN THOẠI!':'Một món hiếm cho bộ sưu tập.'}`,good:true,art:'museum'};},after:()=>collReveal(p,endTurn)});
+    if(o.risk)return ftGamble(p,{eyebrow:'Ăn tối cùng Hoa hậu',title:'Đèn flash lóe lên…',art:'party',bonus:0,body:'<p>Tổng 2–4: ảnh bị đăng báo, vợ/chồng nổi giận. Còn lại: một buổi tối đáng nhớ, quen thêm nhiều người nổi tiếng.</p>',
+      outcome:R=>R.sum<=4&&p.spouse?(addS(p,{happy:-20,rel:-5},'Lên báo lá cải'),{title:'Lên báo lá cải!',text:'Ảnh bạn đi ăn tối với Hoa hậu lên trang nhất. Hạnh phúc gia đình −20.',art:'divorce'}):{title:'Một buổi tối đáng nhớ',text:'Bạn quen thêm nhiều nghệ sĩ, doanh nhân. Quan hệ tăng.',good:true}});
+    endTurn();};
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Giải trí',title:'Tận hưởng thành quả',art:art('travel'),
+    body:`<p>Vòng Thịnh Vượng căng thẳng: mỗi ngày lĩnh lương Hạnh phúc giảm 6. Hạnh phúc dưới 30 là <b>kiệt sức</b>: mất 10% ngày lĩnh lương và giảm Sức khỏe.</p><div class="rows">${opts.map(o=>`<div class="row"><div class="grow"><b>${o.n}</b> · ${fmt(o.cost)}<small>${o.d} ${Object.entries(o.stat).map(([k,v])=>`${STATS[k].n} +${v}`).join(', ')}</small></div></div>`).join('')}</div>`,
+    acts:[...opts.map(o=>({label:`${o.n.split(' ').slice(0,4).join(' ')} · ${fmt(o.cost)}`,disabled:p.cash<o.cost,fn:()=>take(o)})),{label:'Ở nhà nghỉ ngơi',cls:'primary',fn:()=>{addS(p,{happy:5},'Nghỉ ngơi');endTurn();}}],
+    bot:()=>{const o=opts.filter(o=>!o.risk&&p.cash>o.cost*8).sort((a,b)=>a.cost-b.cost)[0];o?take(o):(addS(p,{happy:5}),endTurn());}});}
+/* ô Công trình để đời */
+const WORKS=[
+ {n:'Trường học mang tên bạn ở vùng cao',cost:5*TY,stat:{legacy:20,happy:8},art:'school'},
+ {n:'Bệnh viện nhi miễn phí',cost:12*TY,stat:{legacy:35,happy:10,luck:10},art:'doctor'},
+ {n:'Quỹ học bổng cho sinh viên nghèo',cost:3*TY,stat:{legacy:12,rel:6},art:'scholar'},
+ {n:'Cây cầu cho xã vùng sâu',cost:2*TY,stat:{legacy:10,luck:8},art:'charity'},
+ {n:'Thư viện và bảo tàng cho quê nhà',cost:8*TY,stat:{legacy:25,know:6},art:'library'},
+ {n:'Vườn ươm khởi nghiệp cho người trẻ',cost:4*TY,stat:{legacy:15,rel:10},art:'startup'},
+ {n:'Dạy miễn phí lớp tài chính cá nhân',cost:0,stat:{legacy:5,happy:6},art:'school'}];
+function ftLegacy(p){const opts=[WORKS[WORKS.length-1],...WORKS.slice(0,-1).sort(()=>Math.random()-.5).slice(0,3)];
+  const build=o=>{p.cash-=o.cost;addS(p,o.stat,o.n);(p.works=p.works||[]).push(o.n);log(`Công trình để đời: ${o.n}${o.cost?` (${fmt(o.cost)})`:''}`,p);sfx('win');if(o.cost)coinRain(30);endTurn();};
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Công trình để đời',title:'Bạn muốn được nhớ đến vì điều gì?',art:art('library'),
+    body:`<p>Đỉnh tháp Maslow là được công nhận và cống hiến. Chiến thắng ở vòng này cần <b>Di sản ≥ ${legacyNeed()}</b> (hiện có ${S(p).legacy}). Mỗi 20 Di sản được +1 điểm cho mọi lần tung xúc xắc đỏ đen: uy tín mở mọi cánh cửa.</p><div class="rows">${opts.map(o=>`<div class="row"><div class="grow"><b>${o.n}</b> · ${o.cost?fmt(o.cost):'miễn phí'}<small>${Object.entries(o.stat).map(([k,v])=>`${STATS[k].n} +${v}`).join(', ')}</small></div></div>`).join('')}</div>`,
+    acts:[...opts.map(o=>({label:`${o.n.split(' ').slice(0,4).join(' ')}${o.cost?' · '+fmt(o.cost):''}`,cls:o.cost?'':'primary',disabled:p.cash<o.cost,fn:()=>build(o)})),{label:'Để sau',fn:endTurn}],
+    bot:()=>{const o=opts.filter(o=>o.cost&&p.cash>o.cost*3).sort((a,b)=>b.stat.legacy-a.stat.legacy)[0];build(o||opts[0]);}});}
+/* ---------- xúc xắc đỏ đen trong Vòng Thịnh Vượng ---------- */
+const DIEF=['⚀','⚁','⚂','⚃','⚄','⚅'];
+function ftDice(bonus=0){const v=[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6)];return {v,raw:v[0]+v[1],sum:clamp(v[0]+v[1]+bonus,2,12),bonus};}
+const diceHTML=R=>`<div style="font-size:64px;line-height:1;text-align:center;letter-spacing:8px">${R.v.map(x=>DIEF[x-1]).join('')}</div><p style="text-align:center"><b class="num">${R.raw}</b>${R.bonus?` ${R.bonus>0?'+':'−'} ${Math.abs(R.bonus)} (kỹ năng, quan hệ, di sản)`:''} = <b class="num">${R.sum}</b></p>`;
+const relBonus=p=>(S(p).rel>=70?1:0)+(p.golfClub?1:0);
+/* mở modal "Tung xúc xắc" rồi hiện kết quả; outcome(R) trả về {title,text,good} và tự áp dụng thay đổi */
+function ftGamble(p,o){const go=()=>{const R=ftDice((o.bonus||0)+(o.noLegacy?0:legacyBonus(p)+(p.pro?1:0)));sfx('dice');const res=o.outcome(R);ftRecalc(p);renderHUD();save();
+    openModal({tone:res.good?'ft':'doodad',eyebrow:o.eyebrow,title:res.title,art:art(res.art||o.art),body:diceHTML(R)+`<p>${res.text}</p>`,lesson:res.lesson||'',acts:[{label:'Tiếp tục',cls:'primary',fn:()=>{if(p.cash<0&&p.ft)ftDistress(p);(o.after||endTurn)();}}],bot:()=>{if(p.cash<0&&p.ft)ftDistress(p);(o.after||endTurn)();}});};
+  openModal({tone:'ft',eyebrow:o.eyebrow,title:o.title,art:art(o.art),body:o.body,lesson:o.lesson||'',acts:[{label:'🎲 Tung xúc xắc',cls:'primary',fn:go}],bot:go});}
+/* công nghệ mới: góp vốn bây giờ, ngày lĩnh lương sau tự tung xúc xắc */
+function ftTech(p,t){let dd=!!p.ftGuard;const render=()=>{const bonus=(dd?1:0)+(S(p).know>=70?1:0)-(G.ftCredit>0?2:0);
+  const go=st=>{const fee=dd?Math.round(st*DD_FEE):0;p.cash-=st+fee;p.ftVentures.push({name:t.name,stake:st,dd,lap:p.ftLap,m:t.m,bonus});log(`Rót ${fmt(st)} vào ${t.name}${dd?` (thẩm định ${fmt(fee)})`:''}`,p);sfx('pay');endTurn();};
+  const rows=[[2,4],[5,6],[7,8],[9,10],[11,12]].map(([a,b])=>`<tr><td>Tổng ${a}–${b}</td><td>${[...new Set(t.m.slice(a-2,b-1))].map(x=>x?'×'+trimNum(x,1):'mất trắng').join(' / ')}</td></tr>`).join('');
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Công nghệ mới',title:esc(t.name),art:art(t.art),
+    body:`<p>${t.d} Tiền góp được chốt ở ngày lĩnh lương tới: bạn tự tung 2 xúc xắc.</p><table>${rows}</table><p>${bonus?`Điểm cộng xúc xắc: ${bonus>0?'+':''}${bonus} (${[dd?'thẩm định kỹ':'',S(p).know>=70?'hiểu biết đầu tư cao':'',G.ftCredit>0?'tín dụng đang bị siết':''].filter(Boolean).join(', ')}).`:'Chưa thẩm định: không có điểm cộng.'}</p>`,
+    lesson:'Ngoài đời, đa số khoản đầu tư công nghệ mất trắng; lợi nhuận đến từ số ít kèo nhân nhiều lần. Chỉ dùng phần tiền chấp nhận mất.',
+    acts:[...[TY,3*TY,10*TY].map(st=>({label:`Góp ${fmt(st)}`,cls:st===TY?'primary':'',disabled:p.cash<st*(1+(dd?DD_FEE:0)),fn:()=>go(st)})),{label:dd?'Bỏ thẩm định':`Thẩm định kỹ (+${pct(DD_FEE,0)}, +1 điểm)`,fn:()=>{dd=!dd;render();}},{label:'Bỏ qua',fn:endTurn}],
+    bot:()=>{dd=true;p.cash>4*TY*(1+DD_FEE)?go(TY):endTurn();}});};render();}
+/* ngày lĩnh lương: các khoản công nghệ tới hạn, người chơi tự tung xúc xắc từng khoản */
+function ftReveal(p,done){const v=p.ftVentures.find(x=>x.due);if(!v)return done();
+  ftGamble(p,{eyebrow:'Chốt kèo công nghệ',title:`${esc(v.name)}: góp ${fmt(v.stake)}`,art:'chartup',bonus:v.bonus||0,
+    body:`<p>Tới ngày chốt kèo. Tung 2 xúc xắc để biết số phận khoản đầu tư.</p>`,
+    outcome:R=>{const m=(v.m||VOUT_TABLE)[R.sum-2],back=Math.round(v.stake*m);p.cash+=back;p.ftVentures.splice(p.ftVentures.indexOf(v),1);p.deals.push({name:'Công nghệ: '+v.name,pl:back-v.stake});
+      log(`Chốt ${v.name} (góp ${fmt(v.stake)}): xúc xắc ${R.sum} → ${m?'×'+trimNum(m,1)+' = '+fmt(back):'mất trắng'}`,p);if(m>=4){sfx('win');coinRain(m>=10?80:30);}if(m>=10)chickSay('unicorn',p);
+      return m===0?{title:'Mất trắng!',text:`Công ty cạn vốn, đóng cửa. Mất ${fmt(v.stake)}.`,art:'chartdown',lesson:'Thua một kèo là chuyện thường. Đừng dồn tất cả vào một chỗ.'}
+        :m<1?{title:`Lỗ: chỉ thu về ×${trimNum(m,1)}`,text:`Bị thâu tóm giá rẻ. Thu về ${fmt(back)}.`,art:'chartdown'}
+        :{title:m>=10?`KỲ LÂN! ×${trimNum(m,1)}`:`Thắng ×${trimNum(m,1)}`,text:`Bán cổ phần, thu về ${fmt(back)} (lãi ${fmt(back-v.stake)}).`,good:true,art:'trophy'};},
+    after:()=>ftReveal(p,done)});}
+/* IPO: cần ít nhất 2 doanh nghiệp; bán 30% cổ phần ra công chúng */
+function ftIPO(p){const bz=p.ftAssets.filter(a=>a.sector!=='kcn'||true),base=bz.reduce((s,a)=>s+num(a.cost),0),fee=Math.round(base*.05/1e6)*1e6;
+  if(bz.length<2)return openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · IPO',title:'Chưa đủ điều kiện lên sàn',art:art('chartup'),body:'<p>Cần sở hữu ít nhất 2 doanh nghiệp (hoặc khu công nghiệp) để gộp thành tập đoàn và IPO.</p>',acts:[{label:'Xong',cls:'primary',fn:endTurn}],bot:endTurn});
+  const bonus=(p.ftGuard?1:0)+relBonus(p)+(G.ftCredit>0?-2:0);
+  const go=()=>ftGamble(p,{eyebrow:'IPO · Ngày chào sàn',title:'Chuông khai trương phiên giao dịch',art:'chartup',bonus,
+    body:`<p>Đã trả ${fmt(fee)} phí tư vấn, bảo lãnh. Tổng 8–9: định giá ×3, 10–11: ×5, 12: ×8 vốn gốc; dưới 8: rút hồ sơ.</p>`,
+    outcome:R=>{if(R.sum<8)return {title:'IPO thất bại',text:'Thị trường xấu, nhà đầu tư quay lưng. Mất phí tư vấn.',art:'chartdown',lesson:'Thời điểm IPO quan trọng không kém chất lượng doanh nghiệp.'};
+      const k=R.sum>=12?8:R.sum>=10?5:3,cash=Math.round(base*k*.3);p.cash+=cash;bz.forEach(a=>{a.cf=Math.round(a.cf*.7);a.ipo=true;});p.ipos=(p.ipos||0)+1;
+      log(`IPO thành công: định giá ×${k}, bán 30% thu ${fmt(cash)}`,p);moment('chartup','Rung chuông chào sàn!',`${esc(p.name)} IPO, định giá ×${k}`);
+      return {title:`IPO thành công! Định giá ×${k}`,text:`Tập đoàn được định giá ${fmt(base*k)}. Bán 30% cổ phần thu về ${fmt(cash)}; dòng tiền các doanh nghiệp còn 70% vì đã chia cho cổ đông mới.`,good:true,art:'trophy'};}});
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · IPO',title:'Đưa tập đoàn lên sàn chứng khoán',art:art('chartup'),
+    body:`<div class="facts">${fact('Vốn gốc các doanh nghiệp',fmt(base))}${fact('Phí tư vấn, bảo lãnh',fmt(fee),'neg')}${fact('Điểm cộng xúc xắc',(bonus>0?'+':'')+bonus)}</div><p>Đội pháp chế (+1) giúp hồ sơ sạch, quan hệ rộng (+1) và thẻ hội viên gôn (+1) kéo nhà đầu tư lớn.</p>`,
+    acts:[{label:`IPO, trả phí ${fmt(fee)}`,cls:'primary',disabled:p.cash<fee,fn:()=>{p.cash-=fee;go();}},{label:'Để sau',fn:endTurn}],bot:()=>p.cash>fee*3&&bonus>=1?(p.cash-=fee,go()):endTurn()});}
+/* Khu công nghiệp: đúng luật thì chậm, chạy giấy phép thì đỏ đen */
+function ftKCN(p,t){const i=p.ftPos,own=p.ftAssets.some(a=>a.idx===i);
+  const add=(price,ramp,bribe)=>{p.cash-=price;p.ftAssets.push({idx:i,name:t.name,sector:'bds',cost:t.cost,cf:Math.round(t.cf*(ramp?.3:1)),cf0:t.cf,ramp:ramp?2:0,bribe:!!bribe});ftRecalc(p);};
+  const legal=()=>{add(t.cost,true,false);log(`Đầu tư ${t.name} ${fmt(t.cost)}, làm hồ sơ đúng luật (2 kỳ đầu chỉ 30% dòng tiền)`,p);endTurn();};
+  const bribe=()=>{const env=Math.round(t.cost*.1);p.cash-=env;chickSay('bribe',p);
+    ftGamble(p,{eyebrow:'Chạy giấy phép',title:'Phong bì đã trao…',art:'scam',bonus:0,noLegacy:true,body:`<p>Đã chi ${fmt(env)} "phí bôi trơn". Tổng 2–4: bị bắt quả tang. 5 trở lên: trót lọt, dự án chạy ngay, giá đất rẻ hơn 20%.</p>`,
+      outcome:R=>{if(R.sum<=4){p.jail=3;p.bribes=(p.bribes||0)+1;p.jailCount=num(p.jailCount)+1;moment('police','BỊ BẮT!',`${esc(p.name)} vào tù 3 lượt`);chickSay('jail',p);const fine=Math.round(Math.max(0,p.cash)*.3);p.cash-=fine;addS(p,{rel:-25,happy:-25,luck:-15,legacy:-20},'Bị bắt vì hối lộ');log(`Bị bắt quả tang khi chạy giấy phép ${t.name}: mất phong bì ${fmt(env)}, phạt ${fmt(fine)}, ngồi tù 3 lượt`,p);
+          return {title:'BỊ BẮT!',text:`Mất phong bì ${fmt(env)}, nộp phạt ${fmt(fine)} và ngồi tù 3 lượt. Dự án bị thu hồi.`,art:'police',lesson:'Hối lộ có thể trót lọt vài lần, nhưng chỉ một lần lộ là mất tất cả.'};}
+        p.bribes=(p.bribes||0)+1;add(Math.round(t.cost*.8),false,true);log(`Chạy giấy phép ${t.name} trót lọt (phong bì ${fmt(env)}), giá đất giảm 20%`,p);
+        return {title:'Trót lọt…',text:`Giấy phép có ngay, giá đất giảm 20%: chỉ trả ${fmt(Math.round(t.cost*.8))}, dòng tiền đủ ${fmt(t.cf)} từ kỳ này. Nhưng hồ sơ này sẽ còn đó khi thanh tra tới.`,good:true,art:'garment'};}});};
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Khu công nghiệp',title:esc(t.name),art:art('garment'),
+    body:`<p>Các tập đoàn sản xuất đang tìm đất. Dòng tiền khủng, nhưng giấy phép đất đai là điểm nghẽn.</p><div class="facts">${fact('Vốn',fmt(t.cost))}${fact('Dòng tiền','+'+fmt(t.cf),'pos')}${fact('Lợi suất',pct(t.cf/t.cost))}</div>
+      <p><b>Đúng luật:</b> trả đủ ${fmt(t.cost)}; 2 ngày lĩnh lương đầu chỉ được 30% dòng tiền vì chờ thủ tục.<br><b>Chạy giấy phép:</b> chi ${fmt(t.cost*.1)} phong bì rồi tung xúc xắc: 2–4 bị bắt (≈17%), ngồi tù 3 lượt; trót lọt thì đất rẻ 20%, chạy ngay. Lần sau gặp Thanh tra sẽ dễ bị lộ.</p>${own?'<p>Bạn đã sở hữu khu này.</p>':''}`,
+    acts:[{label:`Đúng luật ${fmt(t.cost)}`,cls:'primary',disabled:own||p.cash<t.cost,fn:legal},{label:'Chạy giấy phép',disabled:own||p.cash<t.cost*.9,fn:bribe},{label:'Bỏ qua',fn:endTurn}],
+    bot:()=>own||p.cash<t.cost*1.5?endTurn():(BOT_LVL[p.botLvl||'normal'].spec>.6&&p.cash>=t.cost*.9?bribe():legal())});}
+/* Thanh tra: hồ sơ cũ quay lại */
+function ftInspect(p){const n=p.bribes||0;
+  if(!n){addS(p,{luck:10},'Hồ sơ sạch');return openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Thanh tra',title:'Hồ sơ sạch',art:art('police'),body:'<p>Đoàn thanh tra rà soát toàn bộ dự án của bạn: không có sai phạm. Uy tín tăng, May mắn +10.</p>',lesson:'Làm ăn sạch thì ngủ ngon.',acts:[{label:'Tiếp tục',cls:'primary',fn:endTurn}],bot:endTurn});}
+  const lim=3+n*2;
+  ftGamble(p,{eyebrow:'Vòng Thịnh Vượng · Thanh tra',title:'Đoàn thanh tra tới gõ cửa',art:'police',bonus:0,noLegacy:true,
+    body:`<p>Bạn từng chạy giấy phép ${n} lần. Tổng xúc xắc ≤ ${lim}: bị lộ (≈${pct([0,0,1,3,6,10,15,21,26,30,33,35,36][Math.min(12,lim)]/36,0)}).</p>`,
+    outcome:R=>{if(R.sum>lim)return {title:'Thoát… lần này',text:'Hồ sơ không bị phát hiện. Nhưng nó vẫn nằm đó.',good:true,art:'escape'};
+      const lost=p.ftAssets.filter(a=>a.bribe);lost.forEach(a=>p.ftAssets.splice(p.ftAssets.indexOf(a),1));const fine=Math.round(Math.max(0,p.cash)*.5);p.cash-=fine;p.jail=p.ftGuard?2:4;p.bribes=0;p.jailCount=num(p.jailCount)+1;moment('police','BỊ KHỞI TỐ!',`${esc(p.name)} vào tù ${p.jail} lượt`);chickSay('jail',p);
+      addS(p,{rel:-30,happy:-25,luck:-20,legacy:-30},'Bị khởi tố');log(`Thanh tra phát hiện hối lộ: tịch thu ${lost.length} dự án, phạt ${fmt(fine)}, ngồi tù ${p.jail} lượt`,p);
+      return {title:'BỊ KHỞI TỐ!',text:`Tịch thu ${lost.length?lost.map(a=>esc(a.name)).join(', '):'các khoản liên quan'}, phạt ${fmt(fine)}, ngồi tù ${p.jail} lượt${p.ftGuard?' (luật sư giúp giảm án)':''}.`,art:'police',lesson:'Tài sản có được nhờ hối lộ luôn có thể bị lấy lại.'};}});}
+/* Sân gôn: quan hệ là tài sản vô hình của người giàu */
+function ftGolf(p){const fee=200*TR,club=2*TY;
+  const play=()=>{p.cash-=fee;addS(p,{rel:10,happy:4},'Chơi gôn');
+    ftGamble(p,{eyebrow:'Sân gôn',title:'Một vòng 18 lỗ với các chủ tập đoàn',art:'skyline',bonus:relBonus(p),body:'<p>Tổng 10 trở lên: được rủ vào kèo nội bộ (mua doanh nghiệp giá 70%). 7–9: quen thêm người, Quan hệ +5. Dưới 7: chỉ là một trận gôn.</p>',
+      outcome:R=>{if(R.sum>=10){const free=FT.map((t,i)=>[t,i]).filter(([t,i])=>t.t==='biz'&&!G.players.some(q=>q.ftAssets&&q.ftAssets.some(a=>a.idx===i)));const pk=free.length?pick(free):null;
+          if(pk&&p.cash>=pk[0].cost*.7){const [t,i]=pk,price=Math.round(t.cost*.7);p.cash-=price;p.ftAssets.push({idx:i,name:t.name,sector:t.sector,cost:price,cf:t.cf});log(`Kèo nội bộ trên sân gôn: mua ${t.name} giá ${fmt(price)} (70%)`,p);
+            return {title:'Kèo nội bộ!',text:`Một chủ tập đoàn nhượng lại ${esc(t.name)} chỉ ${fmt(price)} (70% giá). Dòng tiền +${fmt(t.cf)}.`,good:true,art:'buyer'};}
+          addS(p,{rel:8});return {title:'Được giới thiệu nhà đầu tư lớn',text:'Quan hệ +8. Lần IPO tới dễ thành công hơn.',good:true};}
+        if(R.sum>=7){addS(p,{rel:5});return {title:'Quen thêm vài chủ doanh nghiệp',text:'Quan hệ +5.',good:true};}
+        return {title:'Chỉ là một trận gôn',text:'Đánh hỏng vài lỗ, không ai bàn chuyện làm ăn.',good:false};}});};
+  const join=()=>{p.cash-=club;p.golfClub=true;addS(p,{rel:15,happy:6},'Thẻ hội viên gôn');log(`Mua thẻ hội viên sân gôn ${fmt(club)}`,p);endTurn();};
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Sân gôn',title:'Câu lạc bộ gôn thượng lưu',art:art('skyline'),
+    body:`<p>Nhiều thương vụ lớn được chốt trên sân gôn chứ không phải trong phòng họp.</p><div class="facts">${fact('Một trận',fmt(fee))}${fact('Thẻ hội viên',p.golfClub?'Đã có':fmt(club),'', 'Quan hệ +15, +1 xúc xắc IPO và gôn mãi mãi')}</div>`,
+    acts:[{label:`Chơi một trận ${fmt(fee)}`,cls:'primary',disabled:p.cash<fee,fn:play},...(p.golfClub?[]:[{label:`Thẻ hội viên ${fmt(club)}`,disabled:p.cash<club,fn:join}]),{label:'Không đi',fn:endTurn}],
+    bot:()=>p.cash>club*3&&!p.golfClub?join():p.cash>fee*10?play():endTurn()});}
 function ftLanding(p){
+  if(p.pendingItems&&p.pendingItems.length)return collReveal(p,()=>ftLanding(p));
+  if(p.ftVentures&&p.ftVentures.some(v=>v.due))return ftReveal(p,()=>ftLanding(p));
   const t=FT[p.ftPos];
   if(t.t==='cf')return endTurn();
-  if(t.t==='biz'){const own=p.ftAssets.some(a=>a.idx===p.ftPos);const go=()=>{p.cash-=t.cost;p.ftCF+=t.cf;p.ftAssets.push({idx:p.ftPos,name:t.name,cf:t.cf});log(`Đầu tư ${t.name} ${fmt(t.cost)}, +${fmt(t.cf)}`,p);sfx('cash');endTurn();};
-    return openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Đầu tư',title:t.name,art:art('skyline'),body:`<p>Doanh nghiệp quy mô lớn tìm nhà đầu tư. Mỗi ngày lĩnh lương bạn nhận thêm lợi nhuận.</p><div class="facts">${fact('Vốn đầu tư',fmt(t.cost))}${fact('Dòng tiền thêm','+'+fmt(t.cf),'pos')}${fact('Lợi suất',pct(t.cf/t.cost))}${fact('Tiến độ mục tiêu',pct(t.cf/ftGoal(),0))}</div>${own?'<p>Bạn đã sở hữu doanh nghiệp này.</p>':p.cash<t.cost?'<div class="note">Không đủ tiền mặt. Ở vòng này không có vay tiêu dùng.</div>':''}`,
+  if(t.t==='biz'){const own=p.ftAssets.some(a=>a.idx===p.ftPos);const go=()=>{ftFix(p);p.cash-=t.cost;p.ftAssets.push({idx:p.ftPos,name:t.name,sector:t.sector,cost:t.cost,cf:t.cf});ftRecalc(p);log(`Đầu tư ${t.name} ${fmt(t.cost)}, +${fmt(t.cf)}`,p);sfx('cash');endTurn();};
+    return openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Đầu tư',title:t.name,art:art('skyline'),body:`<p>Doanh nghiệp quy mô lớn tìm nhà đầu tư. Mỗi ngày lĩnh lương bạn nhận thêm lợi nhuận.</p><div class="facts">${fact('Vốn đầu tư',fmt(t.cost))}${fact('Dòng tiền thêm','+'+fmt(t.cf),'pos')}${fact('Lợi suất',pct(t.cf/t.cost))}${fact('Tiến độ mục tiêu',pct(t.cf/ftGoal(),0))}${fact('Ngành',SECTORS[t.sector]||'')}</div>${own?'<p>Bạn đã sở hữu doanh nghiệp này.</p>':p.cash<t.cost?'<div class="note">Không đủ tiền mặt. Ở vòng này không có vay tiêu dùng.</div>':''}`,
       acts:[{label:`Đầu tư ${fmt(t.cost)}`,cls:'primary',disabled:own||p.cash<t.cost,fn:go},{label:'Bỏ qua',fn:endTurn}],bot:()=>!own&&p.cash>=t.cost?go():endTurn()});}
-  if(t.t==='dream'){const d=G.dreams[t.slot],mine=t.slot===p.dream;const buy=()=>{p.cash-=d.c;closeModal();renderHUD();win(p,`Đã mua giấc mơ “${d.n}”.`);};
-    return openModal({tone:'ft',eyebrow:'Giấc mơ',title:esc(d.n),art:art(DREAM_ART[d.a||0]),body:`<p>Giá ${fmt(d.c)}. ${mine?(p.cash>=d.c?'Đây là giấc mơ của bạn và bạn đủ tiền!':'Đây là giấc mơ của bạn, nhưng chưa đủ tiền.'):'Đây là giấc mơ của người khác.'}</p>`,
-      acts:[...(mine?[{label:`Mua giấc mơ ${fmt(d.c)}`,cls:'primary',disabled:p.cash<d.c,fn:buy}]:[]),{label:mine?'Để sau':'Xong',fn:endTurn}],bot:()=>mine&&p.cash>=d.c?buy():endTurn()});}
-  if(t.t==='charity'){const give=()=>{p.cash-=TY;addS(p,{luck:20,happy:8},'Quyên góp 1 tỷ');endTurn();};
+  if(t.t==='tech')return ftTech(p,t);
+  if(t.t==='ipo')return ftIPO(p);
+  if(t.t==='kcn')return ftKCN(p,t);
+  if(t.t==='inspect')return ftInspect(p);
+  if(t.t==='golf')return ftGolf(p);
+  if(t.t==='fun')return ftFun(p);
+  if(t.t==='legacy')return ftLegacy(p);
+  if(['law','crash','fraud','lawsuit','audit','divorce'].includes(t.t))return ftHazard(p,t.t);
+  if(t.t==='dream'){const d=G.dreams[t.slot],mine=t.slot===p.dream,dc=mine?dreamCost(p):d.c;const okL=S(p).legacy>=legacyNeed(),buy=()=>{p.cash-=dc;closeModal();renderHUD();win(p,`Đã mua giấc mơ “${d.n}”, Di sản ${S(p).legacy}.`);};
+    return openModal({tone:'ft',eyebrow:'Giấc mơ',title:esc(d.n),art:art(DREAM_ART[d.a||0]),body:`<p>Giá ${fmt(dc)}${mine&&dc>d.c?` (giá gốc ${fmt(d.c)} + quỹ duy trì, thuế và vận hành bằng 3 ngày lĩnh lương khởi điểm)`:''}. ${mine?(p.cash>=dc?('Đây là giấc mơ của bạn và bạn đủ tiền!'+(okL?'':` Nhưng Di sản mới ${S(p).legacy}/${legacyNeed()}: người giàu chỉ được nhớ đến khi để lại công trình, hãy cống hiến thêm.`)):'Đây là giấc mơ của bạn, nhưng chưa đủ tiền.'):'Đây là giấc mơ của người khác.'}</p>`,
+      acts:[...(mine?[{label:`Mua giấc mơ ${fmt(dc)}`,cls:'primary',disabled:p.cash<dc||!okL,fn:buy}]:[]),{label:mine?'Để sau':'Xong',fn:endTurn}],bot:()=>mine&&p.cash>=dc&&okL?buy():endTurn()});}
+  if(t.t==='charity'){const big=Math.round(Math.max(0,p.cash)*.1/TY)*TY;const give=(amt,lg)=>{p.cash-=amt;addS(p,{luck:20,happy:8,legacy:lg},'Quyên góp '+fmt(amt));log(`Từ thiện ${fmt(amt)}: Di sản +${lg}`,p);endTurn();};
+    if(big>TY)return openModal({tone:'charity',eyebrow:'Từ thiện',title:'Quỹ từ thiện cộng đồng',art:art('charity'),body:`<p>Người giàu được nhớ đến vì những gì họ cho đi. Quyên góp 1 tỷ: May mắn +20, Di sản +8. Quyên góp 10% tiền mặt (${fmt(big)}): May mắn +20, Di sản +20.</p>`,acts:[{label:`10% tiền mặt · ${fmt(big)}`,cls:'primary',fn:()=>give(big,20)},{label:'Quyên góp 1 tỷ',fn:()=>give(TY,8)},{label:'Không',fn:endTurn}],bot:()=>give(big,20)});
+    const giveOne=()=>give(TY,8);
     return openModal({tone:'charity',eyebrow:'Từ thiện',title:'Quỹ từ thiện cộng đồng',art:art('charity'),body:'<p>Quyên góp 1 tỷ để xây trường cho trẻ em vùng cao: May mắn +20. Khi May mắn đạt 80, lần tung kế tiếp được nhân đôi điểm.</p>',
-      acts:[{label:'Quyên góp 1 tỷ',cls:'primary',disabled:p.cash<TY,fn:give},{label:'Không',fn:endTurn}],bot:()=>p.cash>3*TY?give():endTurn()});}
-  const map={lawsuit:['Bị kiện','Đối tác kiện vi phạm hợp đồng. Bạn mất 1/x tiền mặt, với x là số điểm xúc xắc vừa tung.',1/Math.max(1,p.lastRoll||2),'court'],audit:['Kiểm toán thuế','Cơ quan thuế truy thu và phạt chậm nộp: mất một nửa tiền mặt.',.5,'audit'],divorce:['Ly hôn','Chia tài sản sau ly hôn: bạn mất một nửa tiền mặt.',.5,'divorce']};
-  const [ti,tx,f,ak]=map[t.t],loss=Math.round(p.cash*f);const go=()=>{p.cash-=loss;sfx('pay');log(`${ti}: −${fmt(loss)}`,p);endTurn();};
-  openModal({tone:'doodad',eyebrow:'Rủi ro',title:ti,art:art(ak),body:`<p>${tx}</p><div class="facts">${fact('Mất',fmt(loss),'neg')}${fact('Ngày lĩnh lương','Không đổi')}</div>`,acts:[{label:'Chấp nhận',cls:'primary',fn:go}],bot:go});
+      acts:[{label:'Quyên góp 1 tỷ',cls:'primary',disabled:p.cash<TY,fn:giveOne},{label:'Không',fn:endTurn}],bot:()=>p.cash>3*TY?giveOne():endTurn()});}
+  endTurn();
 }
 
 /* ================= setup ================= */
@@ -1264,7 +1723,7 @@ function showSetup(resume){
       <input id="pname${i}" value="${esc(d.name)}" maxlength="16" aria-label="Tên người chơi ${i+1}">
       <div class="meta"><button class="pill ${d.bot?'botpill':''}" data-bot="${i}">${d.bot?'Máy tự chơi':'Người chơi'} ⇄</button>${d.bot?`<button class="pill botpill" data-lvl="${i}">${BOT_LVL[d.botLvl].n} ↻</button>`:''}<button class="pill pickpill" data-prof="${i}">Nghề: <b>${pr.n}</b> ▾</button><span class="pill">${draftScen==='grad'?22:pr.age} tuổi</span><span class="pill">Lương <b>${fmt(T(pr.sal))}</b></span><span class="pill">Dư/tháng <b>${sgn(net)}</b></span><button class="pill pickpill" data-dream="${i}">Ước mơ: <b>${esc(DREAMS[d.dreamId].n)}</b> ▾</button></div></div></div>`;}).join('')}
     <button class="btn primary" id="startBtn" style="width:100%;margin-top:10px">Bắt đầu ván mới</button>
-    <button class="btn" id="onlineBtn" style="width:100%;margin-top:8px">Chơi trực tuyến · tìm bạn chơi</button>
+    ${onlineReady()?'<button class="btn" id="onlineBtn" style="width:100%;margin-top:8px">Chơi trực tuyến · tìm bạn chơi</button>':''}
     <div class="howto"><b>Cách chơi nhanh.</b> Mỗi lượt là 4 tháng: bạn nhận lương, trả chi phí, rồi tung xúc xắc. Ô <b>Cơ hội</b> cho bạn mua tài sản; mỗi thương vụ có bảng tính dòng tiền và lợi suất. Ô <b>Thưởng giữa năm</b> và <b>Thưởng Tết</b> cho thêm tiền khi đi qua. Khi thu nhập thụ động lớn hơn tổng chi phí, bạn sang <b>Vòng Thịnh Vượng</b>. Bấm <b>?</b> để xem luật đầy đủ.</div></div>`;};
   render();
   s.onclick=e=>{const b=e.target.closest('button');if(!b)return;syncNames();
@@ -1374,8 +1833,8 @@ function ledgerQuiz(p,items,cont,intro){
 const HINTS={easy:10,hard:3};
 const CHICKEN_SVG=(s=1)=>`<svg viewBox="0 0 64 64" width="${44*s}" height="${44*s}" aria-hidden="true"><defs><radialGradient id="gch" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fff1b8"/><stop offset="1" stop-color="#d99a1e"/></radialGradient></defs><ellipse cx="34" cy="40" rx="20" ry="16" fill="url(#gch)"/><circle cx="20" cy="22" r="11" fill="url(#gch)"/><path d="M14 12 q3 -8 6 -1 q3 -8 6 0 q3 -6 4 2" fill="#e8423f"/><path d="M9 22 l-7 3 l7 3z" fill="#ff9f43"/><circle cx="17" cy="20" r="2" fill="#1b2a44"/><path d="M30 38 q10 -10 18 2 q-8 8 -18 -2z" fill="#e0a52a"/><path d="M50 30 q10 -6 10 6 q-6 -2 -10 2z" fill="#e8423f"/><path d="M28 55 v6 M38 55 v6" stroke="#ff9f43" stroke-width="3" stroke-linecap="round"/><path d="M12 30 q-2 6 3 6" fill="#e8423f"/></svg>`;
 let adviceTitle=null;
-function hintsLeft(p){if(p.hints==null)p.hints=HINTS[G.mode]||3;return p.hints;}
-function useHint(p){if(hintsLeft(p)<=0)return false;p.hints--;p.st=p.st||{};p.st.hint=(p.st.hint||0)+1;chickenHop();sfx('cash');return true;}
+function hintsLeft(p){if(p.pro)return 99;if(p.hints==null)p.hints=HINTS[G.mode]||3;return p.hints;}
+function useHint(p){if(p.pro){chickenHop();sfx('cash');return true;}if(hintsLeft(p)<=0)return false;p.hints--;p.st=p.st||{};p.st.hint=(p.st.hint||0)+1;chickenHop();sfx('cash');return true;}
 function adviceBox(html){return `<div class="advice">${CHICKEN_SVG(1)}<div><b>Gà Vàng:</b> ${html}</div></div>`;}
 /* lời khuyên cho từng loại thẻ */
 function adviseDeal(p,d){
@@ -1414,7 +1873,56 @@ function adviseGeneral(p){const c=calc(p),L=[];
   return L.length?L.map(x=>'• '+x).join('<br>'):'Tình hình tài chính của bạn đang rất ổn. Tiếp tục tìm thương vụ có dòng tiền dương.';}
 function askChicken(){const p=curP();if(!p||isBotTurn())return;
   if(!useHint(p)){openViewer({tone:'payday',eyebrow:'Gà Vàng',title:'Hết lượt hỏi',body:`${adviceBox('Bạn đã dùng hết lượt hỏi. Ghi sổ đúng 3 lần sẽ được thêm 1 lượt. Ngoài đời, không phải lúc nào cũng có người khuyên.')}`});return;}
-  openViewer({tone:'payday',eyebrow:`Gà Vàng · còn ${hintsLeft(p)} lượt hỏi`,title:'Khám sức khỏe tài chính',body:adviceBox(adviseGeneral(p))});save();renderHUD();}
+  openViewer({tone:'payday',eyebrow:p.pro?'Gà Vàng · chuyên gia PRO':`Gà Vàng · còn ${hintsLeft(p)} lượt hỏi`,title:'Khám sức khỏe tài chính',body:adviceBox(adviseGeneral(p))+(proOffer()?'<p class="lesson">Bản PRO: hỏi không giới hạn và phân tích chuyên sâu. Bấm vương miện 👑 ở góc trên.</p>':'')});save();renderHUD();}
+/* ================= Bản PRO (mua trong ứng dụng iOS) ================= */
+/* Ứng dụng iOS báo trạng thái qua window.proUpdate({available,owned,price}). Khi App Store chưa có sản phẩm,
+   available=false và mọi lời mời mua đều ẩn. Trên web, thêm #pro vào địa chỉ để thử các tính năng PRO. */
+const PROS={available:false,owned:false,price:'',plans:[]};
+const proBridge=()=>window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.pro;
+const isPro=()=>!!PROS.owned||/[#&]pro\b/.test(location.hash);
+const proOffer=()=>PROS.available&&!isPro();
+function proPerks(p){if(p.bot||p.proPerk)return;p.pro=true;p.proPerk=1;const s=S(p);s.luck=clamp(s.luck+10,0,100);s.happy=clamp(s.happy+10,0,100);}
+window.proUpdate=st=>{const was=isPro();Object.assign(PROS,st||{});
+  if(isPro()&&G&&G.players){G.players.forEach(proPerks);if(!was){if(typeof window.__proDone==='function')window.__proDone();moment('trophy','Chào mừng thành viên PRO! 👑','Gà Vàng giờ là chuyên gia tài chính riêng của bạn');save();}}
+  if(st&&st.error)toast(st.error,'neg');const b=$('#proBtn');if(b)b.hidden=!(PROS.available||isPro());if(G&&G.players)renderHUD();};
+function proBuy(id){const b=proBridge();if(b)b.postMessage({action:'buy',id:id||''});}
+function proRestore(){const b=proBridge();if(b)b.postMessage({action:'restore'});}
+const PRO_PERKS=[['Mở khóa Vòng Thịnh Vượng','IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập, công trình để đời: phần gay cấn nhất của trò chơi.'],['Gà Vàng thành chuyên gia tài chính','Hỏi không giới hạn và phân tích sâu: giá trị hợp lý của thương vụ, tỷ lệ nợ, phân bổ tài sản, bước đi tiếp theo cụ thể.'],
+  ['Tư vấn sau mỗi ván','Điểm mạnh, điểm yếu trong cách đầu tư của bạn, rút ra từ cả ván chơi.'],
+  ['Cuộc sống VIP','Khởi đầu với May mắn và Hạnh phúc +10, vương miện 👑 trên bảng xếp hạng.'],
+  ['Lợi thế của người có cố vấn','Thương vụ tốt xuất hiện thường hơn một chút, +1 điểm xúc xắc ở các kèo lớn của Vòng Thịnh Vượng.'],
+  ['Ủng hộ người làm game','Giúp Cash to Freedom tiếp tục có tính năng mới.']];
+const PLAN_NAME={month:'Gói tháng',year:'Gói năm',life:'Trọn đời'};
+const PLAN_UNIT={month:'/tháng',year:'/năm',life:''};
+function planActs(){const L=(PROS.plans||[]).length?PROS.plans:[{id:'',kind:'life',price:PROS.price}];
+  return L.map((x,i)=>({label:`${PLAN_NAME[x.kind]||'PRO'} · ${x.price||''}${PLAN_UNIT[x.kind]||''}`,cls:i===0?'primary':'',disabled:!PROS.available,fn:()=>proBuy(x.id)}));}
+const PRO_TERMS=()=>`<p class="lesson">Gói tháng và gói năm tự động gia hạn với cùng mức giá cho tới khi bạn hủy. Tiền được trừ vào tài khoản Apple khi xác nhận mua và ở mỗi kỳ gia hạn, trừ khi bạn tắt tự động gia hạn ít nhất 24 giờ trước khi kỳ hiện tại kết thúc. Quản lý, hủy gói trong Cài đặt › Apple ID › Đăng ký. Gói trọn đời trả một lần. <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Điều khoản sử dụng</a> · <a href="https://napigostore.github.io/Cash-3D/docs/privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a></p>`;
+function showPro(done,title){const own=isPro(),fin=()=>{window.__proDone=null;closeModal();if(done)done();};window.__proDone=fin;
+  openModal({tone:'ft',eyebrow:'Cash to Freedom PRO',title:own?'Bạn đang dùng bản PRO 👑':(title||'Chơi như nhà đầu tư có cố vấn riêng'),art:art('trophy'),
+    body:`<div class="rows">${PRO_PERKS.map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${own?'':PRO_TERMS()}`,
+    acts:own?[{label:'Tuyệt!',cls:'primary',fn:fin}]:[...planActs(),{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau',fn:fin}],bot:fin});}
+/* Vòng Thịnh Vượng là của PRO khi App Store đã bán gói (nếu chưa bán được thì vẫn mở, để không ai bị kẹt) */
+const needPaywall=p=>!p.bot&&PROS.available&&!isPro();
+function showPaywall(p,enter){window.__proDone=()=>{window.__proDone=null;closeModal();enter();};
+  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · PRO',title:'Bạn đã tự do tài chính! Bước tiếp theo dành cho PRO',art:art('escape'),
+    body:`<p>Phía trước là cuộc chơi của người giàu: IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập huyền thoại và những công trình để đời. Nâng cấp PRO để bước vào Vòng Thịnh Vượng.</p><div class="rows">${PRO_PERKS.slice(0,3).map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${PRO_TERMS()}`,
+    acts:[...planActs(),{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau, chơi tiếp Vòng 1',fn:()=>{window.__proDone=null;closeModal();p.ftWait=G.turn;log('Tự do tài chính, chờ nâng cấp PRO để vào Vòng Thịnh Vượng',p);nextTurn();}}],bot:enter});}
+function proAdCard(p){if(p.bot||!proOffer())return endTurn();
+  openModal({tone:'opp',eyebrow:'Cơ hội · Đầu tư vào chính mình',title:'Cash to Freedom PRO',art:art('scholar'),
+    body:'<p>Người giàu đầu tư vào kiến thức trước khi đầu tư vào tài sản. Bản PRO mở Vòng Thịnh Vượng và biến Gà Vàng thành chuyên gia tài chính riêng: phân tích từng thương vụ, chỉ ra bước đi tiếp theo, tư vấn sau mỗi ván. Cuộc chơi của bạn sẽ dễ thở hơn một chút.</p>',
+    lesson:'Một lời khuyên đúng lúc có thể đáng giá hơn nhiều năm tự mò mẫm.',acts:[{label:'Xem bản PRO',cls:'primary',fn:()=>showPro(endTurn)},{label:'Bỏ qua',fn:endTurn}],bot:endTurn});}
+/* chuyên gia: phân tích sâu hơn cho người chơi PRO */
+function expertGeneral(p){const c=calc(p),L=[];if(p.ft)return '';
+  const inc=Math.max(1,c.income),save=c.cashflow/inc;L.push(`Tỷ lệ tiết kiệm ${pct(save)} thu nhập: ${save>=.3?'rất tốt, người tự do sớm thường để dành trên 30%':save>=.15?'ổn, cố gắng lên 30%':'thấp, hãy cắt chi tiêu không cần thiết trước khi tìm cách kiếm thêm'}.`);
+  const dti=(c.liabPay+c.loanPay+p.assets.reduce((s,a)=>s+(a.left>0?num(a.pay):0),0))/inc;L.push(`Nợ phải trả mỗi tháng bằng ${pct(dti)} thu nhập${dti>.4?': vượt ngưỡng an toàn 40%, ưu tiên trả bớt nợ lãi cao':''}.`);
+  const val={};p.assets.forEach(a=>{const k=a.type==='re'?'Bất động sản':a.type==='biz'?'Kinh doanh':a.type==='stock'?'Cổ phiếu':a.type==='gold'?'Vàng':a.type==='crypto'?'Bitcoin':'Khác';val[k]=(val[k]||0)+Math.max(0,assetValue(a)-num(a.loan));});
+  const tot=Object.values(val).reduce((a,b)=>a+b,0);if(tot>0){const parts=Object.entries(val).sort((a,b)=>b[1]-a[1]);L.push(`Phân bổ tài sản: ${parts.map(([k,v])=>`${k} ${pct(v/tot,0)}`).join(', ')}.${parts[0][1]/tot>.7?' Quá tập trung vào một loại, một biến cố có thể kéo bạn lùi nhiều năm.':''}`);}
+  const gap=c.totalExp-c.passive;if(gap>0){const need=gap*12/.1;L.push(`Bước tiếp theo: cần thêm ${fmt(gap)}/tháng thu nhập thụ động, tương đương sở hữu khoảng ${fmt(need)} tài sản lợi suất 10%/năm. Với ${fmt(p.cash)} tiền mặt, hãy tìm thương vụ có lợi suất trên vốn từ 15% để rút ngắn thời gian.`);}
+  return `<br><br><b>Chuyên gia PRO:</b><br>${L.map(x=>'• '+x).join('<br>')}`;}
+function expertDeal(p,d){if(d.k!=='prop')return '';const a=d.a,R=analyze(a,d.ltvs[d.ltvs.length-1]),fair=Math.max(0,R.net*12/.1),diff=fair?a.price/fair-1:0;
+  return `<br><br><b>Chuyên gia PRO:</b> với lợi suất mục tiêu 10%/năm, giá hợp lý khoảng <b>${fmt(fair)}</b>; giá chào ${fmt(a.price)} ${diff>0?`đắt hơn ${pct(diff,0)}`:`rẻ hơn ${pct(-diff,0)}`}. ${R.cfAfter<R.cf?`Sau ưu đãi, dòng tiền còn ${sgn(R.cfAfter)}/tháng: tính theo con số này.`:''} ${p.cash<R.equity*1.5?'Mua xong tiền mặt còn mỏng: giữ lại ít nhất 3 tháng chi phí.':''}`;}
+{const base=adviseDeal;adviseDeal=function(p,d){const h=base(p,d);return p.pro?h+expertDeal(p,d):h;};}
+{const base=adviseGeneral;adviseGeneral=function(p){const h=base(p);return p.pro?h+expertGeneral(p):h;};}
 /* tư vấn sau ván (PRO) */
 function proReview(p){const c=calc(p),st=p.st||{},good=[],bad=[];
   const buys=st.buys||0,neg=st.neg||0,quizOk=p.fq||0,quizN=p.quizN||0;
@@ -1454,7 +1962,7 @@ function badgeSprite(p){const z=ZODIAC[((p.zod||0)%12+12)%12];
 
 /* ================= Chơi trực tuyến (Firebase) ================= */
 /* Điền cấu hình dự án Firebase của bạn vào đây (Project settings → Your apps → Web app). */
-const FIREBASE_CONFIG=null;
+const FIREBASE_CONFIG={apiKey:"AIzaSyDyzGEVXFn6YybklffChr7oaMvtfMDfQPs",authDomain:"cash-to-freedom.firebaseapp.com",projectId:"cash-to-freedom",storageBucket:"cash-to-freedom.firebasestorage.app",messagingSenderId:"955324743384",appId:"1:955324743384:web:10743b52f28defe5a461ad"};
 const GOOGLE_WEB_CLIENT_ID='';   /* Authentication → Sign-in method → Google → Web client ID (cho đăng nhập Google trong APK) */
 const FB_VER='10.12.2';
 let FB=null,ME=null,meDoc=null,roomUnsub=null,roomData=null,localRev=0,pushTimer=null,presTimer=null,invUnsub=null;
@@ -1485,14 +1993,31 @@ async function signInEmail(create){await fbInit();const em=$('#olEmail').value.t
   catch(e){toast(authMsg(e),'neg');}}
 function authMsg(e){const m={'auth/invalid-email':'Email không hợp lệ.','auth/weak-password':'Mật khẩu cần ít nhất 6 ký tự.','auth/email-already-in-use':'Email này đã có tài khoản, hãy đăng nhập.','auth/invalid-credential':'Sai email hoặc mật khẩu.','auth/wrong-password':'Sai mật khẩu.','auth/user-not-found':'Chưa có tài khoản với email này.'};return m[e.code]||e.message;}
 
+/* ---- Đăng nhập với Apple (ứng dụng iOS) ---- */
+const appleBridge=()=>window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.apple;
+let appleWait=null;
+window.onNativeApple=r=>{const w=appleWait;appleWait=null;if(w)w(r||{error:'Không có phản hồi'});};
+const nativeApple=()=>new Promise(res=>{appleWait=res;appleBridge().postMessage({action:'signin'});});
+async function signInApple(){try{await fbInit();const r=await nativeApple();if(r.error){if(r.error!=='cancel')toast('Đăng nhập Apple thất bại: '+r.error,'neg');return;}
+  const cred=new firebase.auth.OAuthProvider('apple.com').credential({idToken:r.idToken,rawNonce:r.rawNonce});const c=await FB.auth.signInWithCredential(cred);
+  if(r.name&&!c.user.displayName)await c.user.updateProfile({displayName:r.name});await ensureUser(c.user);toast('Đã đăng nhập','pos');}catch(e){toast(authMsg(e),'neg');}}
+/* Apple yêu cầu cho xóa tài khoản ngay trong ứng dụng */
+async function deleteAccount(){if(!ME)return;if(!confirm('Xóa vĩnh viễn tài khoản trực tuyến, danh sách bạn bè và lời mời? Ván chơi trên máy này vẫn giữ nguyên.'))return;
+  const apple=ME.providerData.some(x=>x.providerId==='apple.com');
+  try{if(apple&&appleBridge()){const r=await nativeApple();if(r.error)return;await ME.reauthenticateWithCredential(new firebase.auth.OAuthProvider('apple.com').credential({idToken:r.idToken,rawNonce:r.rawNonce}));
+      if(r.code&&FB.auth.revokeAccessToken)await FB.auth.revokeAccessToken(r.code).catch(()=>{});}
+    else if(!apple){const pw=prompt('Nhập mật khẩu để xác nhận xóa tài khoản');if(!pw)return;await ME.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(ME.email,pw));}
+    if(roomData)await leaveRoom();const ref=FB.db.collection('users').doc(ME.uid);const inv=await ref.collection('invites').get().catch(()=>null);if(inv)for(const d of inv.docs)await d.ref.delete().catch(()=>{});
+    await ref.delete().catch(()=>{});await ME.delete();ME=null;meDoc=null;toast('Đã xóa tài khoản','pos');closeViewer();}
+  catch(e){toast(authMsg(e),'neg');}}
 /* ---- màn hình trực tuyến ---- */
 let olMode='easy',olTab='login';
 async function showOnline(){
   if(!onlineReady())return openViewer({tone:'market',key:'ol:none',eyebrow:'Chơi trực tuyến',title:'Chưa bật máy chủ',body:`<p>Bản này chưa được gắn dự án Firebase. Chủ trò chơi cần điền cấu hình Firebase vào game để mở tính năng tìm bạn chơi.</p>`});
   try{await fbInit();}catch(e){return openViewer({tone:'market',key:'ol:err',eyebrow:'Chơi trực tuyến',title:'Không kết nối được',body:`<p>${esc(e.message)}. Kiểm tra kết nối mạng rồi thử lại.</p>`});}
-  if(!ME){const inl=[signInGoogle,()=>signInEmail(false),()=>signInEmail(true),()=>{olTab=olTab==='login'?'reg':'login';showOnline();}];
+  if(!ME){const inl=[appleBridge()?signInApple:signInGoogle,()=>signInEmail(false),()=>signInEmail(true),()=>{olTab=olTab==='login'?'reg':'login';showOnline();}];
     return openViewer({tone:'market',key:'ol:login',eyebrow:'Chơi trực tuyến',title:'Đăng nhập để tìm bạn chơi',inl,body:`<div class="olbox">
-      <button class="btn gbtn" data-i="0"><span class="g">G</span> Đăng nhập bằng Google</button>
+      ${appleBridge()?'<button class="btn" data-i="0" style="background:#fff;color:#000;font-weight:700"> Đăng nhập với Apple</button>':'<button class="btn gbtn" data-i="0"><span class="g">G</span> Đăng nhập bằng Google</button>'}
       <div class="ordiv"><span>hoặc dùng email</span></div>
       ${olTab==='reg'?'<input id="olName" class="olin" placeholder="Tên hiển thị" maxlength="16">':''}
       <input id="olEmail" class="olin" type="email" placeholder="Email" autocomplete="email">
@@ -1501,7 +2026,7 @@ async function showOnline(){
       <button class="btn" data-i="3">${olTab==='reg'?'Đã có tài khoản? Đăng nhập':'Chưa có tài khoản? Tạo mới'}</button></div>`});}
   if(roomData&&roomData.status==='open')return showRoom();
   const fr=await loadFriends();const inv=await loadInvites();
-  const inl=[quickMatch,()=>createRoom(false),joinByCode,addFriend,async()=>{await FB.auth.signOut();ME=null;showOnline();}];
+  const inl=[quickMatch,()=>createRoom(false),joinByCode,addFriend,async()=>{await FB.auth.signOut();ME=null;showOnline();},deleteAccount];
   const fRows=fr.map(f=>{inl.push(()=>inviteFriend(f));return `<div class="row"><span class="dot" style="background:${isOnlineTs(f.lastSeen)?'var(--money)':'var(--muted)'}"></span><div class="grow">${esc(f.name)}<small>${isOnlineTs(f.lastSeen)?'Đang trực tuyến':'Ngoại tuyến'} · ${esc(f.email)}</small></div><button class="btn sm" data-i="${inl.length-1}">Mời</button></div>`;}).join('');
   const iRows=inv.map(v=>{inl.push(()=>acceptInvite(v));return `<div class="row"><div class="grow"><b>${esc(v.fromName)}</b> mời bạn vào phòng ${esc(v.code)}<small>${MODES[v.mode]?MODES[v.mode].n:''}</small></div><button class="btn sm green" data-i="${inl.length-1}">Vào</button></div>`;}).join('');
   inl.push(()=>{olMode='easy';showOnline();});inl.push(()=>{olMode='hard';showOnline();});const mi=inl.length-2;
@@ -1512,7 +2037,8 @@ async function showOnline(){
     <span class="lbl">Vào phòng bằng mã</span><div class="olrow"><input id="olCode" class="olin" placeholder="Mã 6 ký tự" maxlength="6" style="text-transform:uppercase"><button class="btn" data-i="2">Vào</button></div>
     <span class="lbl">Bạn bè</span><div class="olrow"><input id="olFriend" class="olin" type="email" placeholder="Email của bạn bè"><button class="btn" data-i="3">Thêm</button></div>
     <div class="rows">${fRows||'<p style="color:var(--muted)">Chưa có bạn bè. Thêm bằng email họ đã dùng để đăng nhập.</p>'}</div>
-    <div class="acts"><button class="btn" data-i="4">Đăng xuất</button></div>`});}
+    <p class="lesson">Mỗi lượt chơi trực tuyến có ${TURN_LIMIT} giây. Hết giờ, máy chơi thay lượt đó; quá giờ 3 lần, máy chơi thay luôn.</p>
+    <div class="acts"><button class="btn" data-i="4">Đăng xuất</button><button class="btn" data-i="5" style="color:var(--danger)">Xóa tài khoản</button></div>`});}
 async function loadFriends(){if(!meDoc||!meDoc.friends||!meDoc.friends.length)return [];const out=[];for(const id of meDoc.friends.slice(0,30)){const s=await FB.db.collection('users').doc(id).get();if(s.exists)out.push({id,...s.data()});}return out;}
 async function loadInvites(){const q=await FB.db.collection('users').doc(ME.uid).collection('invites').orderBy('at','desc').limit(5).get().catch(()=>null);return q?q.docs.map(d=>({id:d.id,...d.data()})):[];}
 function watchInvites(){if(invUnsub)invUnsub();invUnsub=FB.db.collection('users').doc(ME.uid).collection('invites').onSnapshot(s=>{s.docChanges().forEach(c=>{if(c.type==='added'){const v=c.doc.data();if(v.at&&v.at.toMillis&&Date.now()-v.at.toMillis()<120000)toast(`${v.fromName} mời bạn chơi (phòng ${v.code})`,'pos');}});});}
@@ -1560,10 +2086,24 @@ function pickOnline(kind,i){const s=roomData.seats[i];
   if(kind==='dream'){const inl=DREAMS.map((d,k)=>()=>{updSeat((x,j)=>j===i?{...x,dreamId:k}:null);showRoom();});pendingJingle=null;return openViewer({tone:'ft',key:'ol:pick',eyebrow:'Phòng',title:'Chọn ước mơ',inl,body:`<div class="dreamgrid">${DREAMS.map((d,k)=>`<button class="dreamc ${s.dreamId===k?'on':''}" data-i="${k}">${art(DREAM_ART[d.a])}<b>${d.n}</b><small>${fmt(d.c)}</small></button>`).join('')}</div>`});}
   avatarPicker({zod:s.zod,col:s.col,char:s.char},v=>{updSeat((x,j)=>j===i?{...x,...v}:null);FB.db.collection('users').doc(ME.uid).update({char:v.char,zod:v.zod}).catch(()=>{});showRoom();},i);}
 async function startOnlineGame(){const r=roomData;const ids=[...new Set(r.seats.map(s=>s.dreamId))];while(ids.length<4){const k=Math.floor(Math.random()*DREAMS.length);if(!ids.includes(k))ids.push(k);}
-  const g={v:STATE_V,mode:r.mode,scenario:'normal',quiz:true,dreams:ids.slice(0,4).map(k=>DREAMS[k]),players:[],cur:0,turn:1,month:0,phase:'await',log:[],stockIdx:1,rateAdj:0,btcIdx:1,cyc:{land:'normal',re:'normal',stock:'normal'},online:{room:r.id,host:r.host}};
+  const g={v:STATE_V,mode:r.mode,scenario:'normal',quiz:false,dreams:ids.slice(0,4).map(k=>DREAMS[k]),players:[],cur:0,turn:1,month:0,phase:'await',log:[],stockIdx:1,rateAdj:0,btcIdx:1,cyc:{land:'normal',re:'normal',stock:'normal'},online:{room:r.id,host:r.host}};
   G=g;G.players=r.seats.map((s,i)=>{const p=newPlayer(i,{...s,dream:Math.max(0,ids.indexOf(s.dreamId))},PROFS[s.prof],s.name,'normal');p.uid=s.uid;return p;});
   G.players.forEach(p=>log(`Bắt đầu ${Math.floor(p.age)} tuổi: ${p.prof}, lương ${fmt(p.salary)}`,p));
   await FB.db.collection('rooms').doc(r.id).update({status:'playing',state:JSON.stringify(G),rev:1,updated:now()});}
+/* ---- giới hạn thời gian mỗi lượt khi chơi trực tuyến ---- */
+const TURN_LIMIT=90,AFK_MAX=3;
+let turnPill=null,warned=0;
+function turnClock(){if(!isOnline()||!G.players||!curP()||!G.turnAt||curP().bot){if(turnPill)turnPill.hidden=true;return;}
+  if(!turnPill){turnPill=document.createElement('div');turnPill.id='turnPill';turnPill.style.cssText='position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 30px);z-index:60;padding:4px 12px;border-radius:999px;font:700 13px var(--f-mono,monospace);background:#0f1a2e;border:1px solid var(--line);color:#fff;pointer-events:none';document.body.appendChild(turnPill);}
+  const left=Math.max(0,Math.ceil(TURN_LIMIT-(Date.now()-G.turnAt)/1000)),mine=iControl();turnPill.hidden=false;
+  turnPill.textContent=`⏱ ${left}s · ${mine?'lượt của bạn':'lượt của '+curP().name}`;turnPill.style.borderColor=left<=15?'#ff4d4d':'var(--line)';turnPill.style.color=left<=15?'#ffb3b3':'#fff';
+  if(mine&&left<=10&&warned!==G.turnAt){warned=G.turnAt;toast('Còn 10 giây! Hết giờ máy sẽ chơi thay lượt này','neg');sfx('pay');}
+  if(ME&&G.online.host===ME.uid&&!G.takeover&&left<=0&&Date.now()-G.turnAt>(TURN_LIMIT+4)*1000)takeover();}
+/* chủ phòng cho máy chơi thay người hết giờ */
+function takeover(){const p=curP();if(!p||p.bot)return;p.afk=(p.afk||0)+1;p.bot=true;p.tmpBot=p.afk<AFK_MAX;G.takeover=1;
+  toast(p.tmpBot?`${p.name} hết giờ, máy chơi thay lượt này`:`${p.name} hết giờ ${AFK_MAX} lần, máy chơi thay từ nay`,'neg');log(p.tmpBot?'Hết giờ, máy chơi thay lượt này':'Hết giờ nhiều lần, máy chơi thay',p);
+  closeModal();closeViewer();if(G.phase==='roll'){save();roll(p.ft?(p.charity>0?3:2):(p.charity>0?2:1),true);}else endTurn();}
+setInterval(turnClock,500);
 /* ---- đồng bộ ván ---- */
 const isOnline=()=>!!(G&&G.online);
 function controllerOf(p){return p.bot?G.online.host:p.uid;}
@@ -1919,7 +2459,7 @@ const BUILD3D={
   divorce(){const g=new THREE.Group();const hs=heartShape(.12);[-1,1].forEach(s=>{const m=mesh(ext(hs,.05),icm('#ff4d6d',{emissive:'#6b0d18',emissiveIntensity:.4}));m.rotation.z=Math.PI+s*.18;m.position.set(s*.05,0,0);m.scale.set(.5,1,1);g.add(m);});return g;},
 };
 function makeIcon3D(key,fallback){try{if(BUILD3D[key])return BUILD3D[key]();}catch(e){}return makeIcon(fallback||key);}
-function ftKey(t){if(t.t==='biz')return t.name;if(t.t==='dream'){const d=G&&G.dreams?G.dreams[t.slot]:DREAMS[t.slot];return d.n;}return t.t;}
+function ftKey(t){if(t.t==='biz')return t.name;if(t.t==='tech')return t.icon;if(t.t==='kcn')return 'Kho lạnh';if(t.t==='inspect')return 'audit';if(t.t==='legacy')return 'Thư viện cho quê nhà';if(t.t==='fun')return 'Du thuyền riêng';if(t.t==='law')return 'audit';if(t.t==='fraud')return 'lawsuit';if(t.t==='dream'){const d=G&&G.dreams?G.dreams[t.slot]:DREAMS[t.slot];return d.n;}return t.t;}
 /* hiệu ứng khi quân cờ dừng ở ô: biểu tượng bật lên, xoay, có cột sáng */
 const beamMat=new THREE.MeshBasicMaterial({color:'#ffe08a',transparent:true,opacity:.0,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide});
 function celebrateTile(p){if(!p)return;const [x,,z]=tileXYZ(p);let ic=null,bd=.6;icons.forEach(m=>{const d=Math.hypot(m.position.x-x,m.position.z-(z-.2));if(d<bd){bd=d;ic=m;}});if(!ic)return;
@@ -2016,9 +2556,11 @@ function buildTiles(){
     const ic=['salary','midbonus','tetbonus','free'].includes(t)?makeIcon3D(t):makeIcon(t);ic.position.set(x,.36,z-.2);ic.userData.y0=.36;tileGroup.add(ic);icons.push(ic);});
   FT.forEach((t,i)=>{const inf=FT_INFO[t.t];const [x,z]=perim(9,i);let lines=inf.lines,sub=null,desc=inf.desc;
     if(t.t==='biz'){lines=splitName(t.name);sub='+'+fmt(t.cf);desc=`${t.name}: vốn ${fmt(t.cost)}, +${fmt(t.cf)} mỗi ngày lĩnh lương.`;}
-    if(t.t==='dream'){const d=G&&G.dreams?G.dreams[t.slot]:DREAMS[t.slot];lines=splitName(d.n);sub=fmt(d.c);desc=`Giấc mơ: ${d.n} (${fmt(d.c)}).`;}
+    if(t.t==='dream'){const d=G&&G.dreams?G.dreams[t.slot]:DREAMS[t.slot];lines=splitName(d.n);sub=fmt(d.c)+'+';desc=`Giấc mơ: ${d.n} (từ ${fmt(d.c)}, cộng quỹ duy trì).`;}
+    if(t.t==='tech'){lines=splitName(t.name);sub='×0 → ×'+Math.max(...t.m);desc=`${t.name}: ${t.d}`;}
+    if(t.t==='kcn'){lines=splitName(t.name);sub=fmt(t.cost);desc=`${t.name}: vốn ${fmt(t.cost)}, +${fmt(t.cf)} mỗi ngày lĩnh lương.`;}
     const m=new THREE.Mesh(tileGeoF,[tileMat(tileTex(inf.col,lines,sub,true)),std('#9a7020',{roughness:.35,metalness:.75})]);m.position.set(x,0,z);m.receiveShadow=true;m.castShadow=true;m.userData.desc=desc;tileGroup.add(m);
-    const ic=makeIcon3D(ftKey(t),t.t==='lawsuit'||t.t==='audit'||t.t==='divorce'?'hazard':t.t);ic.scale.setScalar(1.05);ic.position.set(x,.44,z-.24);ic.userData.y0=.44;tileGroup.add(ic);icons.push(ic);});
+    const ic=makeIcon3D(ftKey(t),['lawsuit','audit','divorce','law','fraud','inspect'].includes(t.t)?'hazard':t.t==='crash'||t.t==='ipo'?'market':t.t==='tech'||t.t==='kcn'?'biz':t.t==='golf'?'opp':t.t==='fun'||t.t==='legacy'?'dream':t.t);ic.scale.setScalar(1.05);ic.position.set(x,.44,z-.24);ic.userData.y0=.44;tileGroup.add(ic);icons.push(ic);});
   const center=new THREE.Mesh(new THREE.PlaneGeometry(4.9,4.9),new THREE.MeshStandardMaterial({map:tex(1024,1024,(x,w,h)=>{
     const g=x.createRadialGradient(w/2,h/2,40,w/2,h/2,w*.72);g.addColorStop(0,'#25406b');g.addColorStop(1,'#132440');x.fillStyle=g;x.fillRect(0,0,w,h);
     x.strokeStyle='rgba(233,185,73,.3)';x.lineWidth=3;for(let r=170;r<520;r+=55){x.beginPath();x.arc(w/2,h/2,r,0,7);x.stroke();}
@@ -2265,6 +2807,41 @@ function gfxTick(t,dt){
   bokeh.children.forEach(b=>{b.position.y+=Math.sin(t*.4+b.userData.ph)*.002;b.material.opacity=.12+.12*Math.sin(t*.8+b.userData.ph);});
   haloRing.material.emissiveIntensity=.9+Math.sin(t*1.6)*.35;camDrift=Math.sin(t*.12)*.06;}
 
+/* ================= Bản tin chạy chữ ================= */
+/* Tin thật lấy từ trạng thái ván chơi (chu kỳ, giá, lãi suất, sự kiện của người chơi), xen lẫn tin đồn, tin bịp:
+   người chơi phải tự đánh giá nguồn tin như ngoài đời. */
+const TK_SRC={real:['Báo Kinh Tế','Thời báo Tài chính','Ngân hàng Nhà nước','Tổng cục Thống kê'],mkt:['Sàn chứng khoán','Bảng giá','Thị trường'],fun:['Đời sống','Xe & Đẳng cấp','Giải trí'],rumor:['Hội nhóm kín','KOL tài chính','Tin đồn','Môi giới nhắn','Chuyên gia tự xưng'],hot:['Nóng']};
+const TK_RUMOR=[()=>`Đất nền ${pick(['Long An','Bình Phước','Hòa Lạc','Nhơn Trạch'])} sắp lên thành phố, giá sẽ gấp đôi trong 3 tháng, ai chậm chân là mất cơ hội!`,
+  ()=>`DBX sắp được quỹ ngoại rót vốn, dự báo tăng 300%. Gom ngay trước khi tin chính thức!`,
+  ()=>'VanaCoin chuẩn bị niêm yết sàn lớn, lãi 5%/tháng chỉ là khởi đầu.',
+  ()=>'Nghe nói ngân hàng sắp hạ lãi suất về 3%, vay mua nhà ngay đi.',
+  ()=>'Chuyên gia khẳng định: bất động sản không bao giờ giảm giá.',
+  ()=>`Nhóm kín: mã ${pick(SYMS)} sắp có tin cực sốc, đội lái đang gom.`,
+  ()=>'Startup AI sắp được tập đoàn lớn mua lại với giá gấp 50 lần.',
+  ()=>'Khóa học “30 ngày thành triệu phú” giảm giá 90% hôm nay, chỉ còn 3 suất.',
+  ()=>`Tin mật: khu công nghiệp sắp được “bật đèn xanh”, chỉ cần một phong bì.`,
+  ()=>'Vàng sẽ lên gấp đôi trong năm nay, ai không mua sẽ hối hận.'];
+const TK_FUN=['Hãng Roro ra mắt siêu xe Spectra, chỉ sản xuất 99 chiếc, đã có khách đặt cọc.','Giá vé chung kết World Cup hạng VIP tăng gấp ba.','Một tỷ phú công nghệ vừa hoàn thành chuyến bay vào vũ trụ.','Hoa hậu dự tiệc từ thiện gây quỹ xây trường vùng cao.','Đồng hồ Patech Grand phá kỷ lục đấu giá thế giới.','Đảo Hawaii đón lượng khách du lịch cao nhất 10 năm.','Du thuyền Roro Ocean được đặt hàng kín đến 3 năm tới.'];
+function tickerItems(){if(!G||!G.players||!G.cyc)return [];const L=[],add=(k,t)=>L.push({k,src:pick(TK_SRC[k]),t});
+  const cy=k=>CYC_LABEL[G.cyc[k]]||'Ổn định';
+  add('real',`Đất nền: ${cy('land').toLowerCase()} · Nhà ở, căn hộ: ${cy('re').toLowerCase()} · Chứng khoán: ${cy('stock').toLowerCase()}.`);
+  add('real',`Lãi suất cho vay mua nhà bình quân khoảng ${pct(Math.max(.06,.095+(G.rateAdj||0)))}/năm.`);
+  if(mode().infl)add('real',`Lạm phát khoảng ${pct(mode().infl)}/năm: tiền mặt để không là mất giá.`);
+  SYMS.slice().sort(()=>Math.random()-.5).slice(0,4).forEach(sym=>{const S0=STOCKS[sym],px=S0.base*(G.stockIdx||1),ch=(G.stockIdx||1)-1;add('mkt',`${sym} ${fmtD(px)} ${Math.abs(ch)<.005?'đứng giá':(ch>0?'▲':'▼')+pct(Math.abs(ch))+' từ đầu ván'} · cổ tức ${pct(S0.div/px)}/năm · ${pick(S0.news)}`);});
+  add('mkt',`Bitcoin quanh ${fmt(btcPrice())}/BTC · vàng nhẫn ${fmt(GOLD_REF)}/chỉ.`);
+  if(G.cyc.land==='boom')add('real','Cảnh báo: giá đất tăng nóng, nhiều nhà đầu tư vay nợ để lướt sóng.');
+  if(G.cyc.stock==='bust')add('real','Chứng khoán giảm sâu, nhiều cổ phiếu tốt về vùng giá rẻ.');
+  if(G.ftCredit>0)add('real','Ngân hàng siết tín dụng với dự án rủi ro cao.');
+  (G.log||[]).slice(0,40).filter(l=>/IPO|Bị bắt|Thanh tra|Mua đáy|Bộ sưu tập|Công trình để đời|Tự do tài chính|CHIẾN THẮNG|rơi lại Vòng Cối Xay|Kèo nội bộ/.test(l.text)).slice(0,3).forEach(l=>add('hot',`${l.who}: ${l.text}`));
+  TK_FUN.slice().sort(()=>Math.random()-.5).slice(0,2).forEach(t=>add('fun',t));
+  TK_RUMOR.slice().sort(()=>Math.random()-.5).slice(0,3).forEach(f=>add('rumor',f()));
+  return L.sort(()=>Math.random()-.5);}
+function proButtonSync(){const b=$('#proBtn');if(b)b.hidden=!(PROS.available||isPro());}
+function renderTicker(){proButtonSync();const box=$('#ticker'),el=$('#tickerIn');if(!box||!el)return;const on=!!(G&&G.players&&G.players.length);box.hidden=!on;document.body.classList.toggle('tk-on',on);if(!on)return;
+  const items=tickerItems();el.innerHTML=items.map(i=>`<span class="tk ${i.k}"><b>${esc(i.src)}</b>${esc(i.t)}</span>`).join('<i>◆</i>');
+  el.style.animation='none';void el.offsetWidth;el.style.animation=`tick ${Math.max(40,Math.round(el.scrollWidth/70))}s linear 1`;}
+document.addEventListener('animationend',e=>{if(e.target&&e.target.id==='tickerIn')renderTicker();});
+setInterval(()=>{const b=$('#ticker');if(b&&b.hidden&&G&&G.players)renderTicker();},2000);
 /* ================= boot ================= */
 async function start(data){
   await Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),sleep(1800)]);
@@ -2280,4 +2857,15 @@ async function start(data){
 window.claude?.hot?.snapshot?.(()=>({G:G&&G.players?G:null}));
 window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
 </script>
-</body></html>
+<script>
+(async function(){const m=location.hash.match(/^#demo-(\w+)/);if(!m)return;const k=m[1];
+  const wait=ms=>new Promise(r=>setTimeout(r,ms)),click=s=>{const b=document.querySelector(s);if(b)b.click();return !!b;};
+  for(let i=0;i<60&&!(document.querySelector('#startBtn')&&typeof draft!=='undefined'&&draft.length);i++)await wait(250);await wait(800);if(k==='home')return;
+  click('[data-n="4"]');await wait(300);click(k==='ledger'?'[data-quiz="1"]':'[data-quiz="0"]');await wait(300);
+  click('#startBtn');await wait(3500);
+  if(k==='deal'){showDeal(curP(),drawBig());}
+  else if(k==='statement'){showStatement(curP());}
+  else if(k==='rules'){showRules();}
+  else if(k==='pro'){const vi=document.documentElement.lang==='vi';PROS.available=true;PROS.plans=PROS.plans&&PROS.plans.length?PROS.plans:[{id:'m',kind:'month',price:vi?'49.000 đ':'$1.99'},{id:'y',kind:'year',price:vi?'249.000 đ':'$9.99'},{id:'l',kind:'life',price:vi?'499.000 đ':'$19.99'}];showPro();}
+})();
+</script>
