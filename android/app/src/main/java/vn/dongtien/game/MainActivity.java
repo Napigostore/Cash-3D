@@ -32,6 +32,7 @@ import java.util.concurrent.Executor;
 
 public class MainActivity extends Activity {
     private WebView web;
+    private ProBilling pro;
     private final Executor mainExecutor = r -> new Handler(Looper.getMainLooper()).post(r);
 
     @Override
@@ -53,8 +54,14 @@ public class MainActivity extends Activity {
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 return loader.shouldInterceptRequest(request.getUrl());
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if (pro != null) pro.refresh();
+            }
         });
         web.addJavascriptInterface(new Bridge(), "Android");
+        pro = new ProBilling(this, this::js);
         setContentView(web);
         web.loadUrl("https://appassets.androidplatform.net/assets/index.html");
     }
@@ -64,6 +71,17 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void googleSignIn(String webClientId) {
             runOnUiThread(() -> signInWithGoogle(webClientId));
+        }
+
+        /** Android.pro('{"action":"buy","id":"pro:monthly"}') from the PRO sheet. */
+        @JavascriptInterface
+        public void pro(String json) {
+            try {
+                JSONObject m = new JSONObject(json);
+                String action = m.optString("action", "status");
+                if ("buy".equals(action)) pro.buy(m.optString("id", ""));
+                else pro.restore();
+            } catch (Exception ignored) { }
         }
     }
 

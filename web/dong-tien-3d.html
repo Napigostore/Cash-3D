@@ -1876,7 +1876,8 @@ function askChicken(){const p=curP();if(!p||isBotTurn())return;
 /* Ứng dụng iOS báo trạng thái qua window.proUpdate({available,owned,price}). Khi App Store chưa có sản phẩm,
    available=false và mọi lời mời mua đều ẩn. Trên web, thêm #pro vào địa chỉ để thử các tính năng PRO. */
 const PROS={available:false,owned:false,price:'',plans:[]};
-const proBridge=()=>window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.pro;
+const onPlay=()=>!!(window.Android&&Android.pro);
+const proBridge=()=>(window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.pro)||(onPlay()?{postMessage:m=>Android.pro(JSON.stringify(m))}:null);
 const isPro=()=>!!PROS.owned||/[#&]pro\b/.test(location.hash);
 const proOffer=()=>PROS.available&&!isPro();
 function proPerks(p){if(p.bot||p.proPerk)return;p.pro=true;p.proPerk=1;const s=S(p);s.luck=clamp(s.luck+10,0,100);s.happy=clamp(s.happy+10,0,100);}
@@ -1894,7 +1895,9 @@ const PLAN_NAME={month:'Gói tháng',year:'Gói năm',life:'Trọn đời'};
 const PLAN_UNIT={month:'/tháng',year:'/năm',life:''};
 function planActs(){const L=(PROS.plans||[]).length?PROS.plans:[{id:'',kind:'life',price:PROS.price}];
   return L.map((x,i)=>({label:`${PLAN_NAME[x.kind]||'PRO'} · ${x.price||''}${PLAN_UNIT[x.kind]||''}`,cls:i===0?'primary':'',disabled:!PROS.available,fn:()=>proBuy(x.id)}));}
-const PRO_TERMS=()=>`<p class="lesson">Gói tháng và gói năm tự động gia hạn với cùng mức giá cho tới khi bạn hủy. Tiền được trừ vào tài khoản Apple khi xác nhận mua và ở mỗi kỳ gia hạn, trừ khi bạn tắt tự động gia hạn ít nhất 24 giờ trước khi kỳ hiện tại kết thúc. Quản lý, hủy gói trong Cài đặt › Apple ID › Đăng ký. Gói trọn đời trả một lần. <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Điều khoản sử dụng</a> · <a href="https://napigostore.github.io/Cash-3D/docs/privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a></p>`;
+const PRO_TERMS=()=>onPlay()
+  ?`<p class="lesson">Gói tháng và gói năm tự động gia hạn với cùng mức giá cho tới khi bạn hủy. Tiền được trừ qua Google Play khi xác nhận mua và ở mỗi kỳ gia hạn. Quản lý, hủy gói trong ứng dụng Google Play: Thanh toán và gói thuê bao. Gói trọn đời trả một lần. <a href="https://play.google.com/about/play-terms/" target="_blank" rel="noopener">Điều khoản Google Play</a> · <a href="https://napigostore.github.io/Cash-3D/docs/privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a></p>`
+  :`<p class="lesson">Gói tháng và gói năm tự động gia hạn với cùng mức giá cho tới khi bạn hủy. Tiền được trừ vào tài khoản Apple khi xác nhận mua và ở mỗi kỳ gia hạn, trừ khi bạn tắt tự động gia hạn ít nhất 24 giờ trước khi kỳ hiện tại kết thúc. Quản lý, hủy gói trong Cài đặt › Apple ID › Đăng ký. Gói trọn đời trả một lần. <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Điều khoản sử dụng</a> · <a href="https://napigostore.github.io/Cash-3D/docs/privacy.html" target="_blank" rel="noopener">Chính sách quyền riêng tư</a></p>`;
 function showPro(done,title){const own=isPro(),fin=()=>{window.__proDone=null;closeModal();if(done)done();};window.__proDone=fin;
   openModal({tone:'ft',eyebrow:'Cash to Freedom PRO',title:own?'Bạn đang dùng bản PRO 👑':(title||'Chơi như nhà đầu tư có cố vấn riêng'),art:art('trophy'),
     body:`<div class="rows">${PRO_PERKS.map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${own?'':PRO_TERMS()}`,

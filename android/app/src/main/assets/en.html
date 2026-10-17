@@ -1879,7 +1879,8 @@ function askChicken(){const p=curP();if(!p||isBotTurn())return;
 /* Ứng dụng iOS báo trạng thái qua window.proUpdate({available,owned,price}). Khi App Store chưa có sản phẩm,
    available=false và mọi lời mời mua đều ẩn. Trên web, thêm #pro vào địa chỉ để thử các tính năng PRO. */
 const PROS={available:false,owned:false,price:'',plans:[]};
-const proBridge=()=>window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.pro;
+const onPlay=()=>!!(window.Android&&Android.pro);
+const proBridge=()=>(window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.pro)||(onPlay()?{postMessage:m=>Android.pro(JSON.stringify(m))}:null);
 const isPro=()=>!!PROS.owned||/[#&]pro\b/.test(location.hash);
 const proOffer=()=>PROS.available&&!isPro();
 function proPerks(p){if(p.bot||p.proPerk)return;p.pro=true;p.proPerk=1;const s=S(p);s.luck=clamp(s.luck+10,0,100);s.happy=clamp(s.happy+10,0,100);}
@@ -1897,7 +1898,9 @@ const PLAN_NAME={month:'Monthly',year:'Yearly',life:'Lifetime'};
 const PLAN_UNIT={month:'/month',year:'/year',life:''};
 function planActs(){const L=(PROS.plans||[]).length?PROS.plans:[{id:'',kind:'life',price:PROS.price}];
   return L.map((x,i)=>({label:`${PLAN_NAME[x.kind]||'PRO'} · ${x.price||''}${PLAN_UNIT[x.kind]||''}`,cls:i===0?'primary':'',disabled:!PROS.available,fn:()=>proBuy(x.id)}));}
-const PRO_TERMS=()=>`<p class="lesson">Monthly and yearly plans renew automatically at the same price until cancelled. Payment is charged to your Apple account at confirmation of purchase and at each renewal, unless auto-renew is turned off at least 24 hours before the end of the current period. Manage or cancel in Settings › Apple ID › Subscriptions. The lifetime plan is a one-time payment. <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Terms of Use</a> · <a href="https://napigostore.github.io/Cash-3D/docs/privacy.html" target="_blank" rel="noopener">Privacy Policy</a></p>`;
+const PRO_TERMS=()=>onPlay()
+  ?`<p class="lesson">Monthly and yearly plans renew automatically at the same price until cancelled. Google Play charges you at confirmation of purchase and at each renewal. Manage or cancel in the Google Play app: Payments & subscriptions. The lifetime plan is a one-time payment. <a href="https://play.google.com/about/play-terms/" target="_blank" rel="noopener">Google Play Terms of Service</a> · <a href="https://napigostore.github.io/Cash-3D/docs/privacy.html" target="_blank" rel="noopener">Privacy Policy</a></p>`
+  :`<p class="lesson">Monthly and yearly plans renew automatically at the same price until cancelled. Payment is charged to your Apple account at confirmation of purchase and at each renewal, unless auto-renew is turned off at least 24 hours before the end of the current period. Manage or cancel in Settings › Apple ID › Subscriptions. The lifetime plan is a one-time payment. <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Terms of Use</a> · <a href="https://napigostore.github.io/Cash-3D/docs/privacy.html" target="_blank" rel="noopener">Privacy Policy</a></p>`;
 function showPro(done,title){const own=isPro(),fin=()=>{window.__proDone=null;closeModal();if(done)done();};window.__proDone=fin;
   openModal({tone:'ft',eyebrow:'Cash to Freedom PRO',title:own?'You’re a PRO member 👑':(title||'Play like an investor with a personal advisor'),art:art('trophy'),
     body:`<div class="rows">${PRO_PERKS.map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${own?'':PRO_TERMS()}`,

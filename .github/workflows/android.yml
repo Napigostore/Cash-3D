@@ -1,0 +1,107 @@
+name: Android
+
+# Builds Cash to Freedom for Google Play on a GitHub runner.
+#  - Every push that touches android/, web/, tools/ or this file: builds the app bundle (signed when the key secrets exist).
+#  - Run by hand with the boxes ticked, or push a commit whose message contains the tag:
+#      [play]       upload the bundle to the internal testing track (tools/play_publish.py)
+#      [play-pro]   create or update the PRO subscription and lifetime product (tools/play_pro.py)
+#
+# Secrets (repository Settings → Secrets and variables → Actions):
+#   ANDROID_KEYSTORE_B64       base64 of the upload keystore (.jks)
+#   ANDROID_KEYSTORE_PASSWORD  keystore password
+#   ANDROID_KEY_ALIAS          key alias
+#   ANDROID_KEY_PASSWORD       key password
+#   PLAY_SERVICE_ACCOUNT_JSON  JSON key of a Google Cloud service account invited in Play Console
+on:
+  push:
+    paths:
+      - "android/**"
+      - "web/**"
+      - "tools/**"
+      - ".github/workflows/android.yml"
+  workflow_dispatch:
+    inputs:
+      play:
+        description: Upload to the internal testing track
+        type: boolean
+        default: false
+      products:
+        description: Create or update the PRO products
+        type: boolean
+        default: false
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Build the web game (vi + en) into the app
+        run: |
+          python3 tools/build_web.py
+          A=android/app/src/main/assets
+          cp ios/CashToFreedom/www/vi.html $A/index.html
+          cp ios/CashToFreedom/www/vi.html $A/vi.html
+          cp ios/CashToFreedom/www/en.html $A/en.html
+          cp ios/CashToFreedom/www/three.min.js $A/three.min.js
+      - name: Upload key
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+            echo "KEYSTORE_PATH=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
+          else
+            echo "::warning title=Android::No ANDROID_KEYSTORE_B64 secret: the bundle is unsigned and cannot go to Google Play."
+          fi
+      - name: Build the app bundle
+        working-directory: android
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle bundleRelease --no-daemon -q
+      - uses: actions/upload-artifact@v5
+        with:
+          name: app-bundle
+          path: android/app/build/outputs/bundle/release/app-release.aab
+
+  play:
+    if: ${{ inputs.play || contains(github.event.head_commit.message, '[play]') }}
+    needs: bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: app-bundle
+      - name: Upload to Google Play (internal testing)
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python3 -m pip install --quiet --break-system-packages google-api-python-client google-auth
+          python3 tools/play_publish.py app-release.aab internal
+
+  products:
+    if: ${{ always() && (inputs.products || contains(github.event.head_commit.message, '[play-pro]')) && needs.play.result != 'failure' }}
+    needs: [bundle, play]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Create the PRO products on Google Play
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python3 -m pip install --quiet --break-system-packages google-api-python-client google-auth
+          cd tools && python3 play_pro.py
