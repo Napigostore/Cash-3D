@@ -94,7 +94,7 @@ LIT = [
     ("'TRUY THU'", "'BACK TAX'"), ("'anh Khoa'", "'Chris'"),
     ("x.fillText('CASH',w/2,h*.47);x.fillText('MONEY',w/2,h*.63);", "x.font='800 118px \"Bricolage Grotesque\",sans-serif';x.fillText('CASH TO',w/2,h*.47);x.fillText('FREEDOM',w/2,h*.63);"),
     ("y/o · TS ${", "y/o · NW ${"), ("</b>/months of passive income to reach", "</b>/month of passive income to reach"),
-    ("0,01 BTC", "0.01 BTC"), ("Prosperity Track · Thanh tra'", "Prosperity Track · Inspection'"), ("VN-INDEX", "INDEX"), ("'Xe & ", "'Cars & "), ("|Thanh tra|", "|Inspectors|"), ("|Financial freedom|", "|Financially free|"), ("Cash to Freedom<em> 3D</em>", "Cash to <em>Freedom</em>"), ("/cp ·", "/sh ·"),
+    ("0,01 BTC", "0.01 BTC"), ("Prosperity Track · Thanh tra'", "Prosperity Track · Inspection'"), ("VN-INDEX", "INDEX"), ("'BA CON {v}!", "'TRIPLE {v}s!"), ("'Xe & ", "'Cars & "), ("|Thanh tra|", "|Inspectors|"), ("|Financial freedom|", "|Financially free|"), ("Cash to Freedom<em> 3D</em>", "Cash to <em>Freedom</em>"), ("/cp ·", "/sh ·"),
 ]
 
 
