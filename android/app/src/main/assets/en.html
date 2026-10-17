@@ -1973,7 +1973,8 @@ async function fbInit(){
   if(FB)return FB;if(!onlineReady())throw new Error('Firebase not configured');
   for(const m of ['app','auth','firestore'])await loadScript(`https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/firebase-${m}-compat.js`);
   firebase.initializeApp(FIREBASE_CONFIG);FB={auth:firebase.auth(),db:firebase.firestore()};
-  await FB.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+  /* iOS loads the game from app://game; if Firebase refuses to persist there, stay signed in for the session instead of failing */
+  try{await FB.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);}catch(e){try{await FB.auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);}catch(e2){}}
   FB.auth.onAuthStateChanged(u=>{ME=u;if(u){ensureUser(u);startPresence();watchInvites();}if(viewing&&viewing.startsWith('ol:'))showOnline();});
   return FB;}
 const now=()=>firebase.firestore.FieldValue.serverTimestamp();

@@ -6,8 +6,8 @@ android {
         applicationId 'vn.dongtien.game'
         minSdk 24
         targetSdk 34
-        versionCode 24
-        versionName "4.4"
+        versionCode 25
+        versionName "4.5"
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
 }
