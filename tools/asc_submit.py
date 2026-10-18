@@ -101,24 +101,18 @@ def main(version_string):
             'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': version['id']}}}}})
     print('review submission', submission['id'], 'holds the version')
 
-    # In-app purchases (PRO lifetime): the first one goes in together with the version already in the submission.
-    for iap in call('GET', f'/v1/apps/{app_id}/inAppPurchasesV2?limit=50')['data']:
-        state = iap['attributes'].get('state')
-        print('in-app purchase', iap['attributes'].get('productId'), state)
-        if state in ('READY_TO_SUBMIT', 'DEVELOPER_ACTION_NEEDED', 'REJECTED'):
-            call_ok('POST', '/v1/inAppPurchaseSubmissions', {'data': {'type': 'inAppPurchaseSubmissions', 'relationships': {
-                'inAppPurchaseV2': {'data': {'type': 'inAppPurchases', 'id': iap['id']}}}}}, allow=(400, 403, 409, 422))
-
-    # Subscriptions (PRO monthly / yearly): a first group goes in together with the version being submitted.
+    # PRO products (lifetime, monthly, yearly): the first ones must be reviewed in the same submission as the version,
+    # so each one goes in as an item of this submission, not as a separate submission.
+    products = [('inAppPurchase', 'inAppPurchases', x) for x in call('GET', f'/v1/apps/{app_id}/inAppPurchasesV2?limit=50')['data']]
     for group in call('GET', f'/v1/apps/{app_id}/subscriptionGroups')['data']:
-        subs = call('GET', f'/v1/subscriptionGroups/{group["id"]}/subscriptions')['data']
-        call_ok('POST', '/v1/subscriptionGroupSubmissions', {'data': {'type': 'subscriptionGroupSubmissions', 'relationships': {
-            'subscriptionGroup': {'data': {'type': 'subscriptionGroups', 'id': group['id']}}}}}, allow=(400, 403, 409, 422))
-        for sub in subs:
-            print('subscription', sub['attributes'].get('productId'), sub['attributes'].get('state'))
-            if sub['attributes'].get('state') in ('READY_TO_SUBMIT', 'DEVELOPER_ACTION_NEEDED', 'REJECTED'):
-                call_ok('POST', '/v1/subscriptionSubmissions', {'data': {'type': 'subscriptionSubmissions', 'relationships': {
-                    'subscription': {'data': {'type': 'subscriptions', 'id': sub['id']}}}}}, allow=(400, 403, 409, 422))
+        products += [('subscription', 'subscriptions', x) for x in call('GET', f'/v1/subscriptionGroups/{group["id"]}/subscriptions')['data']]
+    for kind, rtype, prod in products:
+        state = prod['attributes'].get('state')
+        print(kind, prod['attributes'].get('productId'), state)
+        if state in ('READY_TO_SUBMIT', 'DEVELOPER_ACTION_NEEDED', 'REJECTED', 'MISSING_METADATA'):
+            call_ok('POST', '/v1/reviewSubmissionItems', {'data': {'type': 'reviewSubmissionItems', 'relationships': {
+                'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': submission['id']}},
+                kind: {'data': {'type': rtype, 'id': prod['id']}}}}}, allow=(400, 403, 409, 422))
 
     call('PATCH', f'/v1/reviewSubmissions/{submission["id"]}', {'data': {'type': 'reviewSubmissions', 'id': submission['id'], 'attributes': {'submitted': True}}})
     print('::notice title=TestFlight::Submitted Cash to Freedom ' + version_string + ' (build ' + build['attributes']['version'] + ') for App Review.')
