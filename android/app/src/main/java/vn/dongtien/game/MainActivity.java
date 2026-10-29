@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.Handler;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Looper;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
@@ -31,6 +33,7 @@ import org.json.JSONObject;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends Activity {
+    private static final String GAME_HOST = "appassets.androidplatform.net";
     private WebView web;
     private ProBilling pro;
     private final Executor mainExecutor = r -> new Handler(Looper.getMainLooper()).post(r);
@@ -45,6 +48,8 @@ public class MainActivity extends Activity {
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
         s.setMediaPlaybackRequiresUserGesture(false);
+        s.setAllowFileAccess(false);
+        s.setAllowContentAccess(false);
         // Serve the game from an https origin so Firebase (auth, Firestore) works inside the WebView.
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
@@ -53,6 +58,16 @@ public class MainActivity extends Activity {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 return loader.shouldInterceptRequest(request.getUrl());
+            }
+
+            // Only the bundled game may load here: the Android bridge must never be reachable from another site.
+            // Web links open in the browser; anything else is blocked.
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                Uri u = request.getUrl();
+                if (GAME_HOST.equals(u.getHost())) return false;
+                if ("https".equals(u.getScheme())) startActivity(new Intent(Intent.ACTION_VIEW, u));
+                return true;
             }
 
             @Override

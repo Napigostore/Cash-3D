@@ -1,0 +1,12 @@
+3D models used by the character view (Góc nhìn nhân vật 3D). All are CC0 1.0 (public domain).
+
+Characters (M_*.glb, W_*.glb)
+  Ultimate Modular Men Pack (Feb 2022) and Ultimate Modular Women Pack (Apr 2022) by Quaternius
+  https://quaternius.com  ·  https://creativecommons.org/publicdomain/zero/1.0/
+  M_Worker = Worker, M_Suit = Suit, M_Hoodie = Casual_Hoodie, M_Casual = Casual_2 (men)
+  W_Casual = Casual, W_Formal = Formal (women)
+  Packed from glTF to GLB with tools/gltf_to_glb.py (source files in assets_src/quaternius, not committed).
+
+Cars (car_*.glb, Textures/colormap.png)
+  Car Kit 2.0 by Kenney (www.kenney.nl)
+  car_sedan = sedan.glb, car_suv = suv-luxury.glb

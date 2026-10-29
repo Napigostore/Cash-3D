@@ -19,9 +19,22 @@ L = r"A-Za-z0-9À-ỹ"
 PHRASE = re.compile(rf"[{L}][{L} .,:!?…–%“”’\-]*[{L}.!?…”%]|[{L}]+")
 VN = re.compile(r"[À-ỹ]")
 THREE_CDN = '<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>'
+# Reads the 3D character models (web/models/*.glb) for the character view; bundled locally in the apps.
+GLTF_CDN = '<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>'
 USD = 2500
 # The game file is a body fragment (as published on claude.ai); the app needs a full document.
+#  Content-Security-Policy: the game may only load its own files, Firebase (Google) and the Three.js/Firebase CDNs.
+#  Anything injected into the page cannot send data to another host or load a script from one.
+CSP = ("default-src 'self'; "
+       "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://apis.google.com; "
+       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+       "font-src 'self' https://fonts.gstatic.com data:; "
+       "img-src 'self' data: blob:; media-src 'self' data: blob:; "
+       "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; "
+       "frame-src https://*.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'none'; form-action 'none'")
+
 SKELETON = ('<!doctype html><html lang="vi"><head><meta charset="utf-8">'
+            f'<meta http-equiv="Content-Security-Policy" content="{CSP}">'
             '<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">'
             '<style>html,body{margin:0;background:#0b1220;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}</style></head>\n')
 
@@ -194,7 +207,7 @@ def lang_button(html, to, label):
 def main():
     src = open(SRC, encoding='utf-8', newline='').read().replace('\r\n', '\n')
     os.makedirs(OUT, exist_ok=True)
-    local = SKELETON + src.replace(THREE_CDN, '<script src="three.min.js"></script>')
+    local = SKELETON + src.replace(THREE_CDN, '<script src="three.min.js"></script>').replace(GLTF_CDN, '<script src="GLTFLoader.js"></script>')
     if local == src:
         sys.exit('three.js CDN tag not found')
     open(os.path.join(OUT, 'vi.html'), 'w', encoding='utf-8').write(lang_button(local, 'en', 'English'))
@@ -202,6 +215,10 @@ def main():
     en = lang_button(en, 'vi', 'Tiếng Việt')
     open(os.path.join(OUT, 'en.html'), 'w', encoding='utf-8').write(en)
     shutil.copy(os.path.join(ROOT, 'web', 'three.min.js'), os.path.join(OUT, 'three.min.js'))
+    shutil.copy(os.path.join(ROOT, 'web', 'GLTFLoader.js'), os.path.join(OUT, 'GLTFLoader.js'))
+    models = os.path.join(ROOT, 'web', 'models')
+    if os.path.isdir(models):
+        shutil.copytree(models, os.path.join(OUT, 'models'), dirs_exist_ok=True)
     print('built', OUT, '| untranslated:', len(left))
     for s in sorted(left):
         print('  ', s)

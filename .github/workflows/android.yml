@@ -54,6 +54,8 @@ jobs:
           cp ios/CashToFreedom/www/vi.html $A/vi.html
           cp ios/CashToFreedom/www/en.html $A/en.html
           cp ios/CashToFreedom/www/three.min.js $A/three.min.js
+          cp ios/CashToFreedom/www/GLTFLoader.js $A/GLTFLoader.js
+          if [ -d ios/CashToFreedom/www/models ]; then mkdir -p $A/models && cp ios/CashToFreedom/www/models/* $A/models/; fi
       - name: Upload key
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}

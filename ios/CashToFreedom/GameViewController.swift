@@ -97,14 +97,16 @@ final class GameViewController: UIViewController, WKNavigationDelegate, WKUIDele
         load(language: lang)
     }
 
-    // External links (privacy page, etc.) open in Safari; everything else stays in the game.
+    // Only the bundled game may load in this web view: the purchase, Apple and language bridges must never reach another site.
+    // Web links (privacy page, terms, etc.) open in Safari.
     func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if let url = action.request.url, url.scheme == "https", action.navigationType == .linkActivated {
-            UIApplication.shared.open(url)
-            decisionHandler(.cancel)
+        guard let url = action.request.url else { decisionHandler(.cancel); return }
+        if url.scheme == BundleSchemeHandler.scheme || ["about", "blob", "data"].contains(url.scheme) {
+            decisionHandler(.allow)
             return
         }
-        decisionHandler(.allow)
+        if url.scheme == "https" { UIApplication.shared.open(url) }
+        decisionHandler(.cancel)
     }
 
     // Links with target="_blank" (terms of use, privacy policy) open in Safari.
