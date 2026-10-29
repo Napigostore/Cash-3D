@@ -2793,6 +2793,8 @@ const tweens=[];
 function tween(ms,fn){return new Promise(res=>tweens.push({t0:performance.now(),ms,fn,res}));}
 let theta=0,phi=.7,zoom=1,baseR=20;const focus=new THREE.Vector3(),focusTarget=new THREE.Vector3();
 let zoomKick=0;function zoomPulse(){zoomKick=1;}
+/* góc nhìn nhân vật cho phép lùi xa hơn bàn cờ */
+function maxZoom(){return typeof TPS!=='undefined'&&TPS.on?2.6:1.6;}
 function focusOn(p){if(!p)return;const [x,,z]=tileXYZ(p);focusTarget.set(x*.25,0,z*.25);}
 function layoutCamera(){
   const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);
@@ -2809,10 +2811,10 @@ canvas.addEventListener('pointermove',e=>{const pr=ptrs.get(e.pointerId);if(!pr)
   if(downAt&&Math.hypot(e.clientX-downAt.x,e.clientY-downAt.y)>6)downAt.moved=true;
   if(ptrs.size===1){theta-=(e.clientX-pr.x)*.008;phi=Math.min(1.25,Math.max(.25,phi-(e.clientY-pr.y)*.006));}
   pr.x=e.clientX;pr.y=e.clientY;
-  if(ptrs.size===2){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);zoom=Math.min(1.6,Math.max(.4,zoom0*pinch0/d));}});
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);zoom=Math.min(maxZoom(),Math.max(.4,zoom0*pinch0/d));}});
 const up=e=>{ptrs.delete(e.pointerId);if(e.type==='pointerup'&&downAt&&!downAt.moved&&ptrs.size===0)tapTile(e);};
 canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);
-canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.min(1.6,Math.max(.4,zoom*(1+e.deltaY*.001)));},{passive:false});
+canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.min(maxZoom(),Math.max(.4,zoom*(1+e.deltaY*.001)));},{passive:false});
 function tapTile(e){const r=canvas.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(ndc,camera);
   const hit=ray.intersectObjects(tileGroup.children,false).find(h=>h.object.userData.desc);if(hit)toast(hit.object.userData.desc);}
 
@@ -2916,7 +2918,7 @@ const WEAK_DEVICE=/iPhone|iPod|Android/i.test(navigator.userAgent)||(navigator.m
 let GFX=WEAK_DEVICE?'low':'high';try{GFX=localStorage.getItem('dongtien3d.gfx')||GFX}catch(e){}
 let envTex=null;
 function applyGfx(){const hi=GFX==='high';
-  renderer.setPixelRatio(Math.min(devicePixelRatio,hi?(WEAK_DEVICE?1.5:2):1));renderer.shadowMap.enabled=hi;sun.castShadow=hi;
+  renderer.setPixelRatio(Math.min(devicePixelRatio,hi?(WEAK_DEVICE?1.5:2):(WEAK_DEVICE?1.5:1.25)));renderer.shadowMap.enabled=hi;sun.castShadow=hi;
   if(hi&&!envTex){const pm=new THREE.PMREMGenerator(renderer);envTex=pm.fromScene(makeRoomEnv(),.04).texture;pm.dispose();}
   scene.environment=hi?envTex:null;spot.visible=hi;bokeh.visible=hi;
   tuneEnv(scene);layoutCamera();}
