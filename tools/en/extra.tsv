@@ -92,9 +92,9 @@ Công nghệ	Technology
 Công nghệ mới	New tech
 Công nghệ mới: góp vốn, ngày lĩnh lương sau tự tung xúc xắc xem mất trắng hay nhân nhiều lần.	New tech: invest now, then roll the dice on the next payday to see if you lose it all or multiply it.
 Công ty cạn vốn, đóng cửa. Mất	The company ran out of money and shut down. Lost
-Cạn tiền ở Vòng Thịnh Vượng: phát mãi tài sản, rơi lại Vòng Cối Xay	Ran out of cash on the Prosperity Track: assets foreclosed, back to the Grind Mill
+Cạn tiền ở Vòng Bứt Phá: phát mãi tài sản, rơi lại Vòng Mưu Sinh	Ran out of cash on the Breakthrough Track: assets foreclosed, back to the Daily Grind
 Cần sở hữu ít nhất 2 doanh nghiệp	You need at least 2 businesses
-Danh mục từ Vòng Cối Xay	Portfolio from the Grind Mill
+Danh mục từ Vòng Mưu Sinh	Portfolio from the Daily Grind
 Doanh nghiệp	Businesses
 Doanh nghiệp Công nghệ và Giáo dục được giảm thuế: dòng tiền tăng 30%.	Technology and Education businesses get tax cuts: cash flow up 30%.
 Dịch vụ	Services
@@ -218,7 +218,7 @@ chốt ở ngày lĩnh lương tới	settles on the next payday
 chờ thủ tục	awaiting permits
 các khoản liên quan	the related assets
 cơ hội độc quyền	exclusive opportunity
-cạn tiền, ngân hàng phát mãi tài sản: rơi lại Vòng Cối Xay!	ran out of cash and the bank foreclosed: back to the Grind Mill!
+cạn tiền, ngân hàng phát mãi tài sản: rơi lại Vòng Mưu Sinh!	ran out of cash and the bank foreclosed: back to the Daily Grind!
 cộng quỹ duy trì	plus an upkeep fund
 dòng tiền các doanh nghiệp còn 70% vì đã chia cho cổ đông mới.	your businesses keep 70% of their cash flow, the rest goes to new shareholders.
 dòng tiền đủ	full cash flow of
@@ -296,7 +296,7 @@ x tiền mặt, x là số điểm xúc xắc vừa tung. Có đội pháp chế
 Đã có	Owned
 Đã thẩm định kỹ	Due diligence done
 Đã trả	Paid
-Đã từng rơi lại Vòng Cối Xay	Fell back to the Grind Mill
+Đã từng rơi lại Vòng Mưu Sinh	Fell back to the Daily Grind
 Đúng luật	By the book
 Đưa tập đoàn lên sàn chứng khoán	Take the group public
 Được giới thiệu nhà đầu tư lớn	Introduced to a big investor
@@ -310,7 +310,7 @@ x tiền mặt, x là số điểm xúc xắc vừa tung. Có đội pháp chế
 đã thẩm định	vetted
 đẹp trên giấy	good on paper
 để gộp thành tập đoàn và IPO.	to form a group and IPO.
-để thắng. Cẩn thận: chi tiêu phình to, kiện tụng, thuế, khủng hoảng và kèo mạo hiểm có thể đẩy bạn về lại Vòng Cối Xay.	to win. Careful: lifestyle creep, lawsuits, taxes, crashes and risky bets can push you back to the Grind Mill.
+để thắng. Cẩn thận: chi tiêu phình to, kiện tụng, thuế, khủng hoảng và kèo mạo hiểm có thể đẩy bạn về lại Vòng Mưu Sinh.	to win. Careful: lifestyle creep, lawsuits, taxes, crashes and risky bets can push you back to the Daily Grind.
 đỏ đen	gamble
 đủ thủ tục: dòng tiền	permits complete: cash flow
 Ưu đãi chuyển đổi số	Digital transformation incentives
@@ -345,7 +345,7 @@ Chứng khoán giảm sâu, nhiều cổ phiếu tốt về vùng giá rẻ.	Sto
 CÔNG TRÌNH	LEGACY
 Cây cầu cho xã vùng sâu	A bridge for a remote village
 Công trình để đời	Legacy project
-Công trình để đời, từ thiện, giúp đỡ người khác. Ở Vòng Thịnh Vượng phải đủ Di sản mới chiến thắng.	Legacy projects, charity, helping others. On the Prosperity Track you need enough Legacy to win.
+Công trình để đời, từ thiện, giúp đỡ người khác. Ở Vòng Bứt Phá phải đủ Di sản mới chiến thắng.	Legacy projects, charity, helping others. On the Breakthrough Track you need enough Legacy to win.
 Công trình để đời: trường học, bệnh viện, cây cầu mang dấu ấn của bạn. Tăng Di sản, điều kiện để chiến thắng.	Legacy project: schools, hospitals, bridges bearing your mark. Raises Legacy, which you need to win.
 Cảnh báo: giá đất tăng nóng, nhiều nhà đầu tư vay nợ để lướt sóng.	Warning: land prices are overheating, many investors borrow to flip.
 DBX sắp được quỹ ngoại rót vốn, dự báo tăng 300%. Gom ngay trước khi tin chính thức!	DBX is about to get foreign fund money, tipped to rise 300%. Buy before it's official!
@@ -421,7 +421,7 @@ Tổng 2–4: ảnh bị đăng báo, vợ	Total 2–4: photos hit the papers an
 Tổng cục Thống kê	Statistics Office
 VanaCoin chuẩn bị niêm yết sàn lớn, lãi 5%	VanaCoin is about to list on a major exchange, 5%
 Vàng sẽ lên gấp đôi trong năm nay, ai không mua sẽ hối hận.	Gold will double this year, you'll regret not buying.
-Vòng Thịnh Vượng căng thẳng: mỗi ngày lĩnh lương Hạnh phúc giảm 6. Hạnh phúc dưới 30 là	The Prosperity Track is stressful: Happiness drops 6 every payday. Below 30 means
+Vòng Bứt Phá căng thẳng: mỗi ngày lĩnh lương Hạnh phúc giảm 6. Hạnh phúc dưới 30 là	The Breakthrough Track is stressful: Happiness drops 6 every payday. Below 30 means
 Vườn ươm khởi nghiệp cho người trẻ	A startup incubator for young people
 Xe cổ Mercedo 1960	1960 Mercedo classic car
 Xem bộ sưu tập	View collection
@@ -443,7 +443,7 @@ mất 10% ngày lĩnh lương và giảm Sức khỏe.	losing 10% of the payday 
 người giàu chỉ được nhớ đến khi để lại công trình, hãy cống hiến thêm.	the rich are only remembered for what they build; give more.
 năm: tiền mặt để không là mất giá.	year: idle cash loses value.
 phiên đấu giá	the auction
-rơi lại Vòng Cối Xay	back to the Grind Mill
+rơi lại Vòng Mưu Sinh	back to the Daily Grind
 sắp có tin cực sốc, đội lái đang gom.	has shocking news coming, the pump crew is buying.
 sắp lên thành phố, giá sẽ gấp đôi trong 3 tháng, ai chậm chân là mất cơ hội!	is about to become a city, prices will double in 3 months, don't miss out!
 tháng chỉ là khởi đầu.	a month is just the start.
@@ -470,7 +470,7 @@ vàng nhẫn	gold
 đứng giá	flat
 Ảnh bạn đi ăn tối với Hoa hậu lên trang nhất. Hạnh phúc gia đình	Your dinner with a beauty queen is front-page news. Family happiness
 Ấn ngọc hoàng gia	Royal jade seal
-Ở Vòng Thịnh Vượng, tung 2 xúc xắc giống nhau nhận một món	On the Prosperity Track, rolling a pair earns a
+Ở Vòng Bứt Phá, tung 2 xúc xắc giống nhau nhận một món	On the Breakthrough Track, rolling a pair earns a
 Ở nhà nghỉ ngơi	Stay home and rest
 10 năm đầu không vay tiêu dùng	No consumer loans in the first 10 years
 40%, Bitcoin gấp đôi, doanh nghiệp công nghệ tăng dòng tiền 30%. Người đang cầm cổ phiếu hưởng lợi lớn.	40%, Bitcoin doubles, tech businesses gain 30% cash flow. Stockholders win big.
@@ -483,7 +483,7 @@ Bộ sưu tập gồm	The collection includes
 CHIẾN THẮNG!	VICTORY!
 Chiến thắng sớm nhất	Earliest win
 Chào thành viên mới!	Welcome, little one!
-Chưa thoát được Vòng Cối Xay.	Never escaped the Grind Mill.
+Chưa thoát được Vòng Mưu Sinh.	Never escaped the Daily Grind.
 Chạy phong bì à? Gà không thấy gì đâu nhé…	An envelope? The Rooster saw nothing…
 Chần chừ, mất cơ hội	Hesitated and lost
 Chủ nhà chăm chỉ	The hard-working landlord
@@ -535,8 +535,8 @@ THIÊN NGA ĐEN	BLACK SWAN
 Theo giá	Match
 Thiên nga đen	Black swan
 Thiên nga đen không báo trước. Quỹ khẩn cấp, ít nợ và đa dạng hóa là áo phao của bạn.	Black swans come without warning. An emergency fund, low debt and diversification are your life jacket.
-Thoát Vòng Cối Xay lúc	Escaped the Grind Mill at
-Thoát cối xay rồi! Gà tự hào về bạn!	Out of the mill! The Rooster is proud of you!
+Thoát Vòng Mưu Sinh lúc	Escaped the Daily Grind at
+Thoát vòng mưu sinh rồi! Gà tự hào về bạn!	Out of the mill! The Rooster is proud of you!
 Thưởng: một món sưu tầm hiếm	Reward: a rare collectible
 Tiêu như tỷ phú, giờ thì cạn tiền rồi…	Spent like a billionaire, now the cash is gone…
 Trắng tay!	Wiped out!
@@ -544,12 +544,12 @@ Trời thương rồi!	Heaven smiles on you!
 Tài sản ròng cao nhất	Highest net worth
 Tài sản ròng cuối cùng	Final net worth
 Từng	Jailed
-Từng rơi lại Vòng Cối Xay	Fell back to the Grind Mill
+Từng rơi lại Vòng Mưu Sinh	Fell back to the Daily Grind
 TỰ DO TÀI CHÍNH!	FINANCIAL FREEDOM!
 Tự do tài chính sớm nhất	Earliest financial freedom
 Tự do tài chính trước 45 tuổi	Reach financial freedom before 45
 Vua khu công nghiệp	The industrial park king
-Vào Vòng Thịnh Vượng mà chưa từng chạy giấy phép	Reach the Prosperity Track without ever bribing
+Vào Vòng Bứt Phá mà chưa từng chạy giấy phép	Reach the Breakthrough Track without ever bribing
 Về chung một nhà!	Just married!
 Vốn tự bỏ	Your capital
 chưa tự do	not free yet
@@ -572,7 +572,7 @@ người con	children
 người con.	children.
 sắp mua	is about to buy
 sự kiện hiếm	rare event
-thoát Vòng Cối Xay lúc	escapes the Grind Mill at
+thoát Vòng Mưu Sinh lúc	escapes the Daily Grind at
 thắng lúc	won at
 trả giá	bids
 trả giá cao hơn!	outbids you!
@@ -597,7 +597,7 @@ với lương	earning
 để tranh mua	to compete for
 ơi!	!
 Ối, mua lúc sốt nóng là dễ đu đỉnh lắm đấy!	Oops, buying in a boom is how you buy the top!
-1 điểm xúc xắc ở các kèo lớn của Vòng Thịnh Vượng.	1 on the big Prosperity Track dice rolls.
+1 điểm xúc xắc ở các kèo lớn của Vòng Bứt Phá.	1 on the big Breakthrough Track dice rolls.
 10, vương miện	10, a crown
 Bước tiếp theo: cần thêm	Next step: you need another
 Bạn đang dùng bản PRO	You're a PRO member
@@ -661,11 +661,11 @@ Gói năm	Yearly
 Gói tháng	Monthly
 Gói tháng và gói năm tự động gia hạn với cùng mức giá cho tới khi bạn hủy. Tiền được trừ vào tài khoản Apple khi xác nhận mua và ở mỗi kỳ gia hạn, trừ khi bạn tắt tự động gia hạn ít nhất 24 giờ trước khi kỳ hiện tại kết thúc. Quản lý, hủy gói trong Cài đặt	Monthly and yearly plans renew automatically at the same price until cancelled. Payment is charged to your Apple account at confirmation of purchase and at each renewal, unless auto-renew is turned off at least 24 hours before the end of the current period. Manage or cancel in Settings
 IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập, công trình để đời: phần gay cấn nhất của trò chơi.	IPOs, industrial parks, new tech, golf, supercars, collectibles, legacy projects: the most thrilling part of the game.
-Mở khóa Vòng Thịnh Vượng	Unlock the Prosperity Track
-Người giàu đầu tư vào kiến thức trước khi đầu tư vào tài sản. Bản PRO mở Vòng Thịnh Vượng và biến Gà Vàng thành chuyên gia tài chính riêng: phân tích từng thương vụ, chỉ ra bước đi tiếp theo, tư vấn sau mỗi ván. Cuộc chơi của bạn sẽ dễ thở hơn một chút.	The rich invest in knowledge before assets. PRO unlocks the Prosperity Track and turns the Golden Rooster into your personal financial expert: it analyses every deal, points out your next step and reviews each game. Your journey gets a little easier.
-Phía trước là cuộc chơi của người giàu: IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập huyền thoại và những công trình để đời. Nâng cấp PRO để bước vào Vòng Thịnh Vượng.	Ahead lies the game of the rich: IPOs, industrial parks, new tech, golf, supercars, legendary collectibles and legacy projects. Upgrade to PRO to enter the Prosperity Track.
+Mở khóa Vòng Bứt Phá	Unlock the Breakthrough Track
+Người giàu đầu tư vào kiến thức trước khi đầu tư vào tài sản. Bản PRO mở Vòng Bứt Phá và biến Gà Vàng thành chuyên gia tài chính riêng: phân tích từng thương vụ, chỉ ra bước đi tiếp theo, tư vấn sau mỗi ván. Cuộc chơi của bạn sẽ dễ thở hơn một chút.	The rich invest in knowledge before assets. PRO unlocks the Breakthrough Track and turns the Golden Rooster into your personal financial expert: it analyses every deal, points out your next step and reviews each game. Your journey gets a little easier.
+Phía trước là cuộc chơi của người giàu: IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập huyền thoại và những công trình để đời. Nâng cấp PRO để bước vào Vòng Bứt Phá.	Ahead lies the game of the rich: IPOs, industrial parks, new tech, golf, supercars, legendary collectibles and legacy projects. Upgrade to PRO to enter the Breakthrough Track.
 Trọn đời	Lifetime
-Tự do tài chính, chờ nâng cấp PRO để vào Vòng Thịnh Vượng	Financially free, waiting for PRO to enter the Prosperity Track
+Tự do tài chính, chờ nâng cấp PRO để vào Vòng Bứt Phá	Financially free, waiting for PRO to enter the Breakthrough Track
 Điều khoản sử dụng	Terms of Use
 Đăng ký. Gói trọn đời trả một lần.	Subscriptions. The lifetime plan is a one-time payment.
 Để sau, chơi tiếp Vòng 1	Later, keep playing round 1

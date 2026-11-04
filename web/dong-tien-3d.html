@@ -402,7 +402,7 @@ const TECH=[{name:'Trí tuệ nhân tạo (AI)',icon:'Công ty phần mềm',art
   {name:'Chip bán dẫn',icon:'Điện mặt trời',art:'chartup',m:[0,0,.2,.5,.8,1,1.5,2.5,4,6,12],d:'Chu kỳ lên xuống mạnh, phụ thuộc đơn hàng toàn cầu.'}];
 const KCN=[{name:'Khu công nghiệp Đông Nam',cost:20*TY,cf:TY},{name:'Khu công nghiệp ven cảng',cost:30*TY,cf:1.6*TY}];
 const FT=[];(()=>{let b=0,d=0,v=0;FT_SIDES.flat().forEach(t=>{if(t==='biz'){const i=b++;const cost=TY+((i*7)%9)*.5*TY,name=FT_BIZ_NAMES[i];FT.push({t,name,sector:FT_SECTOR[name]||'dv',cost,cf:Math.round(cost*(.03+((i*3)%5)*.01)/(10*TR))*10*TR});}else if(t==='dream')FT.push({t,slot:d++});else if(t==='tech')FT.push({t,...TECH[v++%TECH.length]});else if(t==='kcn'){const k=KCN[(FT.filter(x=>x.t==='kcn').length)%KCN.length];FT.push({t,...k});}else FT.push({t});});})();
-const FT_INFO={cf:{lines:['NGÀY','LĨNH LƯƠNG'],col:'#23905a',desc:'Ngày lĩnh lương: nhận toàn bộ dòng tiền Vòng Thịnh Vượng.'},biz:{col:'#1c3a68',desc:'Đầu tư doanh nghiệp lớn để tăng dòng tiền.'},dream:{col:'#6c45b5',desc:'Ô giấc mơ: mua được giấc mơ của mình là thắng.'},lawsuit:{lines:['BỊ KIỆN'],col:'#b23c4b',desc:'Bị kiện: mất 1/x tiền mặt, x là số điểm xúc xắc vừa tung. Có đội pháp chế thì mất một nửa số đó.'},audit:{lines:['KIỂM TOÁN','THUẾ'],col:'#b23c4b',desc:'Kiểm toán thuế: mất một nửa tiền mặt.'},divorce:{lines:['LY HÔN'],col:'#8a2535',desc:'Ly hôn: mất một nửa tiền mặt.'},charity:{lines:['TỪ','THIỆN'],col:'#8a5bd0',desc:'Từ thiện: góp 1 tỷ, May mắn +20.'},tech:{lines:['CÔNG NGHỆ','MỚI'],col:'#6b3fb8',desc:'Công nghệ mới: góp vốn, ngày lĩnh lương sau tự tung xúc xắc xem mất trắng hay nhân nhiều lần.'},ipo:{lines:['IPO'],col:'#0f7a6b',desc:'IPO: đưa doanh nghiệp lên sàn. Xúc xắc quyết định được định giá cao hay thất bại.'},kcn:{lines:['KHU CÔNG','NGHIỆP'],col:'#4b5d77',desc:'Khu công nghiệp: vốn khủng, dòng tiền lớn. Làm hồ sơ đúng luật (chậm) hay chạy giấy phép (đỏ đen)?'},fun:{lines:['GIẢI','TRÍ'],col:'#e0663a',desc:'Giải trí: kỳ nghỉ, siêu xe, đấu giá đồ cổ. Người giàu cũng cần vui để khỏi kiệt sức.'},legacy:{lines:['CÔNG TRÌNH','ĐỂ ĐỜI'],col:'#b8892a',desc:'Công trình để đời: trường học, bệnh viện, cây cầu mang dấu ấn của bạn. Tăng Di sản, điều kiện để chiến thắng.'},golf:{lines:['SÂN','GÔN'],col:'#2f8f3a',desc:'Sân gôn: chơi với giới chủ doanh nghiệp để tăng quan hệ, có thể được kèo nội bộ.'},inspect:{lines:['THANH','TRA'],col:'#7a1f2b',desc:'Thanh tra: ai từng chạy giấy phép có thể bị lộ, mất tài sản và đi tù.'},law:{lines:['LUẬT','MỚI'],col:'#8a6d1d',desc:'Luật mới: thuế, tín dụng, chính sách thay đổi. Có đội pháp chế thì thiệt hại ít hơn.'},crash:{lines:['KHỦNG','HOẢNG'],col:'#9b2c2c',desc:'Khủng hoảng: một ngành sụt giảm dòng tiền; ai có sẵn tiền mặt được mua tài sản giá rẻ.'},fraud:{lines:['ĐỐI TÁC','GIAN LẬN'],col:'#7d2a4a',desc:'Đối tác gian lận: mất một doanh nghiệp, trừ khi có đội pháp chế hoặc hiểu biết cao.'}};
+const FT_INFO={cf:{lines:['NGÀY','LĨNH LƯƠNG'],col:'#23905a',desc:'Ngày lĩnh lương: nhận toàn bộ dòng tiền Vòng Bứt Phá.'},biz:{col:'#1c3a68',desc:'Đầu tư doanh nghiệp lớn để tăng dòng tiền.'},dream:{col:'#6c45b5',desc:'Ô giấc mơ: mua được giấc mơ của mình là thắng.'},lawsuit:{lines:['BỊ KIỆN'],col:'#b23c4b',desc:'Bị kiện: mất 1/x tiền mặt, x là số điểm xúc xắc vừa tung. Có đội pháp chế thì mất một nửa số đó.'},audit:{lines:['KIỂM TOÁN','THUẾ'],col:'#b23c4b',desc:'Kiểm toán thuế: mất một nửa tiền mặt.'},divorce:{lines:['LY HÔN'],col:'#8a2535',desc:'Ly hôn: mất một nửa tiền mặt.'},charity:{lines:['TỪ','THIỆN'],col:'#8a5bd0',desc:'Từ thiện: góp 1 tỷ, May mắn +20.'},tech:{lines:['CÔNG NGHỆ','MỚI'],col:'#6b3fb8',desc:'Công nghệ mới: góp vốn, ngày lĩnh lương sau tự tung xúc xắc xem mất trắng hay nhân nhiều lần.'},ipo:{lines:['IPO'],col:'#0f7a6b',desc:'IPO: đưa doanh nghiệp lên sàn. Xúc xắc quyết định được định giá cao hay thất bại.'},kcn:{lines:['KHU CÔNG','NGHIỆP'],col:'#4b5d77',desc:'Khu công nghiệp: vốn khủng, dòng tiền lớn. Làm hồ sơ đúng luật (chậm) hay chạy giấy phép (đỏ đen)?'},fun:{lines:['GIẢI','TRÍ'],col:'#e0663a',desc:'Giải trí: kỳ nghỉ, siêu xe, đấu giá đồ cổ. Người giàu cũng cần vui để khỏi kiệt sức.'},legacy:{lines:['CÔNG TRÌNH','ĐỂ ĐỜI'],col:'#b8892a',desc:'Công trình để đời: trường học, bệnh viện, cây cầu mang dấu ấn của bạn. Tăng Di sản, điều kiện để chiến thắng.'},golf:{lines:['SÂN','GÔN'],col:'#2f8f3a',desc:'Sân gôn: chơi với giới chủ doanh nghiệp để tăng quan hệ, có thể được kèo nội bộ.'},inspect:{lines:['THANH','TRA'],col:'#7a1f2b',desc:'Thanh tra: ai từng chạy giấy phép có thể bị lộ, mất tài sản và đi tù.'},law:{lines:['LUẬT','MỚI'],col:'#8a6d1d',desc:'Luật mới: thuế, tín dụng, chính sách thay đổi. Có đội pháp chế thì thiệt hại ít hơn.'},crash:{lines:['KHỦNG','HOẢNG'],col:'#9b2c2c',desc:'Khủng hoảng: một ngành sụt giảm dòng tiền; ai có sẵn tiền mặt được mua tài sản giá rẻ.'},fraud:{lines:['ĐỐI TÁC','GIAN LẬN'],col:'#7d2a4a',desc:'Đối tác gian lận: mất một doanh nghiệp, trừ khi có đội pháp chế hoặc hiểu biết cao.'}};
 const ftGoal=()=>mode().ftGoal;
 
 /* ================= state ================= */
@@ -855,8 +855,8 @@ const ACH={
  emerg:{n:'Quỹ khẩn cấp',d:'Tiền mặt và tiết kiệm đủ 6 tháng chi phí'},
  nodebt:{n:'Không nợ xấu',d:'Không còn vay tiêu dùng, thẻ tín dụng hay trả góp mua sắm'},
  half:{n:'Nửa đường',d:'Thu nhập thụ động đạt 50% chi phí'},
- free:{n:'Tự do tài chính',d:'Thoát vòng cối xay'},
- free40:{n:'Tự do trước 40',d:'Thoát vòng cối xay trước 40 tuổi'},
+ free:{n:'Tự do tài chính',d:'Thoát vòng mưu sinh'},
+ free40:{n:'Tự do trước 40',d:'Thoát vòng mưu sinh trước 40 tuổi'},
  billion:{n:'Tỷ phú',d:'Tài sản ròng từ 1 tỷ'},
  noscam:{n:'Không cắn câu',d:'Từ chối một lời mời lừa đảo'},
  donor:{n:'Nhà hảo tâm',d:'Làm từ thiện 3 lần'},
@@ -872,7 +872,7 @@ function checkAch(p){const got=[];const c=calc(p),nw=netWorth(p);
 /* ================= Chỉ số cuộc sống: GIEO GÌ GẶT NẤY ================= */
 const STATS={happy:{n:'Hạnh phúc',c:'#ff8fab',d:'Kéo May mắn đi lên mỗi năm'},luck:{n:'May mắn',c:'#ffd23f',d:'Cơ hội tốt xuất hiện nhiều hơn, có thể thoát nạn'},health:{n:'Sức khỏe',c:'#4fd18b',d:'Ít ốm, viện phí thấp hơn'},
   kids:{n:'Con cái',c:'#7fd0ff',d:'Con ít tốn kém; trưởng thành sẽ báo hiếu'},know:{n:'Hiểu biết đầu tư',c:'#b98cff',d:'Gặp cổ phiếu giá tốt nhiều hơn'},rel:{n:'Quan hệ',c:'#ff9f43',d:'Được giới thiệu bất động sản tốt hơn'},
-  legacy:{n:'Di sản',c:'#f5c542',d:'Công trình để đời, từ thiện, giúp đỡ người khác. Ở Vòng Thịnh Vượng phải đủ Di sản mới chiến thắng.'}};
+  legacy:{n:'Di sản',c:'#f5c542',d:'Công trình để đời, từ thiện, giúp đỡ người khác. Ở Vòng Bứt Phá phải đủ Di sản mới chiến thắng.'}};
 function S(p){if(!p.S)p.S={happy:50,luck:50,health:60,kids:50,know:40,rel:40,legacy:0};if(p.S.legacy==null)p.S.legacy=0;return p.S;}
 const sv=(p,k)=>S(p)[k]/100;
 function addS(p,ch,why){const s=S(p),parts=[];let neg=false;for(const k in ch){const v=Math.round(ch[k]);if(!v)continue;s[k]=clamp(s[k]+v,0,100);parts.push(`${STATS[k].n} ${v>0?'+':''}${v}`);if(v<0)neg=true;}
@@ -977,7 +977,7 @@ function renderHUD(){
   }else{
     ftFix(p);const goal=p.ftStart+ftGoal(),pc=Math.min(100,(p.ftCF-p.ftStart)/ftGoal()*100),d=G.dreams[p.dream];
     stats=`<div class="stat"><label>Tiền mặt</label><strong>${fmt(p.cash)}</strong></div><div class="stat"><label>Nhận ròng</label><strong class="${ftNet(p)>=0?'pos':'neg'}">${sgn(ftNet(p))}</strong></div><div class="stat"><label>Giấc mơ</label><strong>${fmt(dreamCost(p))}</strong></div>`;
-    prog=`<div class="bar"><i style="width:${pc}%"></i></div><p>Vòng Thịnh Vượng: đạt <b class="num" style="color:var(--text)">${fmt(goal)}</b> dòng tiền hoặc mua “${esc(d.n)}”, và Di sản <b class="num ${S(p).legacy>=legacyNeed()?'pos':'neg'}">${S(p).legacy}/${legacyNeed()}</b> để thắng.</p>`;
+    prog=`<div class="bar"><i style="width:${pc}%"></i></div><p>Vòng Bứt Phá: đạt <b class="num" style="color:var(--text)">${fmt(goal)}</b> dòng tiền hoặc mua “${esc(d.n)}”, và Di sản <b class="num ${S(p).legacy>=legacyNeed()?'pos':'neg'}">${S(p).legacy}/${legacyNeed()}</b> để thắng.</p>`;
   }
   const nd=p.ft?2:1;
   const rollBtns=remote?`<button class="btn primary" disabled>${p.bot?'Máy đang chơi…':'Chờ '+esc(p.name)+'…'}</button>`:p.charity>0?`<button class="btn primary" data-roll="${nd}" ${busy?'disabled':''}>${nd} xúc xắc</button><button class="btn primary" data-roll="${nd+1}" ${busy?'disabled':''}>${nd+1} xúc xắc</button>`
@@ -1078,11 +1078,11 @@ function showStatement(p){
   if(p.ft){ftFix(p);const fee=guardFee(p),me=p===curP()&&G.phase==='roll'&&!isBotTurn(),inl=[];
     const btn=(label,fn,cls='')=>{inl.push(()=>{fn();renderHUD();save();showStatement(p);});return `<button class="btn sm ${cls}" data-i="${inl.length-1}">${label}</button>`;};
     const secs=[...new Set(p.ftAssets.map(a=>a.sector))];
-    openViewer({tone:'ft',key:'st:'+p.id,eyebrow:`Báo cáo · Vòng Thịnh Vượng · ${Math.floor(p.age)} tuổi`,title:esc(p.name),inl,
+    openViewer({tone:'ft',key:'st:'+p.id,eyebrow:`Báo cáo · Vòng Bứt Phá · ${Math.floor(p.age)} tuổi`,title:esc(p.name),inl,
       body:`<div class="ledger"><div class="facts">${fact('Tiền mặt',fmt(p.cash))}${fact('Ngày lĩnh lương','+'+fmt(p.ftCF),'pos')}${fact('Chi tiêu lối sống','−'+fmt(p.ftExp),'neg',`${LIFESTYLE[p.ftStyle||'comfort'].n}, +${pct(FT_INFL,0)} mỗi lần`)}${fee?fact('Đội pháp chế & thuế','−'+fmt(fee),'neg'):''}${fact('Nhận ròng',sgn(ftNet(p)),ftNet(p)>=0?'pos':'neg')}${fact('Mục tiêu',fmt(p.ftStart+ftGoal()))}${fact('Giấc mơ',fmt(dreamCost(p)))}${fact('Đa dạng hóa',`${secs.length} ngành`,secs.length>=3?'pos':'warn')}${fact('Di sản',`${S(p).legacy}/${legacyNeed()}`,S(p).legacy>=legacyNeed()?'pos':'warn','cần để chiến thắng')}${fact('Bộ sưu tập',`${collOwned(p).size}/${COLL.length}`)}</div>
-      <p>Giấc mơ: <b>${esc(G.dreams[p.dream].n)}</b>. Tự do tài chính lúc ${Math.floor(p.freeAge||p.age)} tuổi.${p.ftFell?` Đã từng rơi lại Vòng Cối Xay ${p.ftFell} lần.`:''}${p.jail?` <span class="neg">Đang ngồi tù: còn ${p.jail} lượt.</span>`:''}${p.bribes?` <span class="neg">Hồ sơ chạy giấy phép: ${p.bribes} lần (Thanh tra dễ phát hiện).</span>`:''}${p.golfClub?' Hội viên câu lạc bộ gôn.':''}${p.ipos?` Đã IPO ${p.ipos} lần.`:''}</p>
+      <p>Giấc mơ: <b>${esc(G.dreams[p.dream].n)}</b>. Tự do tài chính lúc ${Math.floor(p.freeAge||p.age)} tuổi.${p.ftFell?` Đã từng rơi lại Vòng Mưu Sinh ${p.ftFell} lần.`:''}${p.jail?` <span class="neg">Đang ngồi tù: còn ${p.jail} lượt.</span>`:''}${p.bribes?` <span class="neg">Hồ sơ chạy giấy phép: ${p.bribes} lần (Thanh tra dễ phát hiện).</span>`:''}${p.golfClub?' Hội viên câu lạc bộ gôn.':''}${p.ipos?` Đã IPO ${p.ipos} lần.`:''}</p>
       <h3>Đội pháp chế & thuế</h3><p>${p.ftGuard?`Đang thuê luật sư và kế toán thuế: ${fmt(fee)} mỗi ngày lĩnh lương. Bị kiện, kiểm toán, gian lận, luật mới đều nhẹ hơn; kèo mạo hiểm được thẩm định sẵn.`:`Chưa có. Người giàu là mục tiêu của kiện tụng và kiểm toán: thuê đội pháp chế tốn ${fmt(Math.round(p.ftStart*GUARD/1e6)*1e6)} mỗi ngày lĩnh lương.`}</p>${me?`<div class="acts">${p.ftGuard?btn('Cho nghỉ đội pháp chế',()=>{p.ftGuard=false;log('Cho nghỉ đội pháp chế & thuế',p);}):btn('Thuê đội pháp chế & thuế',()=>{p.ftGuard=true;log('Thuê đội pháp chế & thuế',p);},'primary')}</div>`:''}
-      <h3>Doanh nghiệp</h3><table>${p.ftAssets.map(a=>`<tr><td>${esc(a.name)}<br><small>${SECTORS[a.sector]||''} · vốn ${fmt(a.cost||0)}${a.ramp?` · chờ thủ tục ${a.ramp} kỳ`:''}${a.ipo?' · đã niêm yết':''}${a.bribe?' · <span class="neg">giấy phép “chạy”</span>':''}</small></td><td class="pos">+${fmt(a.cf)}</td></tr>`).join('')||'<tr><td>Chưa có</td><td></td></tr>'}<tr><td>Danh mục từ Vòng Cối Xay</td><td class="pos">+${fmt(p.ftBase)}</td></tr></table>
+      <h3>Doanh nghiệp</h3><table>${p.ftAssets.map(a=>`<tr><td>${esc(a.name)}<br><small>${SECTORS[a.sector]||''} · vốn ${fmt(a.cost||0)}${a.ramp?` · chờ thủ tục ${a.ramp} kỳ`:''}${a.ipo?' · đã niêm yết':''}${a.bribe?' · <span class="neg">giấy phép “chạy”</span>':''}</small></td><td class="pos">+${fmt(a.cf)}</td></tr>`).join('')||'<tr><td>Chưa có</td><td></td></tr>'}<tr><td>Danh mục từ Vòng Mưu Sinh</td><td class="pos">+${fmt(p.ftBase)}</td></tr></table>
       ${p.ftVentures.length?`<h3>Kèo đang chờ chốt</h3><table>${p.ftVentures.map(v=>`<tr><td>${esc(v.name)}<br><small>${v.dd?'đã thẩm định':'chưa thẩm định'} · ${v.due?'tới hạn: tung xúc xắc ở lượt tới':'chốt ở ngày lĩnh lương tới'}</small></td><td>${fmt(v.stake)}</td></tr>`).join('')}</table>`:''}
       ${missionsHTML(p)}
       <h3>Chỉ số cuộc sống</h3>${statsHTML(p)}
@@ -1220,10 +1220,10 @@ function endTurn(){
   if(!p.ft&&!p.out&&c.passive>c.totalExp&&!(needPaywall(p)&&p.ftWait&&G.turn-p.ftWait<4*G.players.length)){
     sfx('win');coinRain(40);
     const ftc=Math.max(TY,Math.round(c.passive*200/(10*TR))*10*TR);
-    const go=async()=>{closeModal();p.ft=true;p.freeAge=p.age;addS(p,{happy:20},'Tự do tài chính');moment('escape','TỰ DO TÀI CHÍNH!',`${esc(p.name)} thoát Vòng Cối Xay lúc ${Math.floor(p.age)} tuổi`);chickSay('freedom',p);if(!p.bot){setMastered(p);if(G.quiz)toast(`${p.name} đã nắm vững tài sản và tiêu sản: từ nay không cần ghi sổ nữa`,'pos');}p.ftCF=ftc;p.ftStart=ftc;p.ftBase=ftc;p.ftLap=0;p.ftVentures=[];p.ftAssets=[];p.cash+=ftc;p.ftPos=0;checkAch(p);log(`Tự do tài chính lúc ${Math.floor(p.age)} tuổi! Ngày lĩnh lương ${fmt(ftc)}`,p);await hopTo(p,true);arrangeTokens();ftChooseLifestyle(p,nextTurn);};
+    const go=async()=>{closeModal();p.ft=true;p.freeAge=p.age;addS(p,{happy:20},'Tự do tài chính');moment('escape','TỰ DO TÀI CHÍNH!',`${esc(p.name)} thoát Vòng Mưu Sinh lúc ${Math.floor(p.age)} tuổi`);chickSay('freedom',p);if(!p.bot){setMastered(p);if(G.quiz)toast(`${p.name} đã nắm vững tài sản và tiêu sản: từ nay không cần ghi sổ nữa`,'pos');}p.ftCF=ftc;p.ftStart=ftc;p.ftBase=ftc;p.ftLap=0;p.ftVentures=[];p.ftAssets=[];p.cash+=ftc;p.ftPos=0;checkAch(p);log(`Tự do tài chính lúc ${Math.floor(p.age)} tuổi! Ngày lĩnh lương ${fmt(ftc)}`,p);await hopTo(p,true);arrangeTokens();ftChooseLifestyle(p,nextTurn);};
     openModal({tone:'ft',eyebrow:'Hoàn thành vòng Người lao động',title:`${esc(p.name)} tự do tài chính lúc ${Math.floor(p.age)} tuổi!`,art:art('escape'),quote:QUOTES.ctx.free,
-      body:`<p>Thu nhập thụ động <b class="num pos">${fmt(c.passive)}</b>/tháng đã vượt tổng chi phí <b class="num">${fmt(c.totalExp)}</b>. Không còn phải đi làm vì tiền.</p><div class="facts">${fact('Ngày lĩnh lương mới',fmt(ftc),'pos','= thu nhập thụ động × 200')}${fact('Mục tiêu thắng',fmt(ftc+ftGoal()))}</div><p>Ở Vòng Thịnh Vượng (vòng ngoài), mua được giấc mơ “${esc(G.dreams[p.dream].n)}” hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())} để thắng. Cẩn thận: chi tiêu phình to, kiện tụng, thuế, khủng hoảng và kèo mạo hiểm có thể đẩy bạn về lại Vòng Cối Xay.</p>`,
-      acts:[{label:'Vào Vòng Thịnh Vượng',cls:'primary',fn:()=>needPaywall(p)?showPaywall(p,go):go()}],bot:go});
+      body:`<p>Thu nhập thụ động <b class="num pos">${fmt(c.passive)}</b>/tháng đã vượt tổng chi phí <b class="num">${fmt(c.totalExp)}</b>. Không còn phải đi làm vì tiền.</p><div class="facts">${fact('Ngày lĩnh lương mới',fmt(ftc),'pos','= thu nhập thụ động × 200')}${fact('Mục tiêu thắng',fmt(ftc+ftGoal()))}</div><p>Ở Vòng Bứt Phá (vòng ngoài), mua được giấc mơ “${esc(G.dreams[p.dream].n)}” hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())} để thắng. Cẩn thận: chi tiêu phình to, kiện tụng, thuế, khủng hoảng và kèo mạo hiểm có thể đẩy bạn về lại Vòng Mưu Sinh.</p>`,
+      acts:[{label:'Vào Vòng Bứt Phá',cls:'primary',fn:()=>needPaywall(p)?showPaywall(p,go):go()}],bot:go});
     return;
   }
   if(p.ft&&p.ftCF>=p.ftStart+ftGoal()&&!p.won){if(S(p).legacy>=legacyNeed()){win(p,`Ngày lĩnh lương đạt ${fmt(p.ftCF)}, Di sản ${S(p).legacy}.`);return;}if(!p.legacyHint){p.legacyHint=1;toast(`${p.name} đủ dòng tiền nhưng Di sản mới ${S(p).legacy}/${legacyNeed()}: hãy làm từ thiện, xây công trình để đời`,'neg');}}
@@ -1314,7 +1314,7 @@ function showDeal(p,d){if(d.k==='proad')return proAdCard(p);
   return dealProp(p,d);
 }
 function dealSide(p,d){
-  const take=()=>{p.sides.push({name:d.name,inc:d.inc});if(!p.bot)quoteToast(QUOTES.ctx.sideJob);log(`Làm thêm: ${d.name} +${fmt(d.inc)}/tháng`,p);quizThen(p,[{t:`Thu nhập làm thêm ${fmt(d.inc)}/tháng`,ans:['income'],why:'Làm thêm là thu nhập CHỦ ĐỘNG: ngừng làm là mất. Nó giúp tích lũy vốn nhưng không tính là thu nhập thụ động để thoát vòng cối xay.'}],endTurn);};
+  const take=()=>{p.sides.push({name:d.name,inc:d.inc});if(!p.bot)quoteToast(QUOTES.ctx.sideJob);log(`Làm thêm: ${d.name} +${fmt(d.inc)}/tháng`,p);quizThen(p,[{t:`Thu nhập làm thêm ${fmt(d.inc)}/tháng`,ans:['income'],why:'Làm thêm là thu nhập CHỦ ĐỘNG: ngừng làm là mất. Nó giúp tích lũy vốn nhưng không tính là thu nhập thụ động để thoát vòng mưu sinh.'}],endTurn);};
   openModal({tone:'opp',eyebrow:'Làm thêm',title:d.title,art:art(d.art),story:d.text,body:`<div class="facts">${fact('Thu nhập thêm','+'+fmt(d.inc)+'/tháng','pos')}${fact('Loại thu nhập','Chủ động','warn','không tính vào thu nhập thụ động')}</div><p>Bạn đang có ${p.sides.length}/2 việc làm thêm. Tối đa 2 việc vì thời gian có hạn.</p>`,
     advice:()=>adviseDeal(p,d),lesson:'Làm thêm giúp có vốn ban đầu. Nhưng thời gian có hạn, muốn tự do phải biến vốn đó thành tài sản.',acts:[{label:'Nhận việc',cls:'primary',disabled:p.sides.length>=2||p.retired,fn:take},{label:'Bỏ qua',fn:endTurn}],bot:()=>p.sides.length<2&&tier(p)<3&&!p.retired?take():endTurn()});
 }
@@ -1377,7 +1377,7 @@ function dealGold(p,d){
   let qty=1;
   const buy=()=>{const total=qty*d.each;pay(p,total,'vàng');const g=p.assets.find(a=>a.type==='gold');if(g){g.qty+=qty;g.cost+=total;}else p.assets.push({type:'gold',qty,cost:total});log(`Mua ${qty} chỉ vàng ${fmt(total)}`,p);quizThen(p,quizItemsForAsset({type:'gold',qty},{}),endTurn);};
   const render=()=>{const inl=[],btn=(l,fn)=>{inl.push(()=>{fn();render();});return `<button class="btn sm" data-i="${inl.length-1}">${l}</button>`;};const total=qty*d.each,ok=canAfford(p,total);
-    openModal({tone:'opp',eyebrow:'Cơ hội nhỏ · Vàng',title:d.title,inl,art:art('gold'),hint:'Vàng giữ giá chống lạm phát nhưng không tạo dòng tiền, không giúp thoát vòng cối xay.',body:`<p>${d.text}</p><span class="lbl">Số chỉ</span>${stepperHTML(btn,v=>v===undefined?qty:(qty=Math.max(1,v)),' chỉ',[-5,-1,1,5])}<div class="calc">${line('Tổng tiền',fmt(total),'',1)}${afterLine(p,total)}${line('Dòng tiền','0đ')}</div>${loanNote(p,total)}`,
+    openModal({tone:'opp',eyebrow:'Cơ hội nhỏ · Vàng',title:d.title,inl,art:art('gold'),hint:'Vàng giữ giá chống lạm phát nhưng không tạo dòng tiền, không giúp thoát vòng mưu sinh.',body:`<p>${d.text}</p><span class="lbl">Số chỉ</span>${stepperHTML(btn,v=>v===undefined?qty:(qty=Math.max(1,v)),' chỉ',[-5,-1,1,5])}<div class="calc">${line('Tổng tiền',fmt(total),'',1)}${afterLine(p,total)}${line('Dòng tiền','0đ')}</div>${loanNote(p,total)}`,
       advice:()=>adviseDeal(p,d),acts:[{label:`Mua ${qty} chỉ`,cls:'primary',disabled:!ok,fn:buy},{label:'Bỏ qua',fn:endTurn}],bot:()=>{if(p.cash>500*TR&&d.each<150e5){qty=5;buy();}else endTurn();}});};
   render();
 }
@@ -1486,11 +1486,11 @@ function cardDown(p){
     acts:[{label:'Bắt đầu tìm việc',cls:'primary',fn:go}],bot:go});
 }
 
-/* ================= Vòng Thịnh Vượng ================= */
-/* ================= Vòng Thịnh Vượng: cuộc sống thật của người giàu ================= */
+/* ================= Vòng Bứt Phá ================= */
+/* ================= Vòng Bứt Phá: cuộc sống thật của người giàu ================= */
 /* Tự do tài chính chưa phải là đích: chi tiêu phình to theo tài sản, người giàu là mục tiêu của kiện tụng, thuế,
    lừa đảo; kèo lớn phần đông mất trắng. Ai giữ lối sống vừa phải, có đội pháp chế, đa dạng hóa và
-   thẩm định kỹ thì mới đi tiếp được. Hết tiền thì bán tháo, rồi có thể rơi lại Vòng Cối Xay. */
+   thẩm định kỹ thì mới đi tiếp được. Hết tiền thì bán tháo, rồi có thể rơi lại Vòng Mưu Sinh. */
 const LIFESTYLE={simple:{n:'Giản dị',r:.2,stat:{happy:-5,rel:-5},d:'Chi tiêu 20% ngày lĩnh lương. Ít người biết bạn giàu.'},
   comfort:{n:'Thoải mái',r:.35,stat:{happy:5},d:'Chi tiêu 35%: nhà đẹp, du lịch, trường tốt cho con.'},
   lavish:{n:'Xa hoa',r:.6,stat:{happy:12,rel:15},d:'Chi tiêu 60%: biệt thự, siêu xe, tiệc tùng. Quan hệ rộng, kèo mạo hiểm tốt hơn.'}};
@@ -1519,17 +1519,17 @@ function ftDistress(p){
   ftRecalc(p);if(p.cash>=0)return;
   p.ft=false;p.ftFell=(p.ftFell||0)+1;p.cash=0;p.ftAssets=[];p.ftVentures=[];p.pos=0;
   const rich=p.assets.slice().sort((a,b)=>assetCF(b)-assetCF(a));for(const a of rich){const c=calc(p);if(c.passive<=c.totalExp)break;p.assets.splice(p.assets.indexOf(a),1);}
-  addS(p,{happy:-25,luck:-10},'Mất tự do tài chính');moment('fired','Trắng tay!',`${esc(p.name)} rơi lại Vòng Cối Xay`);chickSay('distress',p);
-  toast(`${p.name} cạn tiền, ngân hàng phát mãi tài sản: rơi lại Vòng Cối Xay!`,'neg');log('Cạn tiền ở Vòng Thịnh Vượng: phát mãi tài sản, rơi lại Vòng Cối Xay',p);
+  addS(p,{happy:-25,luck:-10},'Mất tự do tài chính');moment('fired','Trắng tay!',`${esc(p.name)} rơi lại Vòng Mưu Sinh`);chickSay('distress',p);
+  toast(`${p.name} cạn tiền, ngân hàng phát mãi tài sản: rơi lại Vòng Mưu Sinh!`,'neg');log('Cạn tiền ở Vòng Bứt Phá: phát mãi tài sản, rơi lại Vòng Mưu Sinh',p);
   if(typeof hopTo==='function')hopTo(p,true).then(arrangeTokens);}
 function ftChooseLifestyle(p,done){const pick=k=>{const L=LIFESTYLE[k];p.ftStyle=k;p.ftExp=Math.round(p.ftStart*L.r/1e6)*1e6;addS(p,L.stat,'Lối sống '+L.n);log(`Chọn lối sống ${L.n}: chi tiêu ${fmt(p.ftExp)} mỗi ngày lĩnh lương`,p);closeModal();done();};
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Lối sống',title:'Giàu rồi, sống thế nào?',art:art('villa'),
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Lối sống',title:'Giàu rồi, sống thế nào?',art:art('villa'),
     body:`<p>Người giàu ngoài đời mất tự do tài chính phần nhiều vì chi tiêu phình to theo tài sản. Chi tiêu tăng thêm ${pct(FT_INFL,0)} mỗi ngày lĩnh lương.</p><div class="rows">${Object.entries(LIFESTYLE).map(([k,L])=>`<div class="row"><div class="grow"><b>${L.n}</b> · ${fmt(Math.round(p.ftStart*L.r/1e6)*1e6)}/ngày lĩnh lương<small>${L.d}</small></div></div>`).join('')}</div>`,
     lesson:'Những người giữ được tài sản qua nhiều thế hệ thường sống dưới mức thu nhập và tái đầu tư phần còn lại.',
     acts:Object.entries(LIFESTYLE).map(([k,L])=>({label:L.n,cls:k==='simple'?'primary':'',fn:()=>pick(k)})),bot:()=>pick('comfort')});}
 function ftVenture(p,t){let dd=!!p.ftGuard;const render=()=>{const w=ventureOdds(p,dd),tot=w.reduce((a,b)=>a+b,0);
   const stakes=[TY,3*TY,10*TY],go=st=>{const fee=dd?Math.round(st*DD_FEE):0;p.cash-=st+fee;p.ftVentures.push({name:t.name,stake:st,dd,lap:p.ftLap});log(`Góp ${fmt(st)} vào ${t.name}${dd?` (thẩm định ${fmt(fee)})`:''}`,p);sfx('pay');endTurn();};
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Kèo mạo hiểm',title:esc(t.name),art:art(t.art),
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Kèo mạo hiểm',title:esc(t.name),art:art(t.art),
     body:`<p>Tiền góp vào sẽ được chốt ở ngày lĩnh lương tới. Ngoài đời, đa số khoản đầu tư mạo hiểm mất trắng; lợi nhuận đến từ số ít kèo nhân nhiều lần.</p><div class="facts">${VOUT.map((m,i)=>fact(m?'×'+trimNum(m,1):'Mất trắng',pct(w[i]/tot,0),m>=2?'pos':m?'':'neg')).join('')}</div>
       <p>${dd?`Đã thẩm định kỹ (phí ${pct(DD_FEE,0)} số tiền góp): bớt kèo mất trắng.`:'Chưa thẩm định: dễ gặp kèo "đẹp trên giấy".'}${S(p).know>=70?' Hiểu biết đầu tư cao giúp lọc kèo tốt.':''}${G.ftCredit>0?' <span class="neg">Tín dụng đang bị siết: kèo dễ hỏng hơn.</span>':''}</p>`,
     acts:[...stakes.map(st=>({label:`Góp ${fmt(st)}`,cls:st===TY?'primary':'',disabled:p.cash<st*(1+(dd?DD_FEE:0)),fn:()=>go(st)})),{label:dd?'Bỏ thẩm định':`Thẩm định kỹ (+${pct(DD_FEE,0)})`,fn:()=>{dd=!dd;render();}},{label:'Bỏ qua',fn:endTurn}],
@@ -1558,7 +1558,7 @@ function ftHazard(p,kind){const H=ftHit(p,kind),before=p.cash,cf0=p.ftCF;
         return openModal({tone:'ft',eyebrow:'Khủng hoảng · Cơ hội',title:`Mua đáy ${esc(t.name)}`,art:art('buyer'),body:`<p>Chủ doanh nghiệp cần tiền gấp, bán bằng một nửa giá. Dòng tiền đang giảm còn ${fmt(cf)} nhưng có thể hồi.</p><div class="facts">${fact('Giá',fmt(price))}${fact('Dòng tiền','+'+fmt(cf),'pos')}${fact('Lợi suất',pct(cf/price))}</div>`,
           lesson:'Người có sẵn tiền mặt khi khủng hoảng thường là người giàu lên nhanh nhất.',acts:[{label:`Mua ${fmt(price)}`,cls:'primary',disabled:p.cash<price,fn:buy},{label:'Bỏ qua',fn:endTurn}],bot:()=>p.cash>=price*2?buy():endTurn()});}}
     if(p.cash<0)ftDistress(p);endTurn();};
-  openModal({tone:'doodad',eyebrow:'Vòng Thịnh Vượng · '+FT_INFO[kind].lines.join(' '),title:H.t,art:art(kind==='crash'?'chartdown':kind==='law'?'audit':kind==='fraud'?'scam':kind==='lawsuit'?'court':kind),
+  openModal({tone:'doodad',eyebrow:'Vòng Bứt Phá · '+FT_INFO[kind].lines.join(' '),title:H.t,art:art(kind==='crash'?'chartdown':kind==='law'?'audit':kind==='fraud'?'scam':kind==='lawsuit'?'court':kind),
     body:`<p>${H.x}</p>${p.ftGuard?'':'<p class="lesson">Có đội pháp chế và thuế (trong báo cáo tài chính) thì những rủi ro này nhẹ hơn nhiều.</p>'}`,acts:[{label:'Chấp nhận',cls:'primary',fn:go}],bot:go});}
 /* ================= Gay cấn mà đơn giản: 8 tính năng ================= */
 /* 6. Khoảnh khắc cuộc đời: hoạt cảnh ngắn, tự tắt sau 3 giây */
@@ -1569,7 +1569,7 @@ function moment(artKey,title,sub){if(!G||!G.players)return;let m=$('#moment');if
 const GA={double:['Đôi {v}! Trời thương rồi!','Hai con giống nhau, hên quá trời!'],triple:['BA CON {v}! Gà Vàng đứng hình luôn!'],
   boomBuy:['Ối, mua lúc sốt nóng là dễ đu đỉnh lắm đấy!','Giá đang sốt, cẩn thận làm “người đến sau” nhé!'],bustBuy:['Mua lúc đóng băng, gan đấy! Người giàu hay làm vậy.'],
   bribe:['Chạy phong bì à? Gà không thấy gì đâu nhé…','Gà nhắm mắt rồi, nhưng thanh tra thì không!'],lossSell:['Bán lỗ cũng là học phí. Đau nhưng nhớ lâu!'],
-  autoLoan:['Lại vay tiêu dùng à? Lãi cắn đau lắm đó!'],scam:['Lãi mấy phần trăm một tháng? Gà ngửi thấy mùi lừa đảo!'],freedom:['Thoát cối xay rồi! Gà tự hào về bạn!'],
+  autoLoan:['Lại vay tiêu dùng à? Lãi cắn đau lắm đó!'],scam:['Lãi mấy phần trăm một tháng? Gà ngửi thấy mùi lừa đảo!'],freedom:['Thoát vòng mưu sinh rồi! Gà tự hào về bạn!'],
   jail:['Gà sẽ gửi bánh mì vào trại nhé…'],distress:['Tiêu như tỷ phú, giờ thì cạn tiền rồi…'],burnout:['Làm như trâu thì kiệt sức. Đi nghỉ đi!'],unicorn:['Kỳ lân! Gà xin chữ ký với!'],
   swan:['Bình tĩnh! Khủng hoảng là lúc người có tiền mặt lên ngôi.'],outbid:['Có người tranh mua kìa! Thương trường là chiến trường!'],flash:['Nhanh tay lên, cơ hội không chờ ai đâu!']};
 let chickT=0;
@@ -1626,7 +1626,7 @@ const MISSIONS={
  ipo:{n:'IPO thành công',f:p=>num(p.ipos)>0},
  legacy:{n:'Đạt 20 Di sản',f:p=>S(p).legacy>=20},
  collector:{n:'Sưu tầm 2 món trong một ván',f:p=>(p.coll||[]).length>=2},
- clean:{n:'Vào Vòng Thịnh Vượng mà chưa từng chạy giấy phép',f:p=>p.ft&&!num(p.bribes)&&!num(p.jailCount)}};
+ clean:{n:'Vào Vòng Bứt Phá mà chưa từng chạy giấy phép',f:p=>p.ft&&!num(p.bribes)&&!num(p.jailCount)}};
 function pickMissions(){return Object.keys(MISSIONS).sort(()=>Math.random()-.5).slice(0,3);}
 function missionsCheck(){G.players.forEach(p=>{if(!p.missions)p.missions=pickMissions();p.mDone=p.mDone||[];
   p.missions.forEach(k=>{if(p.mDone.includes(k)||!MISSIONS[k].f(p))return;p.mDone.push(k);const it=collGive(p,1,'hoàn thành nhiệm vụ');if(!p.ft)p.pendingItems=[];
@@ -1650,17 +1650,17 @@ function bioTitle(p){if(num(p.jailCount))return 'Kẻ đánh bạc với pháp l
 function bioHTML(p){const kids=p.kidAges.length,re=p.assets.filter(a=>a.type==='re').length,bz=p.assets.filter(a=>a.type==='biz').length+(p.ftAssets||[]).length,coll=(p.coll||[]).map(id=>(COLL.find(c=>c.id===id)||{}).n).filter(Boolean),works=p.works||[];
   const parts=[`${esc(p.name)}, ${Math.floor(p.age)} tuổi. Khởi đầu là ${esc(p.prof0||p.prof)}${p.sal0?` với lương ${fmt(p.sal0)}/tháng`:''}.`];
   parts.push(p.spouse?`Lập gia đình${kids?`, có ${kids} người con`:''}.`:kids?`Nuôi ${kids} người con.`:'Sống độc thân.');
-  parts.push(p.freeAge?`Thoát Vòng Cối Xay lúc ${Math.floor(p.freeAge)} tuổi.`:'Chưa thoát được Vòng Cối Xay.');
+  parts.push(p.freeAge?`Thoát Vòng Mưu Sinh lúc ${Math.floor(p.freeAge)} tuổi.`:'Chưa thoát được Vòng Mưu Sinh.');
   if(re||bz)parts.push(`Sở hữu ${re?`${re} bất động sản`:''}${re&&bz?' và ':''}${bz?`${bz} doanh nghiệp`:''}.`);
   if(num(p.ipos))parts.push(`Đưa tập đoàn lên sàn ${p.ipos} lần.`);
   if(works.length)parts.push(`Để lại ${works.length} công trình: ${works.map(esc).join(', ')}.`);
   if(num(p.jailCount))parts.push(`Từng ${p.jailCount} lần vào tù vì chạy giấy phép.`);
-  if(num(p.ftFell))parts.push(`Từng rơi lại Vòng Cối Xay ${p.ftFell} lần rồi gượng dậy.`);
+  if(num(p.ftFell))parts.push(`Từng rơi lại Vòng Mưu Sinh ${p.ftFell} lần rồi gượng dậy.`);
   if(coll.length)parts.push(`Bộ sưu tập gồm ${coll.map(esc).join(', ')}.`);
   parts.push(p.won?`Đã chạm tới giấc mơ “${esc(G.dreams[p.dream].n)}”.`:`Tài sản ròng cuối cùng: ${fmt(netWorth(p))}.`);
   return `<div class="bio"><h4>${bioTitle(p)}</h4><p>${parts.join(' ')}</p></div>`;}
 /* ================= Giải trí, bộ sưu tập, Di sản ================= */
-/* Tháp Maslow: đủ tiền rồi, người ta cần được công nhận và cống hiến. Thắng ở Vòng Thịnh Vượng cần đủ Di sản. */
+/* Tháp Maslow: đủ tiền rồi, người ta cần được công nhận và cống hiến. Thắng ở Vòng Bứt Phá cần đủ Di sản. */
 const LEGACY_WIN={easy:20,hard:40};
 const legacyNeed=()=>LEGACY_WIN[(G&&G.mode)||'easy'];
 const legacyBonus=p=>Math.floor(S(p).legacy/20);
@@ -1697,10 +1697,10 @@ function collSVG(it,locked){const c=locked?'#3a4560':it.c,g='g'+it.id+(locked?'L
 function collCard(it,locked){return `<div style="background:${locked?'rgba(255,255,255,.03)':it.t===2?'linear-gradient(160deg,#4a3a0e,#1a2338)':'linear-gradient(160deg,#1e3354,#151f33)'};border:1px solid ${it.t===2&&!locked?'#e9b949':'var(--line)'};border-radius:14px;padding:8px;text-align:center"><div style="height:64px">${collSVG(it,locked)}</div><small style="display:block;line-height:1.25;margin-top:4px;${locked?'color:var(--muted)':''}">${locked?(it.t===2?'Huyền thoại':'Hiếm'):esc(it.n)}</small></div>`;}
 function showCollection(p){const own=collOwned(p);
   openViewer({tone:'ft',key:'coll:'+p.id,eyebrow:`Bộ sưu tập · ${own.size}/${COLL.length}`,title:esc(p.name),
-    body:`<p>Ở Vòng Thịnh Vượng, tung 2 xúc xắc giống nhau nhận một món <b>hiếm</b>; 3 xúc xắc giống nhau nhận món <b>huyền thoại</b>. Bộ sưu tập được lưu mãi theo tên người chơi, qua mọi ván.</p>
+    body:`<p>Ở Vòng Bứt Phá, tung 2 xúc xắc giống nhau nhận một món <b>hiếm</b>; 3 xúc xắc giống nhau nhận món <b>huyền thoại</b>. Bộ sưu tập được lưu mãi theo tên người chơi, qua mọi ván.</p>
       <h3>Huyền thoại</h3><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${COLL.filter(c=>c.t===2).map(c=>collCard(c,!own.has(c.id))).join('')}</div>
       <h3>Hiếm</h3><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${COLL.filter(c=>c.t===1).map(c=>collCard(c,!own.has(c.id))).join('')}</div>`});}
-/* mỗi lần tung ở Vòng Thịnh Vượng: đôi thì nhận đồ hiếm, ba con giống nhau thì nhận đồ huyền thoại */
+/* mỗi lần tung ở Vòng Bứt Phá: đôi thì nhận đồ hiếm, ba con giống nhau thì nhận đồ huyền thoại */
 function collRoll(p,vals){if(!p.ft)return;if(vals.length>=3&&vals.every(v=>v===vals[0]))collGive(p,2,`ba xúc xắc ${vals[0]}`);else if(vals[0]===vals[1])collGive(p,1,`đôi ${vals[0]}`);}
 function collReveal(p,done){const x=(p.pendingItems||[]).shift();if(!x)return done();const it=COLL.find(c=>c.id===x.id);sfx('win');coinRain(it.t===2?100:40);
   openModal({tone:'ft',eyebrow:it.t===2?'Bộ sưu tập · HUYỀN THOẠI':'Bộ sưu tập · Hiếm',title:esc(it.n),body:`<div style="height:170px;margin:4px 0 8px">${collSVG(it,false)}</div><p style="text-align:center">May mắn tung được ${esc(x.why)}! Món đồ đã vào bộ sưu tập vĩnh viễn của bạn.</p>`,
@@ -1723,8 +1723,8 @@ function ftFun(p){const opts=FUN.slice().sort(()=>Math.random()-.5).slice(0,3);
     if(o.risk)return ftGamble(p,{eyebrow:'Ăn tối cùng Hoa hậu',title:'Đèn flash lóe lên…',art:'party',bonus:0,body:'<p>Tổng 2–4: ảnh bị đăng báo, vợ/chồng nổi giận. Còn lại: một buổi tối đáng nhớ, quen thêm nhiều người nổi tiếng.</p>',
       outcome:R=>R.sum<=4&&p.spouse?(addS(p,{happy:-20,rel:-5},'Lên báo lá cải'),{title:'Lên báo lá cải!',text:'Ảnh bạn đi ăn tối với Hoa hậu lên trang nhất. Hạnh phúc gia đình −20.',art:'divorce'}):{title:'Một buổi tối đáng nhớ',text:'Bạn quen thêm nhiều nghệ sĩ, doanh nhân. Quan hệ tăng.',good:true}});
     endTurn();};
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Giải trí',title:'Tận hưởng thành quả',art:art('travel'),
-    body:`<p>Vòng Thịnh Vượng căng thẳng: mỗi ngày lĩnh lương Hạnh phúc giảm 6. Hạnh phúc dưới 30 là <b>kiệt sức</b>: mất 10% ngày lĩnh lương và giảm Sức khỏe.</p><div class="rows">${opts.map(o=>`<div class="row"><div class="grow"><b>${o.n}</b> · ${fmt(o.cost)}<small>${o.d} ${Object.entries(o.stat).map(([k,v])=>`${STATS[k].n} +${v}`).join(', ')}</small></div></div>`).join('')}</div>`,
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Giải trí',title:'Tận hưởng thành quả',art:art('travel'),
+    body:`<p>Vòng Bứt Phá căng thẳng: mỗi ngày lĩnh lương Hạnh phúc giảm 6. Hạnh phúc dưới 30 là <b>kiệt sức</b>: mất 10% ngày lĩnh lương và giảm Sức khỏe.</p><div class="rows">${opts.map(o=>`<div class="row"><div class="grow"><b>${o.n}</b> · ${fmt(o.cost)}<small>${o.d} ${Object.entries(o.stat).map(([k,v])=>`${STATS[k].n} +${v}`).join(', ')}</small></div></div>`).join('')}</div>`,
     acts:[...opts.map(o=>({label:`${o.n.split(' ').slice(0,4).join(' ')} · ${fmt(o.cost)}`,disabled:p.cash<o.cost,fn:()=>take(o)})),{label:'Ở nhà nghỉ ngơi',cls:'primary',fn:()=>{addS(p,{happy:5},'Nghỉ ngơi');endTurn();}}],
     bot:()=>{const o=opts.filter(o=>!o.risk&&p.cash>o.cost*8).sort((a,b)=>a.cost-b.cost)[0];o?take(o):(addS(p,{happy:5}),endTurn());}});}
 /* ô Công trình để đời */
@@ -1738,11 +1738,11 @@ const WORKS=[
  {n:'Dạy miễn phí lớp tài chính cá nhân',cost:0,stat:{legacy:5,happy:6},art:'school'}];
 function ftLegacy(p){const opts=[WORKS[WORKS.length-1],...WORKS.slice(0,-1).sort(()=>Math.random()-.5).slice(0,3)];
   const build=o=>{p.cash-=o.cost;addS(p,o.stat,o.n);(p.works=p.works||[]).push(o.n);log(`Công trình để đời: ${o.n}${o.cost?` (${fmt(o.cost)})`:''}`,p);sfx('win');if(o.cost)coinRain(30);endTurn();};
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Công trình để đời',title:'Bạn muốn được nhớ đến vì điều gì?',art:art('library'),
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Công trình để đời',title:'Bạn muốn được nhớ đến vì điều gì?',art:art('library'),
     body:`<p>Đỉnh tháp Maslow là được công nhận và cống hiến. Chiến thắng ở vòng này cần <b>Di sản ≥ ${legacyNeed()}</b> (hiện có ${S(p).legacy}). Mỗi 20 Di sản được +1 điểm cho mọi lần tung xúc xắc đỏ đen: uy tín mở mọi cánh cửa.</p><div class="rows">${opts.map(o=>`<div class="row"><div class="grow"><b>${o.n}</b> · ${o.cost?fmt(o.cost):'miễn phí'}<small>${Object.entries(o.stat).map(([k,v])=>`${STATS[k].n} +${v}`).join(', ')}</small></div></div>`).join('')}</div>`,
     acts:[...opts.map(o=>({label:`${o.n.split(' ').slice(0,4).join(' ')}${o.cost?' · '+fmt(o.cost):''}`,cls:o.cost?'':'primary',disabled:p.cash<o.cost,fn:()=>build(o)})),{label:'Để sau',fn:endTurn}],
     bot:()=>{const o=opts.filter(o=>o.cost&&p.cash>o.cost*3).sort((a,b)=>b.stat.legacy-a.stat.legacy)[0];build(o||opts[0]);}});}
-/* ---------- xúc xắc đỏ đen trong Vòng Thịnh Vượng ---------- */
+/* ---------- xúc xắc đỏ đen trong Vòng Bứt Phá ---------- */
 const DIEF=['⚀','⚁','⚂','⚃','⚄','⚅'];
 function ftDice(bonus=0){const v=[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6)];return {v,raw:v[0]+v[1],sum:clamp(v[0]+v[1]+bonus,2,12),bonus};}
 const diceHTML=R=>`<div style="font-size:64px;line-height:1;text-align:center;letter-spacing:8px">${R.v.map(x=>DIEF[x-1]).join('')}</div><p style="text-align:center"><b class="num">${R.raw}</b>${R.bonus?` ${R.bonus>0?'+':'−'} ${Math.abs(R.bonus)} (kỹ năng, quan hệ, di sản)`:''} = <b class="num">${R.sum}</b></p>`;
@@ -1755,7 +1755,7 @@ function ftGamble(p,o){const go=()=>{const R=ftDice((o.bonus||0)+(o.noLegacy?0:l
 function ftTech(p,t){let dd=!!p.ftGuard;const render=()=>{const bonus=(dd?1:0)+(S(p).know>=70?1:0)-(G.ftCredit>0?2:0);
   const go=st=>{const fee=dd?Math.round(st*DD_FEE):0;p.cash-=st+fee;p.ftVentures.push({name:t.name,stake:st,dd,lap:p.ftLap,m:t.m,bonus});log(`Rót ${fmt(st)} vào ${t.name}${dd?` (thẩm định ${fmt(fee)})`:''}`,p);sfx('pay');endTurn();};
   const rows=[[2,4],[5,6],[7,8],[9,10],[11,12]].map(([a,b])=>`<tr><td>Tổng ${a}–${b}</td><td>${[...new Set(t.m.slice(a-2,b-1))].map(x=>x?'×'+trimNum(x,1):'mất trắng').join(' / ')}</td></tr>`).join('');
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Công nghệ mới',title:esc(t.name),art:art(t.art),
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Công nghệ mới',title:esc(t.name),art:art(t.art),
     body:`<p>${t.d} Tiền góp được chốt ở ngày lĩnh lương tới: bạn tự tung 2 xúc xắc.</p><table>${rows}</table><p>${bonus?`Điểm cộng xúc xắc: ${bonus>0?'+':''}${bonus} (${[dd?'thẩm định kỹ':'',S(p).know>=70?'hiểu biết đầu tư cao':'',G.ftCredit>0?'tín dụng đang bị siết':''].filter(Boolean).join(', ')}).`:'Chưa thẩm định: không có điểm cộng.'}</p>`,
     lesson:'Ngoài đời, đa số khoản đầu tư công nghệ mất trắng; lợi nhuận đến từ số ít kèo nhân nhiều lần. Chỉ dùng phần tiền chấp nhận mất.',
     acts:[...[TY,3*TY,10*TY].map(st=>({label:`Góp ${fmt(st)}`,cls:st===TY?'primary':'',disabled:p.cash<st*(1+(dd?DD_FEE:0)),fn:()=>go(st)})),{label:dd?'Bỏ thẩm định':`Thẩm định kỹ (+${pct(DD_FEE,0)}, +1 điểm)`,fn:()=>{dd=!dd;render();}},{label:'Bỏ qua',fn:endTurn}],
@@ -1772,7 +1772,7 @@ function ftReveal(p,done){const v=p.ftVentures.find(x=>x.due);if(!v)return done(
     after:()=>ftReveal(p,done)});}
 /* IPO: cần ít nhất 2 doanh nghiệp; bán 30% cổ phần ra công chúng */
 function ftIPO(p){const bz=p.ftAssets.filter(a=>a.sector!=='kcn'||true),base=bz.reduce((s,a)=>s+num(a.cost),0),fee=Math.round(base*.05/1e6)*1e6;
-  if(bz.length<2)return openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · IPO',title:'Chưa đủ điều kiện lên sàn',art:art('chartup'),body:'<p>Cần sở hữu ít nhất 2 doanh nghiệp (hoặc khu công nghiệp) để gộp thành tập đoàn và IPO.</p>',acts:[{label:'Xong',cls:'primary',fn:endTurn}],bot:endTurn});
+  if(bz.length<2)return openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · IPO',title:'Chưa đủ điều kiện lên sàn',art:art('chartup'),body:'<p>Cần sở hữu ít nhất 2 doanh nghiệp (hoặc khu công nghiệp) để gộp thành tập đoàn và IPO.</p>',acts:[{label:'Xong',cls:'primary',fn:endTurn}],bot:endTurn});
   const bonus=(p.ftGuard?1:0)+relBonus(p)+(G.ftCredit>0?-2:0);
   const go=()=>ftGamble(p,{eyebrow:'IPO · Ngày chào sàn',title:'Chuông khai trương phiên giao dịch',art:'chartup',bonus,
     body:`<p>Đã trả ${fmt(fee)} phí tư vấn, bảo lãnh. Tổng 8–9: định giá ×3, 10–11: ×5, 12: ×8 vốn gốc; dưới 8: rút hồ sơ.</p>`,
@@ -1780,7 +1780,7 @@ function ftIPO(p){const bz=p.ftAssets.filter(a=>a.sector!=='kcn'||true),base=bz.
       const k=R.sum>=12?8:R.sum>=10?5:3,cash=Math.round(base*k*.3);p.cash+=cash;bz.forEach(a=>{a.cf=Math.round(a.cf*.7);a.ipo=true;});p.ipos=(p.ipos||0)+1;
       log(`IPO thành công: định giá ×${k}, bán 30% thu ${fmt(cash)}`,p);moment('chartup','Rung chuông chào sàn!',`${esc(p.name)} IPO, định giá ×${k}`);
       return {title:`IPO thành công! Định giá ×${k}`,text:`Tập đoàn được định giá ${fmt(base*k)}. Bán 30% cổ phần thu về ${fmt(cash)}; dòng tiền các doanh nghiệp còn 70% vì đã chia cho cổ đông mới.`,good:true,art:'trophy'};}});
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · IPO',title:'Đưa tập đoàn lên sàn chứng khoán',art:art('chartup'),
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · IPO',title:'Đưa tập đoàn lên sàn chứng khoán',art:art('chartup'),
     body:`<div class="facts">${fact('Vốn gốc các doanh nghiệp',fmt(base))}${fact('Phí tư vấn, bảo lãnh',fmt(fee),'neg')}${fact('Điểm cộng xúc xắc',(bonus>0?'+':'')+bonus)}</div><p>Đội pháp chế (+1) giúp hồ sơ sạch, quan hệ rộng (+1) và thẻ hội viên gôn (+1) kéo nhà đầu tư lớn.</p>`,
     acts:[{label:`IPO, trả phí ${fmt(fee)}`,cls:'primary',disabled:p.cash<fee,fn:()=>{p.cash-=fee;go();}},{label:'Để sau',fn:endTurn}],bot:()=>p.cash>fee*3&&bonus>=1?(p.cash-=fee,go()):endTurn()});}
 /* Khu công nghiệp: đúng luật thì chậm, chạy giấy phép thì đỏ đen */
@@ -1793,16 +1793,16 @@ function ftKCN(p,t){const i=p.ftPos,own=p.ftAssets.some(a=>a.idx===i);
           return {title:'BỊ BẮT!',text:`Mất phong bì ${fmt(env)}, nộp phạt ${fmt(fine)} và ngồi tù 3 lượt. Dự án bị thu hồi.`,art:'police',lesson:'Hối lộ có thể trót lọt vài lần, nhưng chỉ một lần lộ là mất tất cả.'};}
         p.bribes=(p.bribes||0)+1;add(Math.round(t.cost*.8),false,true);log(`Chạy giấy phép ${t.name} trót lọt (phong bì ${fmt(env)}), giá đất giảm 20%`,p);
         return {title:'Trót lọt…',text:`Giấy phép có ngay, giá đất giảm 20%: chỉ trả ${fmt(Math.round(t.cost*.8))}, dòng tiền đủ ${fmt(t.cf)} từ kỳ này. Nhưng hồ sơ này sẽ còn đó khi thanh tra tới.`,good:true,art:'garment'};}});};
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Khu công nghiệp',title:esc(t.name),art:art('garment'),
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Khu công nghiệp',title:esc(t.name),art:art('garment'),
     body:`<p>Các tập đoàn sản xuất đang tìm đất. Dòng tiền khủng, nhưng giấy phép đất đai là điểm nghẽn.</p><div class="facts">${fact('Vốn',fmt(t.cost))}${fact('Dòng tiền','+'+fmt(t.cf),'pos')}${fact('Lợi suất',pct(t.cf/t.cost))}</div>
       <p><b>Đúng luật:</b> trả đủ ${fmt(t.cost)}; 2 ngày lĩnh lương đầu chỉ được 30% dòng tiền vì chờ thủ tục.<br><b>Chạy giấy phép:</b> chi ${fmt(t.cost*.1)} phong bì rồi tung xúc xắc: 2–4 bị bắt (≈17%), ngồi tù 3 lượt; trót lọt thì đất rẻ 20%, chạy ngay. Lần sau gặp Thanh tra sẽ dễ bị lộ.</p>${own?'<p>Bạn đã sở hữu khu này.</p>':''}`,
     acts:[{label:`Đúng luật ${fmt(t.cost)}`,cls:'primary',disabled:own||p.cash<t.cost,fn:legal},{label:'Chạy giấy phép',disabled:own||p.cash<t.cost*.9,fn:bribe},{label:'Bỏ qua',fn:endTurn}],
     bot:()=>own||p.cash<t.cost*1.5?endTurn():(BOT_LVL[p.botLvl||'normal'].spec>.6&&p.cash>=t.cost*.9?bribe():legal())});}
 /* Thanh tra: hồ sơ cũ quay lại */
 function ftInspect(p){const n=p.bribes||0;
-  if(!n){addS(p,{luck:10},'Hồ sơ sạch');return openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Thanh tra',title:'Hồ sơ sạch',art:art('police'),body:'<p>Đoàn thanh tra rà soát toàn bộ dự án của bạn: không có sai phạm. Uy tín tăng, May mắn +10.</p>',lesson:'Làm ăn sạch thì ngủ ngon.',acts:[{label:'Tiếp tục',cls:'primary',fn:endTurn}],bot:endTurn});}
+  if(!n){addS(p,{luck:10},'Hồ sơ sạch');return openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Thanh tra',title:'Hồ sơ sạch',art:art('police'),body:'<p>Đoàn thanh tra rà soát toàn bộ dự án của bạn: không có sai phạm. Uy tín tăng, May mắn +10.</p>',lesson:'Làm ăn sạch thì ngủ ngon.',acts:[{label:'Tiếp tục',cls:'primary',fn:endTurn}],bot:endTurn});}
   const lim=3+n*2;
-  ftGamble(p,{eyebrow:'Vòng Thịnh Vượng · Thanh tra',title:'Đoàn thanh tra tới gõ cửa',art:'police',bonus:0,noLegacy:true,
+  ftGamble(p,{eyebrow:'Vòng Bứt Phá · Thanh tra',title:'Đoàn thanh tra tới gõ cửa',art:'police',bonus:0,noLegacy:true,
     body:`<p>Bạn từng chạy giấy phép ${n} lần. Tổng xúc xắc ≤ ${lim}: bị lộ (≈${pct([0,0,1,3,6,10,15,21,26,30,33,35,36][Math.min(12,lim)]/36,0)}).</p>`,
     outcome:R=>{if(R.sum>lim)return {title:'Thoát… lần này',text:'Hồ sơ không bị phát hiện. Nhưng nó vẫn nằm đó.',good:true,art:'escape'};
       const lost=p.ftAssets.filter(a=>a.bribe);lost.forEach(a=>p.ftAssets.splice(p.ftAssets.indexOf(a),1));const fine=Math.round(Math.max(0,p.cash)*.5);p.cash-=fine;p.jail=p.ftGuard?2:4;p.bribes=0;p.jailCount=num(p.jailCount)+1;moment('police','BỊ KHỞI TỐ!',`${esc(p.name)} vào tù ${p.jail} lượt`);chickSay('jail',p);
@@ -1819,7 +1819,7 @@ function ftGolf(p){const fee=200*TR,club=2*TY;
         if(R.sum>=7){addS(p,{rel:5});return {title:'Quen thêm vài chủ doanh nghiệp',text:'Quan hệ +5.',good:true};}
         return {title:'Chỉ là một trận gôn',text:'Đánh hỏng vài lỗ, không ai bàn chuyện làm ăn.',good:false};}});};
   const join=()=>{p.cash-=club;p.golfClub=true;addS(p,{rel:15,happy:6},'Thẻ hội viên gôn');log(`Mua thẻ hội viên sân gôn ${fmt(club)}`,p);endTurn();};
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Sân gôn',title:'Câu lạc bộ gôn thượng lưu',art:art('skyline'),
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Sân gôn',title:'Câu lạc bộ gôn thượng lưu',art:art('skyline'),
     body:`<p>Nhiều thương vụ lớn được chốt trên sân gôn chứ không phải trong phòng họp.</p><div class="facts">${fact('Một trận',fmt(fee))}${fact('Thẻ hội viên',p.golfClub?'Đã có':fmt(club),'', 'Quan hệ +15, +1 xúc xắc IPO và gôn mãi mãi')}</div>`,
     acts:[{label:`Chơi một trận ${fmt(fee)}`,cls:'primary',disabled:p.cash<fee,fn:play},...(p.golfClub?[]:[{label:`Thẻ hội viên ${fmt(club)}`,disabled:p.cash<club,fn:join}]),{label:'Không đi',fn:endTurn}],
     bot:()=>p.cash>club*3&&!p.golfClub?join():p.cash>fee*10?play():endTurn()});}
@@ -1829,7 +1829,7 @@ function ftLanding(p){
   const t=FT[p.ftPos];
   if(t.t==='cf')return endTurn();
   if(t.t==='biz'){const own=p.ftAssets.some(a=>a.idx===p.ftPos);const go=()=>{ftFix(p);p.cash-=t.cost;p.ftAssets.push({idx:p.ftPos,name:t.name,sector:t.sector,cost:t.cost,cf:t.cf});ftRecalc(p);log(`Đầu tư ${t.name} ${fmt(t.cost)}, +${fmt(t.cf)}`,p);sfx('cash');endTurn();};
-    return openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · Đầu tư',title:t.name,art:art('skyline'),body:`<p>Doanh nghiệp quy mô lớn tìm nhà đầu tư. Mỗi ngày lĩnh lương bạn nhận thêm lợi nhuận.</p><div class="facts">${fact('Vốn đầu tư',fmt(t.cost))}${fact('Dòng tiền thêm','+'+fmt(t.cf),'pos')}${fact('Lợi suất',pct(t.cf/t.cost))}${fact('Tiến độ mục tiêu',pct(t.cf/ftGoal(),0))}${fact('Ngành',SECTORS[t.sector]||'')}</div>${own?'<p>Bạn đã sở hữu doanh nghiệp này.</p>':p.cash<t.cost?'<div class="note">Không đủ tiền mặt. Ở vòng này không có vay tiêu dùng.</div>':''}`,
+    return openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · Đầu tư',title:t.name,art:art('skyline'),body:`<p>Doanh nghiệp quy mô lớn tìm nhà đầu tư. Mỗi ngày lĩnh lương bạn nhận thêm lợi nhuận.</p><div class="facts">${fact('Vốn đầu tư',fmt(t.cost))}${fact('Dòng tiền thêm','+'+fmt(t.cf),'pos')}${fact('Lợi suất',pct(t.cf/t.cost))}${fact('Tiến độ mục tiêu',pct(t.cf/ftGoal(),0))}${fact('Ngành',SECTORS[t.sector]||'')}</div>${own?'<p>Bạn đã sở hữu doanh nghiệp này.</p>':p.cash<t.cost?'<div class="note">Không đủ tiền mặt. Ở vòng này không có vay tiêu dùng.</div>':''}`,
       acts:[{label:`Đầu tư ${fmt(t.cost)}`,cls:'primary',disabled:own||p.cash<t.cost,fn:go},{label:'Bỏ qua',fn:endTurn}],bot:()=>!own&&p.cash>=t.cost?go():endTurn()});}
   if(t.t==='tech')return ftTech(p,t);
   if(t.t==='ipo')return ftIPO(p);
@@ -1859,8 +1859,8 @@ function showSetup(resume){
   const dreams=G.dreams;
   if(!draft.length)setCount(2);
   const render=()=>{s.innerHTML=`<div class="setup-in"><span class="lbl" style="color:var(--gold);margin:0">Trò chơi tài chính · Việt Nam</span><div class="logo">Dòng Tiền<em> 3D</em></div>
-    <div class="mascot">${CHICKEN_SVG(1.4)}<p><b>Gà Vàng</b> chào bạn! Người ta hay nói “gà què ăn quẩn cối xay”: cả đời chạy quanh lương và hóa đơn. Muốn thoát vòng cối xay, bạn phải biết đâu là tài sản, đâu là tiêu sản. Tôi sẽ cố vấn, nhưng chỉ vài lần thôi.</p></div>
-    <p class="lede">Hai vòng chơi: <b>Người lao động</b>, nơi bạn đi làm, nhận lương 4 tháng mỗi lượt và mua tài sản tạo thu nhập thụ động; rồi <b>Vòng Thịnh Vượng</b>, nơi bạn đầu tư lớn để chạm tới giấc mơ.</p>
+    <div class="mascot">${CHICKEN_SVG(1.4)}<p><b>Gà Vàng</b> chào bạn! Người ta hay nói “gà què ăn quẩn cối xay”: cả đời chạy quanh lương và hóa đơn. Muốn thoát vòng mưu sinh, bạn phải biết đâu là tài sản, đâu là tiêu sản. Tôi sẽ cố vấn, nhưng chỉ vài lần thôi.</p></div>
+    <p class="lede">Hai vòng chơi: <b>Người lao động</b>, nơi bạn đi làm, nhận lương 4 tháng mỗi lượt và mua tài sản tạo thu nhập thụ động; rồi <b>Vòng Bứt Phá</b>, nơi bạn đầu tư lớn để chạm tới giấc mơ.</p>
     ${resume?`<button class="btn primary" id="resumeBtn" style="width:100%;margin-bottom:16px">Tiếp tục ván đang chơi (${MODES[resume.mode].n}, năm ${START_YEAR+Math.floor((resume.month||0)/12)})</button>`:''}
     <span class="lbl">Chế độ chơi</span><div class="modes">${Object.entries(MODES).map(([k,m])=>`<button class="mode ${draftMode===k?'on':''}" data-mode="${k}"><b>${m.n}</b><span>${m.sub}</span><small>${k==='easy'?'Không lạm phát, thương vụ tốt hơn, có gợi ý nên mua hay không. Thắng khoảng 33–40 tuổi.':'Lạm phát, lừa đảo, con cái đi học, bố mẹ ốm, lãi suất ưu đãi, chu kỳ thị trường, nghỉ hưu ở 60. Chỉ người am hiểu đầu tư (và chút may mắn) mới sang vòng 2 trước 50 tuổi.'}</small></button>`).join('')}</div>
     <span class="lbl">Ghi sổ</span><div class="seg"><button class="${draftQuiz?'on':''}" data-quiz="1" style="font-family:var(--f-body);font-size:12px">Bật: tự phân loại tài sản, nợ, thu nhập, chi phí</button><button class="${draftQuiz?'':'on'}" data-quiz="0" style="font-family:var(--f-body);font-size:12px">Tắt</button></div>
@@ -1871,7 +1871,7 @@ function showSetup(resume){
       <div class="meta"><button class="pill ${d.bot?'botpill':''}" data-bot="${i}">${d.bot?'Máy tự chơi':'Người chơi'} ⇄</button>${d.bot?`<button class="pill botpill" data-lvl="${i}">${BOT_LVL[d.botLvl].n} ↻</button>`:''}<button class="pill pickpill" data-prof="${i}">Nghề: <b>${pr.n}</b> ▾</button><span class="pill">${draftScen==='grad'?22:pr.age} tuổi</span><span class="pill">Lương <b>${fmt(T(pr.sal))}</b></span><span class="pill">Dư/tháng <b>${sgn(net)}</b></span><button class="pill pickpill" data-dream="${i}">Ước mơ: <b>${esc(DREAMS[d.dreamId].n)}</b> ▾</button></div></div></div>`;}).join('')}
     <button class="btn primary" id="startBtn" style="width:100%;margin-top:10px">Bắt đầu ván mới</button>
     ${onlineReady()?'<button class="btn" id="onlineBtn" style="width:100%;margin-top:8px">Chơi trực tuyến · tìm bạn chơi</button>':''}
-    <div class="howto"><b>Cách chơi nhanh.</b> Mỗi lượt là 4 tháng: bạn nhận lương, trả chi phí, rồi tung xúc xắc. Ô <b>Cơ hội</b> cho bạn mua tài sản; mỗi thương vụ có bảng tính dòng tiền và lợi suất. Ô <b>Thưởng giữa năm</b> và <b>Thưởng Tết</b> cho thêm tiền khi đi qua. Khi thu nhập thụ động lớn hơn tổng chi phí, bạn sang <b>Vòng Thịnh Vượng</b>. Bấm <b>?</b> để xem luật đầy đủ.</div></div>`;};
+    <div class="howto"><b>Cách chơi nhanh.</b> Mỗi lượt là 4 tháng: bạn nhận lương, trả chi phí, rồi tung xúc xắc. Ô <b>Cơ hội</b> cho bạn mua tài sản; mỗi thương vụ có bảng tính dòng tiền và lợi suất. Ô <b>Thưởng giữa năm</b> và <b>Thưởng Tết</b> cho thêm tiền khi đi qua. Khi thu nhập thụ động lớn hơn tổng chi phí, bạn sang <b>Vòng Bứt Phá</b>. Bấm <b>?</b> để xem luật đầy đủ.</div></div>`;};
   render();
   s.onclick=e=>{const b=e.target.closest('button');if(!b)return;syncNames();
     if(b.dataset.n){setCount(+b.dataset.n);render();}
@@ -1892,7 +1892,7 @@ function showSetup(resume){
   };
 }
 function pickProf(i,done){const d=draft[i],inl=PROFS.map((pr,k)=>()=>{d.prof=k;closeViewer();done();});
-  openViewer({tone:'payday',eyebrow:`Người chơi ${i+1}`,title:'Chọn nghề nghiệp xuất phát',inl,body:`<p class="lesson" style="margin-top:0">Lương cao chưa chắc dễ thắng: nợ nhà, nợ xe và lối sống đắt đỏ có thể giữ bạn lâu hơn trong vòng cối xay.</p><div class="rows">${PROFS.map((pr,k)=>{const net=profNet(pr),debt=Object.values(pr.L).reduce((a,v)=>a+v[0],0);return `<button class="row pick ${d.prof===k?'on':''}" data-i="${k}"><div class="grow"><b>${pr.n}</b> · ${pr.age} tuổi<small>Lương ${fmt(T(pr.sal))} · dư ${sgn(net)}/tháng · tiết kiệm ${fmt(T(pr.sav))} · nợ ${fmt(T(debt))}${pr.L.home?' (có nhà vay)':''}</small></div></button>`;}).join('')}</div>`});}
+  openViewer({tone:'payday',eyebrow:`Người chơi ${i+1}`,title:'Chọn nghề nghiệp xuất phát',inl,body:`<p class="lesson" style="margin-top:0">Lương cao chưa chắc dễ thắng: nợ nhà, nợ xe và lối sống đắt đỏ có thể giữ bạn lâu hơn trong vòng mưu sinh.</p><div class="rows">${PROFS.map((pr,k)=>{const net=profNet(pr),debt=Object.values(pr.L).reduce((a,v)=>a+v[0],0);return `<button class="row pick ${d.prof===k?'on':''}" data-i="${k}"><div class="grow"><b>${pr.n}</b> · ${pr.age} tuổi<small>Lương ${fmt(T(pr.sal))} · dư ${sgn(net)}/tháng · tiết kiệm ${fmt(T(pr.sav))} · nợ ${fmt(T(debt))}${pr.L.home?' (có nhà vay)':''}</small></div></button>`;}).join('')}</div>`});}
 function pickDream(i,done){const d=draft[i],used=new Set(draft.filter((x,j)=>j!==i).map(x=>x.dreamId)),full=used.size>=4;const inl=DREAMS.map((dr,k)=>()=>{if(full&&!used.has(k))return;d.dreamId=k;closeViewer();done();});
   openViewer({tone:'ft',eyebrow:`Người chơi ${i+1}`,title:'Ước mơ của bạn là gì?',inl,body:`<p class="lesson" style="margin-top:0">Khi tự do tài chính, mua được ước mơ của mình ở vòng ngoài là chiến thắng. Bàn cờ có 4 ô ước mơ.</p><div class="dreamgrid">${DREAMS.map((dr,k)=>`<button class="dreamc ${d.dreamId===k?'on':''}" data-i="${k}" ${full&&!used.has(k)?'disabled':''}>${art(DREAM_ART[dr.a])}<b>${dr.n}</b><small>${fmt(dr.c)}</small></button>`).join('')}</div>`});pendingJingle=null;}
 function pickChar(i,done){
@@ -1905,7 +1905,7 @@ $('#menuBtn').onclick=()=>{const inl=[()=>{closeViewer();showSummary();},()=>{cl
   openViewer({tone:'downsized',eyebrow:'Ván chơi',title:'Menu',inl,body:`<div class="acts">${G&&G.players?'<button class="btn" data-i="0">Tổng kết ván</button>':''}<button class="btn primary" data-i="1">Bắt đầu ván mới</button><button class="btn" data-i="2">Đồ họa: ${GFX==='high'?'Đẹp':'Nhẹ'} ⇄</button><button class="btn" data-i="3">Góc nhìn: ${TPS.on?'Nhân vật 3D':'Bàn cờ'} ⇄</button></div><p class="lesson">Ván mới sẽ thay thế ván đang chơi. Đồ họa Nhẹ tắt bóng đổ, phản chiếu và đèn sân khấu cho máy yếu. Góc nhìn Nhân vật 3D: nhân vật mặc đồ đúng nghề, khá giả thì đi xe máy, giàu thì lái ô tô; hai bên đường là cảnh đúng nội dung từng ô.</p>`});};
 function showRules(){
   openViewer({tone:'payday',key:'rules',eyebrow:'Luật chơi',title:'Dòng Tiền 3D chơi thế nào?',body:`<div class="rules">
-  <h3>Hai vòng chơi</h3><ul><li><b>Vòng 1 – Người lao động</b> (vòng trong): đi làm, nhận lương, trả chi phí, mua tài sản. Hoàn thành khi <b>thu nhập thụ động lớn hơn tổng chi phí</b> hằng tháng.</li><li><b>Vòng 2 – Vòng Thịnh Vượng</b> (vòng ngoài): thắng khi mua được giấc mơ hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())}.</li></ul>
+  <h3>Hai vòng chơi</h3><ul><li><b>Vòng 1 – Người lao động</b> (vòng trong): đi làm, nhận lương, trả chi phí, mua tài sản. Hoàn thành khi <b>thu nhập thụ động lớn hơn tổng chi phí</b> hằng tháng.</li><li><b>Vòng 2 – Vòng Bứt Phá</b> (vòng ngoài): thắng khi mua được giấc mơ hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())}.</li></ul>
   <h3>Chế độ</h3><ul><li><b>Dễ</b>: để tập chơi. Không lạm phát, thương vụ tốt hơn, có dòng <i>Gợi ý</i> nên mua hay không, vay tiêu dùng 1%/tháng.</li><li><b>Khó</b>: như cuộc đời. Lạm phát 3,5%/năm, tăng lương không chắc chắn, chu kỳ sốt nóng – đóng băng, lãi suất thả nổi, ưu đãi lãi suất hết hạn, lừa đảo, ốm đau, con đi học và đại học, bố mẹ ốm, nghỉ hưu ở 60 tuổi (lương hưu 55%), dừng cuộc chơi ở 70 tuổi.</li></ul>
   <h3>Ba giai đoạn tài chính</h3><ul><li><b>Cơm áo gạo tiền</b> (vốn đầu tư dưới ${fmt(TIER_NW[2])}): làm thêm, kinh doanh nhỏ, phòng trọ, cổ phiếu, vàng, Bitcoin.</li><li><b>Tích lũy</b> (từ ${fmt(TIER_NW[2])}): mở khóa cơ hội lớn như chung cư, nhà đất, chuỗi cà phê, siêu thị mini, farm, góp vốn công ty. Cũng xuất hiện cám dỗ như mua ô tô, trường quốc tế, resort.</li><li><b>Nhà đầu tư</b> (từ ${fmt(TIER_NW[3])}): nhà phố, căn hộ dịch vụ, khách sạn mini, mua lại công ty.</li><li>Chọn phương án <b>rẻ</b> (trường công, du lịch bụi…) tích <b>điểm rủi ro</b>: sau này ốm đau dễ xảy ra hơn và tốn hơn. Chọn phương án <b>đắt</b> cho <b>điểm quan hệ</b>: được xem nhiều cơ hội hơn.</li><li><b>Làm thêm</b> là thu nhập chủ động, tối đa 2 việc, không tính vào thu nhập thụ động.</li></ul>
   <h3>Thời gian và lương</h3><ul><li>Mỗi lượt = <b>4 tháng</b>. Đầu lượt bạn tự động nhận <b>lương 4 tháng</b>, trả thuế, bảo hiểm và mọi chi phí; phiếu lương cho biết còn lại bao nhiêu.</li><li>Ô góc <b>LƯƠNG</b> là mốc nhận lương. Ô <b>Thưởng giữa năm</b> và <b>Thưởng Tết</b> cho thưởng khi đi qua hoặc dừng lại.</li><li>Mỗi năm: tăng lương, lạm phát, con lớn thêm một tuổi, bản tin kinh tế mới.</li></ul>
@@ -1988,7 +1988,7 @@ function adviseDeal(p,d){
   const cyc=G.cyc||{land:'normal',re:'normal',stock:'normal'};
   if(d.k==='scam')return 'Đây là <b>lừa đảo</b>. Lãi cam kết 4–5%/tháng (50–60%/năm) không doanh nghiệp thật nào trả nổi. Tiền trả cho bạn lúc đầu chính là tiền của người vào sau. Từ chối.';
   if(d.k==='side')return p.sides.length>=2?'Bạn đã đủ 2 việc làm thêm.':tier(p)>=2?'Bạn đã có vốn khá. Thời gian của bạn nên dành để tìm cơ hội lớn hơn là làm thêm.':'Nên nhận. Ở giai đoạn này vốn là thứ bạn thiếu nhất. Nhưng nhớ: đây là thu nhập chủ động, phải dùng nó để mua tài sản.';
-  if(d.k==='gold'||d.k==='crypto')return `${d.k==='gold'?'Vàng':'Bitcoin'} không tạo dòng tiền nên không giúp bạn thoát vòng cối xay. Chỉ nên mua bằng tiền nhàn rỗi, tối đa 5–10% tài sản, khi bạn đã có quỹ khẩn cấp và tài sản tạo dòng tiền.`;
+  if(d.k==='gold'||d.k==='crypto')return `${d.k==='gold'?'Vàng':'Bitcoin'} không tạo dòng tiền nên không giúp bạn thoát vòng mưu sinh. Chỉ nên mua bằng tiền nhàn rỗi, tối đa 5–10% tài sản, khi bạn đã có quỹ khẩn cấp và tài sản tạo dòng tiền.`;
   if(d.k==='bond')return d.b.risk==='Cao'?`Lãi ${pct(d.b.c)} cao vì doanh nghiệp rủi ro (bất động sản). Nếu mua, chỉ dùng phần nhỏ tiền nhàn rỗi. Trái phiếu rủi ro thấp lãi ${pct(BONDS[0].c)} vẫn hơn gửi tiết kiệm ${pct(DEP_RATE,0)}.`:`Rủi ro ${d.b.risk.toLowerCase()}, lãi ${pct(d.b.c)} cao hơn tiết kiệm ${pct(DEP_RATE,0)}. Hợp để giữ tiền nhàn rỗi trong lúc chờ cơ hội lớn. Đừng vay tiêu dùng 18%/năm để mua trái phiếu 10%/năm.`;
   if(d.k==='stock'){const S=STOCKS[d.sym],dy=S.div/d.price,pe=d.price/S.eps,h=p.assets.find(a=>a.type==='stock'&&a.sym===d.sym);let t='';
     if(h){const g=d.price*(1-STK_FEE-STK_TAX)/h.cost-1;t+=g>=.3?`Bạn đang lãi ${pct(g,0)} với ${d.sym}: <b>nên chốt lời</b> để có vốn mua tài sản tạo dòng tiền. `:g<-.2?`Bạn đang lỗ ${pct(-g,0)}. Nếu doanh nghiệp vẫn tốt (cổ tức đều), giữ chờ giá hồi; đừng bán hoảng loạn. `:'Lãi lỗ chưa đáng kể, có thể giữ. ';}
@@ -2035,10 +2035,10 @@ window.proUpdate=st=>{const was=isPro();Object.assign(PROS,st||{});
   if(st&&st.error)toast(st.error,'neg');const b=$('#proBtn');if(b)b.hidden=!(PROS.available||isPro());if(G&&G.players)renderHUD();};
 function proBuy(id){const b=proBridge();if(b)b.postMessage({action:'buy',id:id||''});}
 function proRestore(){const b=proBridge();if(b)b.postMessage({action:'restore'});}
-const PRO_PERKS=[['Mở khóa Vòng Thịnh Vượng','IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập, công trình để đời: phần gay cấn nhất của trò chơi.'],['Gà Vàng thành chuyên gia tài chính','Hỏi không giới hạn và phân tích sâu: giá trị hợp lý của thương vụ, tỷ lệ nợ, phân bổ tài sản, bước đi tiếp theo cụ thể.'],
+const PRO_PERKS=[['Mở khóa Vòng Bứt Phá','IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập, công trình để đời: phần gay cấn nhất của trò chơi.'],['Gà Vàng thành chuyên gia tài chính','Hỏi không giới hạn và phân tích sâu: giá trị hợp lý của thương vụ, tỷ lệ nợ, phân bổ tài sản, bước đi tiếp theo cụ thể.'],
   ['Tư vấn sau mỗi ván','Điểm mạnh, điểm yếu trong cách đầu tư của bạn, rút ra từ cả ván chơi.'],
   ['Cuộc sống VIP','Khởi đầu với May mắn và Hạnh phúc +10, vương miện 👑 trên bảng xếp hạng.'],
-  ['Lợi thế của người có cố vấn','Thương vụ tốt xuất hiện thường hơn một chút, +1 điểm xúc xắc ở các kèo lớn của Vòng Thịnh Vượng.'],
+  ['Lợi thế của người có cố vấn','Thương vụ tốt xuất hiện thường hơn một chút, +1 điểm xúc xắc ở các kèo lớn của Vòng Bứt Phá.'],
   ['Ủng hộ người làm game','Giúp Cash to Freedom tiếp tục có tính năng mới.']];
 const PLAN_NAME={month:'Gói tháng',year:'Gói năm',life:'Trọn đời'};
 const PLAN_UNIT={month:'/tháng',year:'/năm',life:''};
@@ -2051,15 +2051,15 @@ function showPro(done,title){const own=isPro(),fin=()=>{window.__proDone=null;cl
   openModal({tone:'ft',eyebrow:'Cash to Freedom PRO',title:own?'Bạn đang dùng bản PRO 👑':(title||'Chơi như nhà đầu tư có cố vấn riêng'),art:art('trophy'),
     body:`<div class="rows">${PRO_PERKS.map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${own?'':PRO_TERMS()}`,
     acts:own?[{label:'Tuyệt!',cls:'primary',fn:fin}]:[...planActs(),{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau',fn:fin}],bot:fin});}
-/* Vòng Thịnh Vượng là của PRO khi App Store đã bán gói (nếu chưa bán được thì vẫn mở, để không ai bị kẹt) */
+/* Vòng Bứt Phá là của PRO khi App Store đã bán gói (nếu chưa bán được thì vẫn mở, để không ai bị kẹt) */
 const needPaywall=p=>!p.bot&&PROS.available&&!isPro();
 function showPaywall(p,enter){window.__proDone=()=>{window.__proDone=null;closeModal();enter();};
-  openModal({tone:'ft',eyebrow:'Vòng Thịnh Vượng · PRO',title:'Bạn đã tự do tài chính! Bước tiếp theo dành cho PRO',art:art('escape'),
-    body:`<p>Phía trước là cuộc chơi của người giàu: IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập huyền thoại và những công trình để đời. Nâng cấp PRO để bước vào Vòng Thịnh Vượng.</p><div class="rows">${PRO_PERKS.slice(0,3).map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${PRO_TERMS()}`,
-    acts:[...planActs(),{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau, chơi tiếp Vòng 1',fn:()=>{window.__proDone=null;closeModal();p.ftWait=G.turn;log('Tự do tài chính, chờ nâng cấp PRO để vào Vòng Thịnh Vượng',p);nextTurn();}}],bot:enter});}
+  openModal({tone:'ft',eyebrow:'Vòng Bứt Phá · PRO',title:'Bạn đã tự do tài chính! Bước tiếp theo dành cho PRO',art:art('escape'),
+    body:`<p>Phía trước là cuộc chơi của người giàu: IPO, khu công nghiệp, công nghệ mới, sân gôn, siêu xe, bộ sưu tập huyền thoại và những công trình để đời. Nâng cấp PRO để bước vào Vòng Bứt Phá.</p><div class="rows">${PRO_PERKS.slice(0,3).map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('')}</div>${PRO_TERMS()}`,
+    acts:[...planActs(),{label:'Khôi phục giao dịch',fn:proRestore},{label:'Để sau, chơi tiếp Vòng 1',fn:()=>{window.__proDone=null;closeModal();p.ftWait=G.turn;log('Tự do tài chính, chờ nâng cấp PRO để vào Vòng Bứt Phá',p);nextTurn();}}],bot:enter});}
 function proAdCard(p){if(p.bot||!proOffer())return endTurn();
   openModal({tone:'opp',eyebrow:'Cơ hội · Đầu tư vào chính mình',title:'Cash to Freedom PRO',art:art('scholar'),
-    body:'<p>Người giàu đầu tư vào kiến thức trước khi đầu tư vào tài sản. Bản PRO mở Vòng Thịnh Vượng và biến Gà Vàng thành chuyên gia tài chính riêng: phân tích từng thương vụ, chỉ ra bước đi tiếp theo, tư vấn sau mỗi ván. Cuộc chơi của bạn sẽ dễ thở hơn một chút.</p>',
+    body:'<p>Người giàu đầu tư vào kiến thức trước khi đầu tư vào tài sản. Bản PRO mở Vòng Bứt Phá và biến Gà Vàng thành chuyên gia tài chính riêng: phân tích từng thương vụ, chỉ ra bước đi tiếp theo, tư vấn sau mỗi ván. Cuộc chơi của bạn sẽ dễ thở hơn một chút.</p>',
     lesson:'Một lời khuyên đúng lúc có thể đáng giá hơn nhiều năm tự mò mẫm.',acts:[{label:'Xem bản PRO',cls:'primary',fn:()=>showPro(endTurn)},{label:'Bỏ qua',fn:endTurn}],bot:endTurn});}
 /* chuyên gia: phân tích sâu hơn cho người chơi PRO */
 function expertGeneral(p){const c=calc(p),L=[];if(p.ft)return '';
@@ -2076,11 +2076,11 @@ function expertDeal(p,d){if(d.k!=='prop')return '';const a=d.a,R=analyze(a,d.ltv
 /* tư vấn sau ván (PRO) */
 function proReview(p){const c=calc(p),st=p.st||{},good=[],bad=[];
   const buys=st.buys||0,neg=st.neg||0,quizOk=p.fq||0,quizN=p.quizN||0;
-  if(p.ft)good.push(`Thoát vòng cối xay lúc ${Math.floor(p.freeAge)} tuổi${p.freeAge<45?', sớm hơn phần lớn người trung lưu':''}.`);
+  if(p.ft)good.push(`Thoát vòng mưu sinh lúc ${Math.floor(p.freeAge)} tuổi${p.freeAge<45?', sớm hơn phần lớn người trung lưu':''}.`);
   if(buys&&neg===0)good.push('Không mua tài sản nào có dòng tiền âm: bạn hiểu tài sản là thứ đưa tiền vào túi.');
   if(neg)bad.push(`Mua ${neg} tài sản có dòng tiền âm. Hãy luôn tính dòng tiền sau trả góp, kể cả sau khi hết ưu đãi lãi suất.`);
   if(quizN){const r=quizOk/quizN;(r>=.8?good:bad).push(`Ghi sổ đúng ${quizOk}/${quizN} lần${r>=.8?': bạn phân biệt rõ tài sản, tiêu sản, thu nhập, chi phí.':'. Hãy nhớ: nhà ở, xe, đồ dùng là tiêu sản; khoản vay là nợ.'}`);}
-  if((st.loanMax||0)>=p.salary*5)bad.push(`Từng vay tiêu dùng tới ${fmt(st.loanMax)} với lãi 18%/năm. Nợ tiêu dùng là cái cối xay giữ chân bạn.`);else if(st.loanMax===0||!st.loanMax)good.push('Gần như không dùng nợ tiêu dùng.');
+  if((st.loanMax||0)>=p.salary*5)bad.push(`Từng vay tiêu dùng tới ${fmt(st.loanMax)} với lãi 18%/năm. Nợ tiêu dùng là cái vòng mưu sinh giữ chân bạn.`);else if(st.loanMax===0||!st.loanMax)good.push('Gần như không dùng nợ tiêu dùng.');
   if(st.scam)bad.push('Đã sập bẫy lừa đảo lãi suất cao. Lãi cam kết 4–5%/tháng luôn là dấu hiệu đỏ.');if(st.scamNo)good.push('Tỉnh táo từ chối lời mời đầu tư lừa đảo.');
   const sold=p.deals.filter(x=>/^Bán/.test(x.name));if(sold.length){const pl=sold.reduce((a,x)=>a+x.pl,0);(pl>0?good:bad).push(`Bán ${sold.length} lần, tổng ${pl>=0?'lãi':'lỗ'} ${fmt(Math.abs(pl))}. ${pl>0?'Bạn biết chốt lời đúng lúc.':'Hãy kiên nhẫn chờ thẻ Thị trường giá tốt, đừng bán lúc đóng băng.'}`);}
   else if(p.assets.some(a=>assetValue(a)>(a.equity||a.cost||0)*1.5))bad.push('Có tài sản đã tăng giá mạnh nhưng chưa từng chốt lời để tái đầu tư.');
@@ -2718,7 +2718,7 @@ function buildTiles(){
     const g=x.createRadialGradient(w/2,h/2,40,w/2,h/2,w*.72);g.addColorStop(0,'#25406b');g.addColorStop(1,'#132440');x.fillStyle=g;x.fillRect(0,0,w,h);
     x.strokeStyle='rgba(233,185,73,.3)';x.lineWidth=3;for(let r=170;r<520;r+=55){x.beginPath();x.arc(w/2,h/2,r,0,7);x.stroke();}
     x.fillStyle='rgba(233,185,73,.08)';x.font='800 700px "Be Vietnam Pro",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('₫',w/2,h/2+40);
-    x.textBaseline='alphabetic';x.fillStyle='#e9b949';x.font='700 38px "JetBrains Mono",monospace';x.fillText('VÒNG CỐI XAY',w/2,h*.3);
+    x.textBaseline='alphabetic';x.fillStyle='#e9b949';x.font='700 38px "JetBrains Mono",monospace';x.fillText('VÒNG MƯU SINH',w/2,h*.3);
     x.fillStyle='#eef2f8';x.font='800 160px "Bricolage Grotesque","Be Vietnam Pro",sans-serif';x.fillText('DÒNG',w/2,h*.47);x.fillText('TIỀN',w/2,h*.63);
     x.fillStyle='rgba(238,242,248,.7)';x.font='600 36px "Be Vietnam Pro",sans-serif';x.fillText('Thu nhập thụ động > Chi phí',w/2,h*.73);}),roughness:.8}));
   center.rotation.x=-Math.PI/2;center.position.y=.003;center.receiveShadow=true;tileGroup.add(center);
@@ -2842,7 +2842,7 @@ function frame(now){
 /* ================= Gà Vàng nói vui: câu động viên theo tình huống ================= */
 const QUOTES={
   bad:['Đen thôi, đỏ quên đi!','Sông có khúc, người có lúc.','Của đi thay người, người còn là còn tất cả!','Thất bại là mẹ thành công… mà bà mẹ này hơi đông con.','Không sao, mai lại đi làm!','Tiền mất, kinh nghiệm còn.','Ngã ở đâu đứng dậy ở đó… nhớ phủi quần.','Sau cơn mưa trời lại sáng, sau cơn lỗ lại… cố lên!','Trời không phụ lòng người, chỉ hơi trễ hẹn.','Cười lên! Nghèo thì cũng phải vui chứ.'],
-  good:['Có công mài sắt, có ngày nên kim!','Tích tiểu thành đại!','Tiền đẻ ra tiền, gà đẻ trứng vàng!','Làm giàu không khó, khó là không chịu làm!','Đồng tiền đi liền khúc ruột, nay nó quay về rồi!','Chậm mà chắc, cứ thế mà tiến!','Tiền vào như nước sông Đà!','Gà què sắp thoát cối xay rồi!'],
+  good:['Có công mài sắt, có ngày nên kim!','Tích tiểu thành đại!','Tiền đẻ ra tiền, gà đẻ trứng vàng!','Làm giàu không khó, khó là không chịu làm!','Đồng tiền đi liền khúc ruột, nay nó quay về rồi!','Chậm mà chắc, cứ thế mà tiến!','Tiền vào như nước sông Đà!','Gà què sắp thoát vòng mưu sinh rồi!'],
   spend:['Tiêu thì dễ, kiếm mới khó!','Vui là chính, tiền là… phụ hơi nhiều.','Mua sắm là liều thuốc, nhưng ví tiền là người bệnh.','Tháng này thắt lưng buộc bụng nhé!','Của rẻ là của ôi, của đắt là… của mình trả góp.'],
   ctx:{schoolRich:'Nghèo cũng phải cho cu Tèo đi học!',schoolPub:'Học trường làng vẫn thành ông nọ bà kia!',schoolMid:'Con hơn cha là nhà có phúc!',
     carPoor:'Đi xe hơi, ăn mì tôm!',carNo:'Xe máy chạy bền, ví tiền chạy xa!',scamNo:'Tham thì thâm, mình không tham!',scamYes:'Ối giời, tham thì thâm rồi…',
@@ -3455,7 +3455,7 @@ function tickerItems(){if(!G||!G.players||!G.cyc)return [];const L=[],add=(k,t)=
   if(G.cyc.land==='boom')add('real','Cảnh báo: giá đất tăng nóng, nhiều nhà đầu tư vay nợ để lướt sóng.');
   if(G.cyc.stock==='bust')add('real','Chứng khoán giảm sâu, nhiều cổ phiếu tốt về vùng giá rẻ.');
   if(G.ftCredit>0)add('real','Ngân hàng siết tín dụng với dự án rủi ro cao.');
-  (G.log||[]).slice(0,40).filter(l=>/IPO|Bị bắt|Thanh tra|Mua đáy|Bộ sưu tập|Công trình để đời|Tự do tài chính|CHIẾN THẮNG|rơi lại Vòng Cối Xay|Kèo nội bộ/.test(l.text)).slice(0,3).forEach(l=>add('hot',`${l.who}: ${l.text}`));
+  (G.log||[]).slice(0,40).filter(l=>/IPO|Bị bắt|Thanh tra|Mua đáy|Bộ sưu tập|Công trình để đời|Tự do tài chính|CHIẾN THẮNG|rơi lại Vòng Mưu Sinh|Kèo nội bộ/.test(l.text)).slice(0,3).forEach(l=>add('hot',`${l.who}: ${l.text}`));
   TK_FUN.slice().sort(()=>Math.random()-.5).slice(0,2).forEach(t=>add('fun',t));
   TK_RUMOR.slice().sort(()=>Math.random()-.5).slice(0,3).forEach(f=>add('rumor',f()));
   return L.sort(()=>Math.random()-.5);}
