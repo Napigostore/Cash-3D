@@ -62,7 +62,12 @@ def main(version_string):
              '"Play online" → Sign in with Apple (or email), then create a room and add bots; Delete account is in the online lobby. '
              'Tap "Start a new game" (1 player vs 3 bots by default), then "Roll the dice". It is an educational board game about '
              'personal finance: all prices, stocks and companies are fictional simulations, no ads. Round 1 is free; PRO (monthly or yearly auto-renewable subscription, or a lifetime non-consumable) unlocks round 2 and the expert advisor. The purchase sheet opens from the crown button (top right), the Free time tile, or when a player reaches financial freedom; it has Restore and links to the Terms of Use and Privacy Policy. '
-             'The app is in English or Vietnamese following the device language; the EN/VI button at the top right switches it.')
+             'The app is in English or Vietnamese following the device language; the EN/VI button at the top right switches it. '
+             'WHAT IS DIFFERENT: the game is a single-player and pass-and-play life simulation with dice, a 3D board, a personal-interest system: '
+             'choices in the Free Time and event cards reveal what the player likes (travel, sport, family, learning, wealth, food, art, tech) and the '
+             'Opportunity cards then offer deals matching those interests (for example a homestay or a football pitch). Each player gets a different life. '
+             'The 3D view (3D button in the top bar) shows the current ring as a road with scenes from the player life. '
+             'Start a new game from the Menu (⟲) to choose the scenario: Normal, New graduate, Crisis or Housing bubble.')
     attributes = {'demoAccountRequired': False, 'notes': notes}
     if detail:
         call('PATCH', f'/v1/appStoreReviewDetails/{detail["id"]}', {'data': {'type': 'appStoreReviewDetails', 'id': detail['id'], 'attributes': attributes}})
