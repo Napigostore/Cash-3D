@@ -70,6 +70,7 @@ body.tk-on #topbar{padding-top:calc(env(safe-area-inset-top,0px) + 30px)}
 .stat label{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stat strong{display:block;font-family:var(--f-num);font-size:14px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .progress{margin-top:10px}
+.interests{margin:6px 0 0;font-size:12px;color:var(--muted);line-height:1.35}
 .bar{height:8px;border-radius:99px;background:var(--ink);border:1px solid var(--line);overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--money),var(--gold));border-radius:99px;transition:width .6s}
 .progress p{margin:5px 0 0;font-size:12px;color:var(--muted)}
@@ -966,6 +967,9 @@ function renderChips(){
 }
 $('#rank').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b)showStatement(G.players[+b.dataset.p]);});
 $('#rankToggle').addEventListener('click',()=>{rankOpen=!rankOpen;try{localStorage.setItem('dongtien3d.rank',rankOpen?'1':'0')}catch(e){}if(G&&G.players){renderChips();layoutCamera();}});
+/* sở thích nổi bật của người chơi hiện tại: hiện ngay trên bảng để người chơi thấy game đang hiểu mình */
+function interestLine(p){const top=Object.entries(p.pref||{}).filter(([,v])=>v>0).sort((x,y)=>y[1]-x[1]).slice(0,2);
+  return top.length?`Sở thích nổi bật: <b style="color:var(--text)">${top.map(([k])=>PREFS[k]).join(" · ")}</b> · thương vụ sẽ bám theo đó`:"Chưa rõ sở thích: chọn lựa chọn ở ô Thời gian rảnh và Tiêu xài để game hiểu bạn";}
 function renderHUD(){
   if(!G||!G.players)return;renderChips();
   const p=curP(),c=calc(p),remote=isBotTurn(),busy=G.phase!=='roll'||remote;
@@ -983,7 +987,7 @@ function renderHUD(){
   const rollBtns=remote?`<button class="btn primary" disabled>${p.bot?'Máy đang chơi…':'Chờ '+esc(p.name)+'…'}</button>`:p.charity>0?`<button class="btn primary" data-roll="${nd}" ${busy?'disabled':''}>${nd} xúc xắc</button><button class="btn primary" data-roll="${nd+1}" ${busy?'disabled':''}>${nd+1} xúc xắc</button>`
     :`<button class="btn primary" data-roll="${nd}" ${busy?'disabled':''}>${busy?'Đang đi…':'Tung xúc xắc'}</button>`;
   $('#hud').innerHTML=`<div class="who">${pBadge(p,34)}<b>${esc(p.name)}</b><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${Math.floor(p.age)} tuổi · ${p.retired?'Nghỉ hưu':p.prof} · ${TIERS[tier(p)].n}${p.kids?` · ${p.kids} con`:''}${p.charity?` · từ thiện ${p.charity}`:''}</span><span class="turn">${calLabel()} · ${MODES[G.mode].n.toUpperCase()}</span></div>
-  <div class="stats">${stats}</div><div class="progress">${prog}</div>
+  <div class="stats">${stats}</div><div class="progress">${prog}</div><p class="interests">${interestLine(p)}</p>
   <div class="actions">${rollBtns}<button class="btn" id="stBtn">Tài chính</button><button class="btn" id="logBtn">Nhật ký</button><button class="btn chick" id="chickBtn" ${remote||p.ft?'disabled':''} title="Hỏi Gà Vàng">${CHICKEN_SVG(.55)}<small>${hintsLeft(p)}</small></button></div>`;
   $('#hud').classList.toggle('locked',remote);
   refreshViewer();layoutCamera();if(typeof updateCity==='function')updateCity();
