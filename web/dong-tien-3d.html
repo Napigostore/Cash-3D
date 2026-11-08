@@ -652,7 +652,17 @@ function drawBigRaw(){
   return re('Lô đất 500 m² gần sân bay Long Thành','Đất thổ cư mặt đường, giá đã tăng mạnh nhiều năm qua. Không có dòng tiền.','land',rnd(20,50)*100*TR,0,0,15,{art:'land',label:'Long Thành, Đồng Nai'});
 }
 function bestCoc(d){if(d.k!=='prop')return 1;return Math.max(...d.ltvs.map(x=>analyze(d.a,x).coc));}
-function drawDeal(big){const pref=prefOffer(big);if(pref)return pref;let d=big?drawBigRaw():drawSmallRaw();{const pp=p0();if(pp&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<Math.max(0,(S(pp).luck-50)/200+(d.a.type==='re'?(S(pp).rel-40)/120:0)))d=big?drawBigRaw():drawSmallRaw();}{const pp=p0();if(pp&&pp.pro&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<.15)d=big?drawBigRaw():drawSmallRaw();}const gb=mode().goodBias;if(gb&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<gb)d=big?drawBigRaw():drawSmallRaw();if(gb&&d.k==='scam')d=drawSmallRaw();return d;}
+function drawDeal(big){const pref=prefOffer(big);if(pref)return fitDeal(pref);let d=big?drawBigRaw():drawSmallRaw();{const pp=p0();if(pp&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<Math.max(0,(S(pp).luck-50)/200+(d.a.type==='re'?(S(pp).rel-40)/120:0)))d=big?drawBigRaw():drawSmallRaw();}{const pp=p0();if(pp&&pp.pro&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<.15)d=big?drawBigRaw():drawSmallRaw();}const gb=mode().goodBias;if(gb&&d.k==='prop'&&bestCoc(d)<.12&&Math.random()<gb)d=big?drawBigRaw():drawSmallRaw();if(gb&&d.k==='scam')d=drawSmallRaw();return fitDeal(d);}
+/* Cơ hội vừa sức: tiền đặt cọc tối thiểu (theo mức vay cao nhất) không vượt tiền mặt + tiết kiệm của người chơi.
+   Nếu rút phải cơ hội quá lớn, rút lại từ các cơ hội nhỏ và chọn cái có tiền cọc gần 70% vốn nhất. */
+const downOf=d=>d.k==='prop'?d.a.price*(1-Math.max(...d.ltvs)):0;
+function goldFallback(){const each=rnd(130,170)*1e5;return {k:'gold',each,title:`Vàng nhẫn ${fmt(each)}/chỉ`,text:'Tiệm vàng quen bán vàng nhẫn 9999. Vàng không tạo dòng tiền, chỉ lời khi giá lên.'};}
+function fitDeal(d){const pp=p0();if(!pp||pp.bot||d.k!=='prop')return d;
+  const cash=pp.cash+pp.dep;if(downOf(d)<=cash)return d;
+  const ht=topPref(pp),gen=()=>ht&&Math.random()<.6?pick(PREF_DEALS[ht].s)():drawSmallRaw();
+  const target=cash*.7;let best=null,bs=Infinity;
+  for(let i=0;i<30;i++){const c=gen();if(c.k!=='prop'){if(!best){best=c;bs=1e300;}continue;}const dn=downOf(c);if(dn>cash)continue;const s=Math.abs(dn-target);if(s<bs){bs=s;best=c;}}
+  return best||goldFallback();}
 const drawSmall=()=>drawDeal(false),drawBig=()=>drawDeal(true);
 const RE_GROUP={room:'phòng trọ, ki-ốt, căn hộ dịch vụ',apt:'căn hộ chung cư',shop:'nhà phố',land:'đất nền'};
 function drawMarket(){
@@ -1526,17 +1536,25 @@ function cardParty(p){
     bot:take(p.cash>=tiers[1].a?tiers[1]:tiers[3])});
 }
 function cardMilestone(p){
-  const opts=[
-    {label:`Mua ô tô, trả thẳng ${fmt(900*TR)}`,cost:900*TR,st:{rep:6,rel:3,happy:6,health:2},msg:'Mua ô tô trả thẳng'},
-    {label:`Mua ô tô, trả góp: trả trước ${fmt(270*TR)}, vay ${fmt(630*TR)}`,cost:270*TR,liab:{label:'Vay mua ô tô',bal:630*TR,pay:13*TR},st:{rep:6,rel:3,happy:6,health:2},msg:'Mua ô tô trả góp'},
-    {label:`Xây nhà, trả thẳng ${fmt(2400*TR)}`,cost:2400*TR,st:{rep:10,rel:5,happy:8,health:4},msg:'Xây nhà trả thẳng'},
-    {label:`Xây nhà, trả góp: trả trước ${fmt(600*TR)}, vay ${fmt(1800*TR)}`,cost:600*TR,liab:{label:'Vay xây nhà',bal:1800*TR,pay:18*TR},st:{rep:10,rel:5,happy:8,health:4},msg:'Xây nhà trả góp'}];
-  const buy=o=>()=>{if(o.cost>p.cash)return;p.cash-=o.cost;if(o.liab)p.liabs.push({key:'x'+Date.now(),label:o.liab.label,bal:o.liab.bal,pay:o.liab.pay});addS(p,o.st,'Việc đại sự');log(`${o.msg}: trả ${fmt(o.cost)}`,p);endTurn();};
+  /* Giá theo tuổi và thị trường: người dưới 30 tuổi được giảm 15%; nhà đất theo chu kỳ của năm hiện tại */
+  const disc=p.age<30?.85:1,cyc=(G&&G.cyc&&G.cyc.re)||'normal',rs=cyc==='boom'?1.12:cyc==='bust'?.88:1;
+  const cost=(a)=>Math.round(a.base*disc*(a.re?rs:1)/1e6)*1e6;
   const later=()=>{addS(p,{happy:-1},'Chưa lo việc lớn');endTurn();};
-  openModal({tone:'payday',eyebrow:'Việc đại sự',title:'Đã đến lúc lo xe và nhà',art:art('villa'),story:'Gia đình muốn có chỗ ở ổn định hơn và đi lại thuận tiện. Trả thẳng thì không vay, nhưng cần đủ tiền mặt. Trả góp thì hằng tháng trả thêm tiền vay.',
-    body:`<div class="facts">${fact('Tiền mặt của bạn',fmt(p.cash))}</div>`,lesson:'Việc đại sự tăng uy tín và hạnh phúc, nhưng khoản trả góp kéo dài sẽ chiếm dòng tiền.',
-    acts:[...opts.map((o,i)=>({label:o.label,cls:i===2?'primary':'',disabled:o.cost>p.cash,fn:buy(o)})),{label:'Để sau',fn:later}],
-    bot:()=>(opts[1].cost<=p.cash?buy(opts[1]):later)()});
+  const ASSETS=[
+    {n:'Xe cũ',base:350*TR,re:false,ratio:.3,pay:.0205,st:{rep:3,rel:2,happy:4,health:1},art:'scooter',note:'Xe đã qua sử dụng vài năm, vẫn đi lại tốt.'},
+    {n:'Xe mới',base:900*TR,re:false,ratio:.3,pay:.0206,st:{rep:6,rel:3,happy:6,health:2},art:'scooter',note:'Xe đời mới, bảo hành chính hãng.'},
+    {n:'Căn hộ cũ 2 phòng ngủ',base:1200*TR,re:true,ratio:.3,pay:.0095,st:{rep:6,rel:3,happy:6,health:3},art:'tower',note:'Căn hộ đã qua sử dụng, khu dân cư có sẵn tiện ích.'},
+    {n:'Nhà xây mới',base:2400*TR,re:true,ratio:.25,pay:.01,st:{rep:10,rel:5,happy:8,health:4},art:'villa',note:'Xây trên đất có sổ, đủ phòng cho cả gia đình.'}];
+  const buy=(a,total,down,loan)=>()=>{if(down>p.cash)return;p.cash-=down;if(loan>0)p.liabs.push({key:'x'+Date.now(),label:`Vay mua ${a.n.toLowerCase()}`,bal:loan,pay:Math.round(loan*a.pay/1e5)*1e5});addS(p,a.st,'Việc đại sự');log(`${a.n}: ${loan>0?'trả trước '+fmt(down):'trả thẳng '+fmt(total)}`,p);endTurn();};
+  const payFor=a=>{const total=cost(a),down=Math.round(total*a.ratio/1e6)*1e6,loan=total-down;
+    const adjNote=disc<1?'Giảm 15% cho người dưới 30 tuổi.':'';const mkNote=rs!==1?`Thị trường nhà đất đang ${rs>1?'sôi động':'đóng băng'}, giá đã được điều chỉnh.`:'';
+    openModal({tone:'payday',eyebrow:'Việc đại sự · '+a.n,title:`${a.n}: ${fmt(total)}`,art:art(a.art),story:a.note,
+      body:`<div class="facts">${fact('Giá',fmt(total),'',adjNote)}${fact('Tiền mặt của bạn',fmt(p.cash))}${fact('Nếu trả góp',`trả trước ${fmt(down)}`,'',`vay ${fmt(loan)}`)}</div>${mkNote?`<div class="note">${mkNote}</div>`:''}`,
+      acts:[{label:`Trả thẳng ${fmt(total)}`,cls:'primary',disabled:total>p.cash,fn:buy(a,total,total,0)},{label:`Trả góp: trả trước ${fmt(down)}`,disabled:down>p.cash,fn:buy(a,total,down,loan)},{label:'Quay lại',fn:()=>{closeModal();cardMilestone(p);}}],bot:later});};
+  openModal({tone:'payday',eyebrow:'Việc đại sự',title:'Đã đến lúc lo xe và nhà',art:art('villa'),story:'Gia đình muốn có phương tiện và chỗ ở ổn định hơn. Mỗi lựa chọn có giá khác nhau, trả thẳng không vay, trả góp thì hằng tháng trả thêm tiền vay.',
+    body:`<div class="facts">${fact('Tiền mặt của bạn',fmt(p.cash))}${fact('Tuổi',Math.floor(p.age)+'',"",disc<1?'giảm giá người trẻ':'')}</div>`,lesson:'Việc đại sự tăng uy tín và hạnh phúc, nhưng khoản trả góp kéo dài sẽ chiếm dòng tiền. Mua loại cũ hoặc nhỏ hơn là cách giữ dòng tiền khi còn trẻ.',
+    acts:[...ASSETS.map(a=>({label:`${a.n} · ${fmt(cost(a))}`,cls:a.n==='Nhà xây mới'?'primary':'',disabled:Math.round(cost(a)*a.ratio/1e6)*1e6>p.cash,fn:()=>{closeModal();payFor(a);}})),{label:'Để sau',fn:later}],
+    bot:later});
 }
 function cardDown(p){
   const M=mode();if(Math.random()<Math.max(0,(S(p).luck-55)/110)){const ok=()=>{addS(p,{luck:-10,happy:5},'Thoát nạn');endTurn();};return openModal({tone:'payday',eyebrow:'May mắn',title:'Thoát nạn cắt giảm nhân sự!',art:art('promo'),story:'Công ty cắt giảm 30% nhân sự nhưng sếp quyết định giữ bạn lại vì năng lực và… chút may mắn.',quote:'Ở hiền gặp lành!',body:`<p>Nhờ chỉ số May mắn ${S(p).luck}, bạn không bị mất việc. May mắn giảm 10 vì đã dùng.</p>`,acts:[{label:'Phù!',cls:'primary',fn:ok}],bot:ok});}
