@@ -271,9 +271,25 @@ body.tk-on #topbar{padding-top:calc(env(safe-area-inset-top,0px) + 30px)}
 .review{background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;font-size:12px}
 .review ul{margin:4px 0 8px;padding-left:16px}.review li{margin:2px 0;line-height:1.45}
 @media (prefers-reduced-motion:reduce){.sheet,.toast,#rollNum.pop,.botbar i,#paySlip.in,#coinFly i{animation:none}}
+
+#life{position:fixed;inset:0;overflow:auto;z-index:1;padding:92px 14px 340px;background:#f3ead6 radial-gradient(#dccba6 1px,transparent 1.3px) 0 0/18px 18px;color:#2b2a26;-webkit-overflow-scrolling:touch}
+#life[hidden]{display:none}
+.lt-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:800;color:#6b4f1d;font-size:14px;margin:4px 0 4px}
+.lt-head small{font-weight:600;color:#7a6642;font-size:12px}
+.lt-sec{margin:20px 0 8px;font-size:11px;font-weight:800;letter-spacing:.14em;color:#8a6b2b;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lt-sec::after{content:'';flex:1;height:2px;margin-left:10px;background:repeating-linear-gradient(90deg,#8a6b2b 0 6px,transparent 6px 10px);opacity:.6}
+.lt-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px 5px}
+.lt-tile{position:relative;aspect-ratio:1/1;min-width:0;border:2px solid #2b2a26;border-radius:9px;background:#fffaf0;padding:5px 2px 2px;font:inherit;font-size:8.5px;line-height:1.05;color:#2b2a26;display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;text-align:left;box-shadow:2px 3px 0 #2b2a26;cursor:pointer;overflow:hidden}
+.lt-tile::before{content:'';position:absolute;left:0;right:0;top:0;height:5px;background:var(--tc,#888)}
+.lt-tile.now{outline:3px solid #e0566b;outline-offset:2px}
+.lt-tile.on{background:#fff0c9}
+.lt-lab{font-weight:800;overflow:hidden;word-break:break-word;hyphens:auto}
+.lt-toks{display:flex;flex-wrap:wrap;gap:2px;justify-content:flex-end}
+.lt-tok{width:15px;height:15px;border-radius:50%;color:#fff;font-size:8px;font-style:normal;font-weight:800;display:inline-flex;align-items:center;justify-content:center;border:1px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.45)}
+.lt-note{font-size:12px;color:#5c5240;margin:12px 2px 0;line-height:1.4}
 </style>
 
-<canvas id="scene" aria-label="Bàn cờ 3D"></canvas>
+<canvas id="scene" aria-label="Bàn cờ 3D"></canvas><div id="life" hidden aria-label="Đường đời"></div>
 <div id="ticker" hidden aria-label="Bản tin thị trường"><div id="tickerIn"></div></div><header id="topbar"><button class="rankhead" id="rankToggle" aria-expanded="true"><span>▾</span> Xếp hạng</button><button class="iconbtn" id="proBtn" hidden title="PRO" aria-label="PRO" onclick="showPro()">👑</button><button class="iconbtn" id="rulesBtn" title="Luật chơi" aria-label="Luật chơi">?</button><button class="iconbtn" id="soundBtn" title="Âm thanh" aria-label="Bật tắt âm thanh">♪</button><button class="iconbtn" id="viewBtn" title="Góc nhìn nhân vật 3D" aria-label="Góc nhìn nhân vật 3D" style="font:800 12px var(--f-mono,monospace)">3D</button><button class="iconbtn" id="menuBtn" title="Ván mới" aria-label="Ván mới">⟲</button><div id="rank"></div></header>
 <section id="hud"></section>
 <div id="toasts"></div>
@@ -992,7 +1008,7 @@ $('#rankToggle').addEventListener('click',()=>{rankOpen=!rankOpen;try{localStora
 /* sở thích nổi bật của người chơi hiện tại: hiện ngay trên bảng để người chơi thấy game đang hiểu mình */
 function interestLine(p){const top=Object.entries(p.pref||{}).filter(([,v])=>v>0).sort((x,y)=>y[1]-x[1]).slice(0,2);
   return top.length?`Sở thích nổi bật: <b style="color:var(--text)">${top.map(([k])=>PREFS[k]).join(" · ")}</b> · thương vụ sẽ bám theo đó`:"Chưa rõ sở thích: chọn lựa chọn ở ô Công viên và Trung tâm mua sắm để game hiểu bạn";}
-function renderHUD(){
+function renderHUD(){renderLife();
   if(!G||!G.players)return;renderChips();
   const p=curP(),c=calc(p),remote=isBotTurn(),busy=G.phase!=='roll'||remote;
   let stats,prog;
@@ -2016,8 +2032,8 @@ function pickChar(i,done){
 }
 function syncNames(){draft.forEach((d,i)=>{const el=$('#pname'+i);if(el)d.name=el.value;});}
 function setCount(n){const used=new Set(draft.map(d=>d.prof));while(draft.length<n){let pr;do{pr=Math.floor(Math.random()*PROFS.length);}while(used.has(pr)&&used.size<PROFS.length);used.add(pr);const k=draft.length,bot=k>0;const ud=new Set(draft.map(x=>x.dreamId));let dr=Math.floor(Math.random()*DREAMS.length);if(ud.size<4)while(ud.has(dr))dr=(dr+1)%DREAMS.length;else dr=[...ud][k%ud.size];draft.push({name:bot?BOT_NAMES[k]:`Người chơi ${k+1}`,bot,botLvl:'normal',prof:pr,dreamId:dr,char:CHARS[k%CHARS.length].id,zod:(k*5)%12,col:PCOLORS[(k*3)%PCOLORS.length].c});}draft.length=n;}
-$('#menuBtn').onclick=()=>{const inl=[()=>{closeViewer();showSummary();},()=>{closeViewer();closeModal();if(isOnline())leaveRoom();startedOnline=false;G={dreams:G&&G.dreams};draft=[];showSetup();},()=>{GFX=GFX==='high'?'low':'high';try{localStorage.setItem('dongtien3d.gfx',GFX)}catch(e){}applyGfx();toast('Đồ họa: '+(GFX==='high'?'Đẹp':'Nhẹ'));closeViewer();},()=>{tpsSet(!TPS.on);toast(TPS.on?'Góc nhìn nhân vật: đi qua cảnh đời bên đường':'Góc nhìn bàn cờ');closeViewer();},()=>{closeViewer();openLifePath(curP());}];
-  openViewer({tone:'downsized',eyebrow:'Ván chơi',title:'Menu',inl,body:`<div class="acts">${G&&G.players?'<button class="btn" data-i="0">Tổng kết ván</button>':''}<button class="btn primary" data-i="1">Bắt đầu ván mới</button><button class="btn" data-i="2">Đồ họa: ${GFX==='high'?'Đẹp':'Nhẹ'} ⇄</button><button class="btn" data-i="3">Góc nhìn: ${TPS.on?'Nhân vật 3D':'Bàn cờ'} ⇄</button>${G&&G.players?'<button class="btn" data-i="4">Đường đời (thử)</button>':''}</div><p class="lesson">Ván mới sẽ thay thế ván đang chơi. Đồ họa Nhẹ tắt bóng đổ, phản chiếu và đèn sân khấu cho máy yếu. Góc nhìn Nhân vật 3D: nhân vật mặc đồ đúng nghề, khá giả thì đi xe máy, giàu thì lái ô tô; hai bên đường là cảnh đúng nội dung từng ô.</p>`});};
+$('#menuBtn').onclick=()=>{const inl=[()=>{closeViewer();showSummary();},()=>{closeViewer();closeModal();if(isOnline())leaveRoom();startedOnline=false;G={dreams:G&&G.dreams};draft=[];showSetup();},()=>{GFX=GFX==='high'?'low':'high';try{localStorage.setItem('dongtien3d.gfx',GFX)}catch(e){}applyGfx();toast('Đồ họa: '+(GFX==='high'?'Đẹp':'Nhẹ'));closeViewer();},()=>{setView(VIEW==='road'?'3d':'road');toast(VIEW==='road'?'Đường đời':'Bàn cờ 3D');closeViewer();},()=>{closeViewer();openLifePath(curP());}];
+  openViewer({tone:'downsized',eyebrow:'Ván chơi',title:'Menu',inl,body:`<div class="acts">${G&&G.players?'<button class="btn" data-i="0">Tổng kết ván</button>':''}<button class="btn primary" data-i="1">Bắt đầu ván mới</button><button class="btn" data-i="2">Đồ họa: ${GFX==='high'?'Đẹp':'Nhẹ'} ⇄</button><button class="btn" data-i="3">Xem: ${VIEW==='road'?'Đường đời':'Bàn cờ 3D'} ⇄</button>${G&&G.players?'<button class="btn" data-i="4">Hành trình và số liệu</button>':''}</div><p class="lesson">Ván mới sẽ thay thế ván đang chơi. Đồ họa Nhẹ tắt bóng đổ, phản chiếu và đèn sân khấu cho máy yếu. Góc nhìn Nhân vật 3D: nhân vật mặc đồ đúng nghề, khá giả thì đi xe máy, giàu thì lái ô tô; hai bên đường là cảnh đúng nội dung từng ô.</p>`});};
 function showRules(){
   openViewer({tone:'payday',key:'rules',eyebrow:'Luật chơi',title:'Dòng Tiền 3D chơi thế nào?',body:`<div class="rules">
   <h3>Hai vòng chơi</h3><ul><li><b>Vòng 1 – Người lao động</b> (vòng trong): đi làm, nhận lương, trả chi phí, mua tài sản. Hoàn thành khi <b>thu nhập thụ động lớn hơn tổng chi phí</b> hằng tháng.</li><li><b>Vòng 2 – Vòng Bứt Phá</b> (vòng ngoài): thắng khi mua được giấc mơ hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())}.</li></ul>
@@ -3549,7 +3565,7 @@ hopTo=function(p,big){if(!TPS.on||big||!tokens.get(p.id))return _hopBoard(p,big)
 const _boardFromState=boardFromState;
 boardFromState=function(){_boardFromState();roadWorld(false);roadReset();tpsApply();};
 tpsApply();tpsBtn();
-$('#viewBtn').onclick=()=>{tpsSet(!TPS.on);toast(TPS.on?'Góc nhìn nhân vật: đi qua cảnh đời bên đường':'Góc nhìn bàn cờ');};
+$('#viewBtn').onclick=()=>{if(VIEW!=='3d'){setView('3d');toast('Bàn cờ 3D');return;}tpsSet(!TPS.on);toast(TPS.on?'Góc nhìn nhân vật: đi qua cảnh đời bên đường':'Góc nhìn bàn cờ');};
 
 /* ================= Bản tin chạy chữ ================= */
 /* Tin thật lấy từ trạng thái ván chơi (chu kỳ, giá, lãi suất, sự kiện của người chơi), xen lẫn tin đồn, tin bịp:
@@ -3600,4 +3616,34 @@ async function start(data){
 }
 window.claude?.hot?.snapshot?.(()=>({G:G&&G.players?G:null}));
 window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
+
+/* ===== Đường đời: màn hình chính. Các ô đi theo đường xoắn, người chơi là chấm màu. Bàn 3D là chế độ xem thêm. ===== */
+let VIEW=(()=>{try{return localStorage.getItem('dongtien3d.view')==='3d'?'3d':'road';}catch(e){return 'road';}})();
+function setView(v){VIEW=v==='3d'?'3d':'road';try{localStorage.setItem('dongtien3d.view',VIEW);}catch(e){}applyView();}
+function applyView(){const c=document.getElementById('scene'),L=document.getElementById('life');if(c)c.style.display=VIEW==='3d'?'block':'none';if(L)L.hidden=VIEW!=='road';renderLife();}
+const LIFE_COLS=8;
+function lifeIndexAt(row,col){return row*LIFE_COLS+(row%2?LIFE_COLS-1-col:col);}
+function lifeTokens(ring,i){return G.players.filter(q=>!q.out&&!!q.ft===(ring==='ft')&&(ring==='ft'?q.ftPos:q.pos)===i);}
+function lifeTile(ring,i,cur){const isIn=ring==='in';const t=isIn?BOARD[i]:FT[i].t;const inf=isIn?(TILE_INFO[t]||{lines:[t],col:'#888'}):(FT_INFO[t]||{lines:[t],col:'#888'});
+  const toks=lifeTokens(ring,i).map(q=>`<i class="lt-tok" style="background:${q.color}" title="${esc(q.name)}">${esc((q.name||'?').trim().slice(0,1).toUpperCase())}</i>`).join('');
+  const here=cur&&!!cur.ft===(ring==='ft')&&(ring==='ft'?cur.ftPos:cur.pos)===i;
+  const name=isIn?(inf.lines||[t]).join(' '):(FT[i].name||(inf.lines||[t]).join(' '));
+  return `<button class="lt-tile${here?' now':''}" data-ring="${ring}" data-i="${i}" style="--tc:${inf.col}" aria-label="${esc(name)}"><span class="lt-lab">${esc(name)}</span><span class="lt-toks">${toks}</span></button>`;}
+function lifeRow(ring,rows,cur){let h='';for(let r=0;r<rows;r++){for(let c=0;c<LIFE_COLS;c++)h+=lifeTile(ring,lifeIndexAt(r,c),cur);}return `<div class="lt-grid">${h}</div>`;}
+function renderLife(){const L=document.getElementById('life');if(!L||L.hidden||!G||!G.players||!G.players.length)return;
+  const cur=curP();const ftOn=G.players.some(p=>p.ft&&!p.out);
+  const head=cur?`<div class="lt-head"><span>${esc(cur.name)} · ${Math.floor(cur.age)} tuổi</span><small>Lượt ${G.turn} · năm ${yearOf()}</small></div>`:'';
+  L.innerHTML=`${head}
+    <div class="lt-sec"><span>Vòng Mưu Sinh</span><small>${BOARD.length} ô</small></div>${lifeRow('in',BOARD.length/LIFE_COLS,cur)}
+    <div class="lt-sec"><span>Vòng Bứt Phá${ftOn?'':' · chưa ai vào'}</span><small>${FT.length} ô</small></div>${lifeRow('ft',FT.length/LIFE_COLS,cur)}
+    <p class="lt-note">Bấm một ô để xem ô đó làm gì. Chấm màu là người chơi đang đứng ở ô đó.</p>`;}
+document.getElementById('life').addEventListener('click',e=>{const b=e.target.closest('.lt-tile');if(!b||!G||!G.players)return;const ring=b.dataset.ring,i=+b.dataset.i;
+  const isIn=ring==='in';const t=isIn?BOARD[i]:FT[i].t;const inf=isIn?(TILE_INFO[t]||{}):(FT_INFO[t]||{});
+  openViewer({tone:'payday',eyebrow:isIn?'Vòng Mưu Sinh':'Vòng Bứt Phá',title:esc(isIn?(inf.lines||[t]).join(' '):(FT[i].name||(inf.lines||[t]).join(' '))),body:`<p>${esc(inf.desc||'')}</p>`});});
+/* mỗi bước đi trên đường đời được hiện ngay, không cần chờ hiệu ứng 3D */
+const _hopBeforeRoad=hopTo;
+hopTo=function(p,big){if(VIEW!=='road')return _hopBeforeRoad(p,big);renderLife();return new Promise(r=>setTimeout(r,big?160:240)).then(renderLife);};
+const _boardFromStateRoad=boardFromState;
+boardFromState=function(){_boardFromStateRoad();renderLife();};
+applyView();
 </script>
