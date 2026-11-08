@@ -68,6 +68,7 @@ body.tk-on #topbar{padding-top:calc(env(safe-area-inset-top,0px) + 30px)}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
 .stat{background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:7px 9px;min-width:0}
 .stat label{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:420px){.stat label{white-space:normal;font-size:9px;line-height:1.15;letter-spacing:.02em}.who{font-size:12px}.who b{font-size:14px}}
 .stat strong{display:block;font-family:var(--f-num);font-size:14px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .progress{margin-top:10px}
 .interests{margin:6px 0 0;font-size:12px;color:var(--muted);line-height:1.35}
@@ -1002,7 +1003,7 @@ function afterLine(p,amt){const left=p.cash+p.dep-amt;return line('Tiền mặt 
 function calLabel(){if(!G||!G.players)return '';const m=(G.month||0)%12+1;return `T${m}–T${Math.min(12,m+mpt()-1)}/${yearOf()}`;}
 
 /* ================= HUD & bảng xếp hạng ================= */
-let rankOpen=true;try{rankOpen=localStorage.getItem('dongtien3d.rank')!=='0'}catch(e){}
+let rankOpen=innerWidth>600;try{const v=localStorage.getItem('dongtien3d.rank');if(v!=null)rankOpen=v!=='0'}catch(e){}
 function rankScore(p){if(p.won)return 1e6;if(p.ft)return 1e3+(p.ftCF-p.ftStart)/ftGoal();if(p.out)return -1;const c=calc(p);return c.totalExp?c.passive/c.totalExp:0;}
 function renderChips(){
   const el=$('#rank'),tg=$('#rankToggle');tg.classList.toggle('closed',!rankOpen);tg.setAttribute('aria-expanded',rankOpen);el.hidden=!rankOpen;if(!rankOpen)return;
@@ -2944,7 +2945,7 @@ function layoutCamera(){
   const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);
   const hudH=($('#hud').offsetHeight||0),topH=($('#topbar').offsetHeight||0),d=Math.max(0,hudH-topH),vh=Math.max(120,h-hudH-topH);$('#toasts').style.top=(topH+6)+'px';
   camera.aspect=w/(h+d);camera.setViewOffset(w,h+d,0,d,w,h);
-  const tanH=Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),span=10.6;
+  const tanH=Math.tan(THREE.MathUtils.degToRad(camera.fov/2)),span=(!(typeof TPS!=='undefined'&&TPS.on)&&w<600)?7.4:10.6;
   baseR=Math.max(span*(h+d)/(2*tanH*w*.98),span*.8*(h+d)/(2*tanH*vh))+1.5;camera.updateProjectionMatrix();
 }
 addEventListener('resize',layoutCamera);
@@ -3059,7 +3060,7 @@ function makeRoomEnv(){const sc=new THREE.Scene(),geo=new THREE.BoxGeometry();ge
   [[50,[-16.116,14.37,8.208],[.1,2.428,2.739]],[50,[-16.109,18.021,-8.207],[.1,2.425,2.751]],[17,[14.904,12.198,-1.832],[.15,4.265,6.331]],[43,[-.462,8.89,14.52],[4.38,5.441,.088]],[20,[3.235,11.486,-12.541],[2.5,2,.1]],[100,[0,20,0],[1,.1,1]]].forEach(([i,p,s])=>add(al(i),p,0,s));
   return sc;}
 /* Điện thoại và máy ít nhân mặc định đồ họa Nhẹ để khỏi nóng; người chơi vẫn đổi được trong Menu */
-const WEAK_DEVICE=/iPhone|iPod|Android/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||(navigator.hardwareConcurrency||8)<=4;
+const WEAK_DEVICE=/iPhone|iPod|Android/i.test(navigator.userAgent)||(typeof matchMedia==='function'&&matchMedia('(pointer:coarse)').matches&&Math.min(screen.width,screen.height)<800)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||(navigator.hardwareConcurrency||8)<=4;
 let GFX=WEAK_DEVICE?'low':'high';try{GFX=localStorage.getItem('dongtien3d.gfx')||GFX}catch(e){}
 let envTex=null;
 function applyGfx(){const hi=GFX==='high';
