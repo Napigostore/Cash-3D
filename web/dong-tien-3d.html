@@ -1291,6 +1291,9 @@ function landing(p){
   endTurn();
 }
 function cardOpp(p){
+  const ht=!p.bot&&topPref(p);
+  if(ht){const big=tier(p)>=2&&p.cash>400*TR&&Math.random()<.5;const pd=pick(PREF_DEALS[ht][big?'b':'s'])();
+    return openModal({tone:'opp',eyebrow:'Cơ hội · Hợp gu bạn',title:'Thương vụ hợp sở thích',art:art('opp'),story:'Hồ sơ sở thích của bạn cho thấy đây là thương vụ hợp gu nhất.',acts:[{label:'Xem thương vụ',cls:'primary',fn:()=>showDeal(p,pd)}],bot:()=>showDeal(p,pd)});}
   const go=big=>{if(p.net>0){p.net--;const a=big?drawBig():drawSmall(),b=big?drawBig():drawSmall();return chooseOf(p,[a,b]);}showDeal(p,big?drawBig():drawSmall());};
   const tr=tier(p);
   openModal({tone:'opp',eyebrow:`Cơ hội · Giai đoạn ${TIERS[tr].n}`,title:'Chọn loại thương vụ',art:art('opp'),body:`<p>Bạn có <b class="num">${fmt(p.cash)}</b> tiền mặt${p.dep?` và ${fmt(p.dep)} tiết kiệm`:''}, hạn mức vay tiêu dùng còn <b class="num">${fmt(Math.max(0,loanCap(p)-p.loan))}</b>.</p><p><b>Nhỏ:</b> cổ phiếu, trái phiếu, vàng, phòng trọ, ki-ốt, kinh doanh nhỏ (vốn vài chục triệu).<br><b>Lớn:</b> ${tr>=2?TIERS[tr].d+'.':`<span class="warn">Đang khóa.</span> Vốn đầu tư từ ${fmt(TIER_NW[2])} mới được giới thiệu chung cư, nhà đất, chuỗi cà phê, siêu thị mini, farm, góp vốn công ty.`}</p>${p.net>0?`<div class="note">Bạn có ${p.net} điểm quan hệ: lần này được xem 2 thương vụ và chọn cái tốt hơn.</div>`:''}`,
