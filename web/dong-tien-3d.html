@@ -1293,8 +1293,41 @@ function runEvents(p,done){
 }
 
 /* ================= vòng Người lao động: các ô ================= */
+/* ===== Đường đời (bản thử): hành trình theo tuổi, thay cho vòng tròn ===== */
+function recordTrail(p){p.trail=p.trail||[];p.trail.push({a:+(+p.age).toFixed(1),t:BOARD[p.pos]});if(p.trail.length>300)p.trail.shift();}
+function lifePathHTML(p){
+  const MIN=20,MAX=70,pos=a=>Math.max(0,Math.min(100,(a-MIN)/(MAX-MIN)*100));
+  const tr=p.trail||[];
+  const ticks=[];for(let a=MIN;a<=MAX;a+=10)ticks.push(`<div class="lp-tick" style="left:${pos(a)}%"><span>${a}</span></div>`);
+  const dots=tr.map((e,i)=>{const inf=TILE_INFO[e.t]||{col:'#999',lines:[e.t]};return `<i class="lp-dot" title="${esc(inf.lines.join(' '))} · ${Math.floor(e.a)} tuổi" style="left:${pos(e.a)}%;background:${inf.col};top:${i%2?'62%':'22%'}"></i>`;}).join('');
+  const s=S(p),c=calc(p);
+  const bars=['rep','happy','rel','health','know'].map(k=>`<div class="lp-stat"><label>${STATS[k].n}</label><div class="lp-bar"><i style="width:${s[k]}%;background:${STATS[k].c}"></i></div><b>${s[k]}</b></div>`).join('');
+  const recent=tr.slice(-6).reverse().map(e=>{const inf=TILE_INFO[e.t]||{lines:[e.t]};return `<li><b>${Math.floor(e.a)} tuổi</b> · ${esc(inf.lines.join(' '))}</li>`;}).join('');
+  return `<style>
+  .lp-track{position:relative;height:120px;margin:18px 4px 6px}
+  .lp-line{position:absolute;left:0;right:0;top:50%;height:6px;margin-top:-3px;border-radius:3px;background:linear-gradient(90deg,#f5c542,#ffd86b)}
+  .lp-tick{position:absolute;top:50%;width:2px;height:14px;margin-top:-7px;background:var(--muted,#888)}
+  .lp-tick span{position:absolute;top:18px;left:-12px;width:24px;text-align:center;font-size:11px;color:var(--muted,#888)}
+  .lp-dot{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+  .lp-me{position:absolute;top:-6px;transform:translateX(-50%);text-align:center}
+  .lp-me:before{content:'';display:block;width:0;height:0;margin:0 auto;border:8px solid transparent;border-top:12px solid #e0566b}
+  .lp-me span{display:block;font-weight:700;font-size:12px;white-space:nowrap;transform:translateX(-30%)}
+  .lp-stat{display:grid;grid-template-columns:120px 1fr 32px;gap:8px;align-items:center;margin:6px 0;font-size:13px}
+  .lp-bar{height:8px;border-radius:4px;background:rgba(127,127,127,.2);overflow:hidden}.lp-bar i{display:block;height:100%}
+  .lp ul{padding-left:18px;margin:6px 0}.lp li{margin:4px 0;font-size:13px}
+  </style>
+  <div class="lp">
+    <div class="lp-track"><div class="lp-line"></div>${ticks}${dots}<div class="lp-me" style="left:${pos(p.age)}%"><span>${Math.floor(p.age)} tuổi</span></div></div>
+    <p class="lesson">Mỗi chấm là một ô bạn đã dừng lại. Đường đi từ trái sang phải theo tuổi, không lặp vòng như bàn cờ.</p>
+    <div class="facts">${fact('Tiền mặt',fmt(p.cash))}${fact('Thu nhập thụ động',fmt(c.passive)+'/tháng')}${fact('Trạng thái',p.ft?'Tự do tài chính':'Vòng Mưu Sinh',p.ft?'pos':'')}</div>
+    ${bars}
+    <h3>Các điểm đã dừng gần đây</h3>
+    <ul>${recent||'<li>Chưa dừng ô nào.</li>'}</ul>
+  </div>`;
+}
+function openLifePath(p){if(!p)return;openViewer({tone:'payday',eyebrow:'Đường đời · '+p.name,title:'Hành trình của bạn',body:lifePathHTML(p),key:'lp:'+p.id});}
 function landing(p){
-  const t=BOARD[p.pos];
+  recordTrail(p);const t=BOARD[p.pos];
   if(t==='opp')return cardOpp(p);
   if(t==='market')return cardMarket(p);
   if(t==='doodad')return cardDoodad(p);
@@ -1979,8 +2012,8 @@ function pickChar(i,done){
 }
 function syncNames(){draft.forEach((d,i)=>{const el=$('#pname'+i);if(el)d.name=el.value;});}
 function setCount(n){const used=new Set(draft.map(d=>d.prof));while(draft.length<n){let pr;do{pr=Math.floor(Math.random()*PROFS.length);}while(used.has(pr)&&used.size<PROFS.length);used.add(pr);const k=draft.length,bot=k>0;const ud=new Set(draft.map(x=>x.dreamId));let dr=Math.floor(Math.random()*DREAMS.length);if(ud.size<4)while(ud.has(dr))dr=(dr+1)%DREAMS.length;else dr=[...ud][k%ud.size];draft.push({name:bot?BOT_NAMES[k]:`Người chơi ${k+1}`,bot,botLvl:'normal',prof:pr,dreamId:dr,char:CHARS[k%CHARS.length].id,zod:(k*5)%12,col:PCOLORS[(k*3)%PCOLORS.length].c});}draft.length=n;}
-$('#menuBtn').onclick=()=>{const inl=[()=>{closeViewer();showSummary();},()=>{closeViewer();closeModal();if(isOnline())leaveRoom();startedOnline=false;G={dreams:G&&G.dreams};draft=[];showSetup();},()=>{GFX=GFX==='high'?'low':'high';try{localStorage.setItem('dongtien3d.gfx',GFX)}catch(e){}applyGfx();toast('Đồ họa: '+(GFX==='high'?'Đẹp':'Nhẹ'));closeViewer();},()=>{tpsSet(!TPS.on);toast(TPS.on?'Góc nhìn nhân vật: đi qua cảnh đời bên đường':'Góc nhìn bàn cờ');closeViewer();}];
-  openViewer({tone:'downsized',eyebrow:'Ván chơi',title:'Menu',inl,body:`<div class="acts">${G&&G.players?'<button class="btn" data-i="0">Tổng kết ván</button>':''}<button class="btn primary" data-i="1">Bắt đầu ván mới</button><button class="btn" data-i="2">Đồ họa: ${GFX==='high'?'Đẹp':'Nhẹ'} ⇄</button><button class="btn" data-i="3">Góc nhìn: ${TPS.on?'Nhân vật 3D':'Bàn cờ'} ⇄</button></div><p class="lesson">Ván mới sẽ thay thế ván đang chơi. Đồ họa Nhẹ tắt bóng đổ, phản chiếu và đèn sân khấu cho máy yếu. Góc nhìn Nhân vật 3D: nhân vật mặc đồ đúng nghề, khá giả thì đi xe máy, giàu thì lái ô tô; hai bên đường là cảnh đúng nội dung từng ô.</p>`});};
+$('#menuBtn').onclick=()=>{const inl=[()=>{closeViewer();showSummary();},()=>{closeViewer();closeModal();if(isOnline())leaveRoom();startedOnline=false;G={dreams:G&&G.dreams};draft=[];showSetup();},()=>{GFX=GFX==='high'?'low':'high';try{localStorage.setItem('dongtien3d.gfx',GFX)}catch(e){}applyGfx();toast('Đồ họa: '+(GFX==='high'?'Đẹp':'Nhẹ'));closeViewer();},()=>{tpsSet(!TPS.on);toast(TPS.on?'Góc nhìn nhân vật: đi qua cảnh đời bên đường':'Góc nhìn bàn cờ');closeViewer();},()=>{closeViewer();openLifePath(curP());}];
+  openViewer({tone:'downsized',eyebrow:'Ván chơi',title:'Menu',inl,body:`<div class="acts">${G&&G.players?'<button class="btn" data-i="0">Tổng kết ván</button>':''}<button class="btn primary" data-i="1">Bắt đầu ván mới</button><button class="btn" data-i="2">Đồ họa: ${GFX==='high'?'Đẹp':'Nhẹ'} ⇄</button><button class="btn" data-i="3">Góc nhìn: ${TPS.on?'Nhân vật 3D':'Bàn cờ'} ⇄</button>${G&&G.players?'<button class="btn" data-i="4">Đường đời (thử)</button>':''}</div><p class="lesson">Ván mới sẽ thay thế ván đang chơi. Đồ họa Nhẹ tắt bóng đổ, phản chiếu và đèn sân khấu cho máy yếu. Góc nhìn Nhân vật 3D: nhân vật mặc đồ đúng nghề, khá giả thì đi xe máy, giàu thì lái ô tô; hai bên đường là cảnh đúng nội dung từng ô.</p>`});};
 function showRules(){
   openViewer({tone:'payday',key:'rules',eyebrow:'Luật chơi',title:'Dòng Tiền 3D chơi thế nào?',body:`<div class="rules">
   <h3>Hai vòng chơi</h3><ul><li><b>Vòng 1 – Người lao động</b> (vòng trong): đi làm, nhận lương, trả chi phí, mua tài sản. Hoàn thành khi <b>thu nhập thụ động lớn hơn tổng chi phí</b> hằng tháng.</li><li><b>Vòng 2 – Vòng Bứt Phá</b> (vòng ngoài): thắng khi mua được giấc mơ hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())}.</li></ul>
