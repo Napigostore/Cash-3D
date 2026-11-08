@@ -367,7 +367,10 @@ const BOT_NAMES=['Máy Minh','Máy Hoa','Máy Khang','Máy Vy','Máy Phúc','Má
 /* Bảng ô vòng Mưu Sinh. Ô 'W' là ô đời sống: mỗi ván được rút ngẫu nhiên từ LIFE_POOL, nên thứ tự ô khác nhau giữa các ván. */
 const BOARD_TEMPLATE=['salary','doodad','W','charity','W','midbonus','W','market','W','free','W','downsized','W','tetbonus','W','market','W','doodad','W','baby','W','free','doodad','market'];
 const LIFE_POOL=[['opp',30],['party',20],['job',20],['doodad',10],['market',10],['milestone',6],['charity',4]];
-function makeBoard(){const tot=LIFE_POOL.reduce((a,[,w])=>a+w,0);return BOARD_TEMPLATE.map(t=>{if(t!=='W')return t;let r=Math.random()*tot;for(const [k,w] of LIFE_POOL){if((r-=w)<0)return k;}return 'opp';});}
+/* Luôn có đúng 3 ô Thương vụ (chỗ duy nhất để mua tài sản), phần còn lại rút theo LIFE_POOL không kể 'opp'. */
+function makeBoard(){const slots=BOARD_TEMPLATE.map((t,i)=>t==='W'?i:-1).filter(i=>i>=0);const deal=new Set();while(deal.size<3)deal.add(slots[Math.floor(Math.random()*slots.length)]);
+  const pool=LIFE_POOL.filter(([k])=>k!=='opp'),tot=pool.reduce((a,[,w])=>a+w,0);
+  return BOARD_TEMPLATE.map((t,i)=>{if(t!=='W')return t;if(deal.has(i))return 'opp';let r=Math.random()*tot;for(const [k,w] of pool){if((r-=w)<0)return k;}return 'party';});}
 let BOARD=BOARD_TEMPLATE.map(t=>t==='W'?'opp':t);
 function setBoard(b){BOARD=Array.isArray(b)&&b.length===BOARD_TEMPLATE.length?b:makeBoard();}
 const TILE_INFO={
