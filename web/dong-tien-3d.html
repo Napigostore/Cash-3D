@@ -322,9 +322,9 @@ function pmt(P,rate,years){if(P<=0)return 0;const r=rate/12,n=Math.max(1,Math.ro
 const mpt=()=>mode().mpt;     // số tháng cuộc đời mỗi lượt
 const START_YEAR=2026;
 const MODES={
- easy:{n:'Dễ',sub:'Tập chơi',desc:'Không lạm phát, thương vụ tốt hơn, có gợi ý nên mua hay không. Phần lớn người chơi thắng, khoảng 40–45 tuổi.',deals:9,mpt:4,yMul:1.05,sMul:1.05,rMul:1,ftGoal:1e9,infl:0,raise:[.05,.05],promo:0,clRate:.01,scam:false,life:false,teaser:false,news:false,retire:false,insurance:false,goodBias:.6,downSkip:1,benefit:.6,midBonus:[.5,.5],tetBonus:[1,1],doodadMul:.7},
- medium:{n:'Vừa',sub:'Có kỷ luật',desc:'Lạm phát nhẹ, lừa đảo, con cái đi học, lãi suất ưu đãi, chu kỳ thị trường. Cần đi đúng luật làm giàu: khoảng 1 ván trên 4 có người thắng, thường ở tuổi 45–50.',deals:8,mpt:4,yMul:.8,sMul:.75,rMul:.92,ftGoal:1.5e9,infl:.015,raise:[.02,.04],promo:.03,clRate:.012,scam:true,life:true,teaser:true,news:true,retire:true,insurance:true,goodBias:.1,downSkip:1,benefit:.6,midBonus:[.2,.6],tetBonus:[.5,1.5],doodadMul:.9},
- hard:{n:'Khó',sub:'Như cuộc đời',desc:'Lạm phát, lừa đảo, con cái đi học, bố mẹ ốm, lãi suất ưu đãi, chu kỳ thị trường, nghỉ hưu ở 60. Chỉ khoảng 1 ván trên 20 có người thắng, cần kỷ luật và chút may mắn.',deals:7,mpt:4,yMul:.52,sMul:.34,bizRisk:true,rMul:.85,ftGoal:2e9,infl:.035,raise:[0,.08],promo:.08,clRate:.015,scam:true,life:true,teaser:true,news:true,retire:true,insurance:true,goodBias:0,downSkip:2,benefit:.6,midBonus:[0,1],tetBonus:[0,2],doodadMul:1}};
+ easy:{n:'Dễ',sub:'Tập chơi',desc:'Không lạm phát, thương vụ tốt hơn, có gợi ý nên mua hay không. Khoảng 1 người chơi trên 2 thắng, thường ở tuổi 40–45.',deals:9,dreamMul:1,botLvl:'safe',mpt:4,yMul:1.05,sMul:1.05,rMul:1,ftGoal:1e9,infl:0,raise:[.05,.05],promo:0,clRate:.01,scam:false,life:false,teaser:false,news:false,retire:false,insurance:false,goodBias:.6,downSkip:1,benefit:.6,midBonus:[.5,.5],tetBonus:[1,1],doodadMul:.7},
+ medium:{n:'Vừa',sub:'Có kỷ luật',desc:'Lạm phát, lừa đảo, con cái đi học, lãi suất ưu đãi, chu kỳ thị trường. Cần đi đúng luật làm giàu: khoảng 1 người chơi trên 4 thắng, thường ở tuổi 55–60.',deals:8,dreamMul:6,botLvl:'normal',mpt:4,yMul:.6,sMul:.5,rMul:.85,ftGoal:1.5e9,infl:.03,raise:[.02,.04],promo:.03,clRate:.012,scam:true,life:true,teaser:true,news:true,retire:true,insurance:true,goodBias:.1,downSkip:1,benefit:.6,midBonus:[.2,.6],tetBonus:[.5,1.5],doodadMul:.9},
+ hard:{n:'Khó',sub:'Như cuộc đời',desc:'Lạm phát, lừa đảo, con cái đi học, bố mẹ ốm, lãi suất ưu đãi, chu kỳ thị trường, nghỉ hưu ở 60. Khoảng 1 người chơi trên 20 thắng, cần kỷ luật và chút may mắn.',deals:7,dreamMul:1.4,botLvl:'normal',mpt:4,yMul:.45,sMul:.28,bizRisk:true,rMul:.85,ftGoal:6e9,infl:.05,raise:[0,.08],promo:.08,clRate:.015,scam:true,life:true,teaser:true,news:true,retire:true,insurance:true,goodBias:0,downSkip:2,benefit:.6,midBonus:[0,1],tetBonus:[0,2],doodadMul:1}};
 const mode=()=>MODES[G&&G.mode]||MODES.easy;
 const clr=()=>mode().clRate;
 const yearOf=()=>START_YEAR+Math.floor((G&&G.month||0)/12);
@@ -1776,7 +1776,7 @@ function bioHTML(p){const kids=p.kidAges.length,re=p.assets.filter(a=>a.type==='
   return `<div class="bio"><h4>${bioTitle(p)}</h4><p>${parts.join(' ')}</p></div>`;}
 /* ================= Giải trí, bộ sưu tập, Di sản ================= */
 /* Tháp Maslow: đủ tiền rồi, người ta cần được công nhận và cống hiến. Thắng ở Vòng Bứt Phá cần đủ Di sản. */
-const LEGACY_WIN={easy:20,medium:30,hard:40};
+const LEGACY_WIN={easy:20,medium:40,hard:60};
 const legacyNeed=()=>LEGACY_WIN[(G&&G.mode)||'easy'];
 const legacyBonus=p=>Math.floor(S(p).legacy/20);
 /* bộ sưu tập: hiếm (2 xúc xắc giống nhau) và huyền thoại (3 xúc xắc giống nhau) */
@@ -2000,9 +2000,9 @@ function showSetup(resume){
     else if(b.dataset.char){const k=+b.dataset.char;avatarPicker(draft[k],v=>{Object.assign(draft[k],v);render();},k);}
     else if(b.id==='onlineBtn'){showOnline();}
     else if(b.id==='resumeBtn'){G=resume;s.hidden=true;boardFromState();G.phase='busy';afterEvents(curP());}
-    else if(b.id==='startBtn'){const ids=[...new Set(draft.map(d=>d.dreamId))];while(ids.length<4){const k=Math.floor(Math.random()*DREAMS.length);if(!ids.includes(k))ids.push(k);}const dreams=ids.slice(0,4).map(k=>DREAMS[k]);draft.forEach(d=>d.dream=Math.max(0,ids.indexOf(d.dreamId)));G={v:STATE_V,mode:draftMode,scenario:draftScen,quiz:draftQuiz,dreams,board:makeBoard(draftMode),players:[],cur:0,turn:1,month:0,phase:'roll',log:[],stockIdx:draftScen==='crisis'?.7:1,rateAdj:draftScen==='crisis'?.03:0,cyc:{land:draftScen==='bubble'?'boom':draftScen==='crisis'?'bust':'normal',re:draftScen==='crisis'?'bust':'normal',stock:draftScen==='crisis'?'bust':'normal'}};
+    else if(b.id==='startBtn'){const ids=[...new Set(draft.map(d=>d.dreamId))];while(ids.length<4){const k=Math.floor(Math.random()*DREAMS.length);if(!ids.includes(k))ids.push(k);}const dreams=ids.slice(0,4).map(k=>DREAMS[k]).map(d=>({...d,c:Math.round(d.c*(MODES[draftMode].dreamMul||1))}));draft.forEach(d=>d.dream=Math.max(0,ids.indexOf(d.dreamId)));G={v:STATE_V,mode:draftMode,scenario:draftScen,quiz:draftQuiz,dreams,board:makeBoard(draftMode),players:[],cur:0,turn:1,month:0,phase:'roll',log:[],stockIdx:draftScen==='crisis'?.7:1,rateAdj:draftScen==='crisis'?.03:0,cyc:{land:draftScen==='bubble'?'boom':draftScen==='crisis'?'bust':'normal',re:draftScen==='crisis'?'bust':'normal',stock:draftScen==='crisis'?'bust':'normal'}};
       setBoard(G.board);G.players=draft.map((d,i)=>newPlayer(i,d,PROFS[d.prof],d.name.trim()||`Người chơi ${i+1}`,draftScen));
-      G.players.forEach(p=>log(`Bắt đầu ${Math.floor(p.age)} tuổi: ${p.prof}, lương ${fmt(p.salary)}, tiền mặt ${fmt(p.cash)}`,p));draft=[];s.hidden=true;ensureAudio();boardFromState();
+      G.players.forEach(p=>{if(p.bot)p.botLvl=MODES[draftMode].botLvl||'normal';});G.players.forEach(p=>log(`Bắt đầu ${Math.floor(p.age)} tuổi: ${p.prof}, lương ${fmt(p.salary)}, tiền mặt ${fmt(p.cash)}`,p));draft=[];s.hidden=true;ensureAudio();boardFromState();
       G.phase='busy';afterEvents(curP());}
   };
 }
@@ -2352,7 +2352,7 @@ function pickOnline(kind,i){const s=roomData.seats[i];
   if(kind==='dream'){const inl=DREAMS.map((d,k)=>()=>{updSeat((x,j)=>j===i?{...x,dreamId:k}:null);showRoom();});pendingJingle=null;return openViewer({tone:'ft',key:'ol:pick',eyebrow:'Phòng',title:'Chọn ước mơ',inl,body:`<div class="dreamgrid">${DREAMS.map((d,k)=>`<button class="dreamc ${s.dreamId===k?'on':''}" data-i="${k}">${art(DREAM_ART[d.a])}<b>${d.n}</b><small>${fmt(d.c)}</small></button>`).join('')}</div>`});}
   avatarPicker({zod:s.zod,col:s.col,char:s.char},v=>{updSeat((x,j)=>j===i?{...x,...v}:null);FB.db.collection('users').doc(ME.uid).update({char:v.char,zod:v.zod}).catch(()=>{});showRoom();},i);}
 async function startOnlineGame(){const r=roomData;const ids=[...new Set(r.seats.map(s=>s.dreamId))];while(ids.length<4){const k=Math.floor(Math.random()*DREAMS.length);if(!ids.includes(k))ids.push(k);}
-  const g={v:STATE_V,mode:r.mode,scenario:'normal',quiz:false,dreams:ids.slice(0,4).map(k=>DREAMS[k]),board:makeBoard(r.mode),players:[],cur:0,turn:1,month:0,phase:'await',log:[],stockIdx:1,rateAdj:0,btcIdx:1,cyc:{land:'normal',re:'normal',stock:'normal'},online:{room:r.id,host:r.host}};
+  const g={v:STATE_V,mode:r.mode,scenario:'normal',quiz:false,dreams:ids.slice(0,4).map(k=>DREAMS[k]).map(d=>({...d,c:Math.round(d.c*(MODES[r.mode].dreamMul||1))})),board:makeBoard(r.mode),players:[],cur:0,turn:1,month:0,phase:'await',log:[],stockIdx:1,rateAdj:0,btcIdx:1,cyc:{land:'normal',re:'normal',stock:'normal'},online:{room:r.id,host:r.host}};
   G=g;setBoard(G.board);G.players=r.seats.map((s,i)=>{const p=newPlayer(i,{...s,dream:Math.max(0,ids.indexOf(s.dreamId))},PROFS[s.prof],s.name,'normal');p.uid=s.uid;return p;});
   G.players.forEach(p=>log(`Bắt đầu ${Math.floor(p.age)} tuổi: ${p.prof}, lương ${fmt(p.salary)}`,p));
   await FB.db.collection('rooms').doc(r.id).update({status:'playing',state:JSON.stringify(G),rev:1,updated:now()});}
