@@ -63,11 +63,14 @@ def main(version_string):
              'Tap "Start a new game" (1 player vs 3 bots by default), then "Roll the dice". It is an educational board game about '
              'personal finance: all prices, stocks and companies are fictional simulations, no ads. Round 1 is free; PRO (monthly or yearly auto-renewable subscription, or a lifetime non-consumable) unlocks round 2 and the expert advisor. The purchase sheet opens from the crown button (top right), the Free time tile, or when a player reaches financial freedom; it has Restore and links to the Terms of Use and Privacy Policy. '
              'The app is in English or Vietnamese following the device language; the EN/VI button at the top right switches it. '
-             'WHAT IS DIFFERENT: the game is a single-player and pass-and-play life simulation with dice, a 3D board, a personal-interest system: '
+             'WHAT IS DIFFERENT: the game is a single-player and pass-and-play life simulation with dice, a personal-interest system: '
              'choices in the Free Time and event cards reveal what the player likes (travel, sport, family, learning, wealth, food, art, tech) and the '
              'Opportunity cards then offer deals matching those interests (for example a homestay or a football pitch). Each player gets a different life. '
-             'The 3D view (3D button in the top bar) shows the current ring as a road with scenes from the player life. '
-             'Start a new game from the Menu (⟲) to choose the scenario: Normal, New graduate, Crisis or Housing bubble.')
+             'The default view is a 3D character view of the player moving along the street. The 3D button in the top bar, or Menu > View, switches to '
+             'the overhead board and to the Life path: a plain 2D map of the same tiles, which turns the 3D renderer off to save battery. '
+             'Each tile shows its icon and name; tapping a tile explains what it does. Life path was added in this version. '
+             'Start a new game from the Menu (⟲) to choose the scenario (Normal, New graduate, Crisis or Housing bubble) and the difficulty (Easy, Medium, Hard). '
+             'Difficulty changes how many deals appear and how much AI opponents earn; it does not change the rules of winning.')
     attributes = {'demoAccountRequired': False, 'notes': notes}
     if detail:
         call('PATCH', f'/v1/appStoreReviewDetails/{detail["id"]}', {'data': {'type': 'appStoreReviewDetails', 'id': detail['id'], 'attributes': attributes}})
