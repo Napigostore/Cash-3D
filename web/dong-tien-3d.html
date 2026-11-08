@@ -272,21 +272,28 @@ body.tk-on #topbar{padding-top:calc(env(safe-area-inset-top,0px) + 30px)}
 .review ul{margin:4px 0 8px;padding-left:16px}.review li{margin:2px 0;line-height:1.45}
 @media (prefers-reduced-motion:reduce){.sheet,.toast,#rollNum.pop,.botbar i,#paySlip.in,#coinFly i{animation:none}}
 
-#life{position:fixed;inset:0;overflow:auto;z-index:1;padding:92px 14px 340px;background:#f3ead6 radial-gradient(#dccba6 1px,transparent 1.3px) 0 0/18px 18px;color:#2b2a26;-webkit-overflow-scrolling:touch}
+#life{position:fixed;inset:0;overflow:auto;z-index:1;padding:86px 12px 330px;color:#2a2f2a;-webkit-overflow-scrolling:touch;background:radial-gradient(120% 55% at 15% 0%,#dff0c8 0,transparent 62%),radial-gradient(100% 60% at 100% 100%,#fbe3b8 0,transparent 60%),linear-gradient(#f6f1e4,#efe6cf)}
 #life[hidden]{display:none}
-.lt-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:800;color:#6b4f1d;font-size:14px;margin:4px 0 4px}
-.lt-head small{font-weight:600;color:#7a6642;font-size:12px}
-.lt-sec{margin:20px 0 8px;font-size:11px;font-weight:800;letter-spacing:.14em;color:#8a6b2b;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.lt-sec::after{content:'';flex:1;height:2px;margin-left:10px;background:repeating-linear-gradient(90deg,#8a6b2b 0 6px,transparent 6px 10px);opacity:.6}
-.lt-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px 5px}
-.lt-tile{position:relative;aspect-ratio:1/1;min-width:0;border:2px solid #2b2a26;border-radius:9px;background:#fffaf0;padding:5px 2px 2px;font:inherit;font-size:8.5px;line-height:1.05;color:#2b2a26;display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;text-align:left;box-shadow:2px 3px 0 #2b2a26;cursor:pointer;overflow:hidden}
-.lt-tile::before{content:'';position:absolute;left:0;right:0;top:0;height:5px;background:var(--tc,#888)}
-.lt-tile.now{outline:3px solid #e0566b;outline-offset:2px}
-.lt-tile.on{background:#fff0c9}
-.lt-lab{font-weight:800;overflow:hidden;word-break:break-word;hyphens:auto}
-.lt-toks{display:flex;flex-wrap:wrap;gap:2px;justify-content:flex-end}
-.lt-tok{width:15px;height:15px;border-radius:50%;color:#fff;font-size:8px;font-style:normal;font-weight:800;display:inline-flex;align-items:center;justify-content:center;border:1px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.45)}
-.lt-note{font-size:12px;color:#5c5240;margin:12px 2px 0;line-height:1.4}
+.lt-top{background:#fff;border-radius:18px;padding:12px 14px 14px;box-shadow:0 4px 0 rgba(0,0,0,.12),0 10px 22px rgba(0,0,0,.08);margin-bottom:6px}
+.lt-top-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.lt-name{font-weight:800;font-size:16px}
+.lt-meta{font-size:12px;color:#6c6758;font-weight:600}
+.lt-age{margin-top:10px;height:10px;border-radius:6px;background:#ece5d2;position:relative;overflow:hidden}
+.lt-age i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#f4b740,#e0566b);border-radius:6px}
+.lt-age-l{display:flex;justify-content:space-between;font-size:10px;color:#8b8474;margin-top:4px;font-weight:700}
+.lt-sec{margin:20px 4px 2px;font-size:12px;font-weight:800;letter-spacing:.12em;color:#5f5a48;display:flex;justify-content:space-between;align-items:center;gap:10px;text-transform:uppercase}
+.lt-track{position:relative}
+.lt-svg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.lt-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(8,1fr);gap:16px 7px;padding:12px 4px 10px}
+.lt-tile{position:relative;min-width:0;aspect-ratio:1/1.08;border:0;border-radius:14px;background:#fff;padding:0;box-shadow:0 3px 0 rgba(0,0,0,.18),0 6px 12px rgba(0,0,0,.10);cursor:pointer;display:flex;flex-direction:column;overflow:hidden;font:inherit;color:#2a2f2a;text-align:center}
+.lt-tile:active{transform:translateY(2px)}
+.lt-band{height:24%;flex:none;background:var(--tc,#888)}
+.lt-ico{flex:1;display:flex;align-items:center;justify-content:center;font-size:clamp(15px,4.4vw,21px);line-height:1}
+.lt-lab{font-size:clamp(7px,2vw,8.5px);font-weight:800;line-height:1.1;padding:0 2px 4px;overflow:hidden;max-height:2.3em}
+.lt-tile.now{box-shadow:0 0 0 3px #fff,0 0 0 6px #e0566b,0 8px 16px rgba(0,0,0,.2)}
+.lt-toks{position:absolute;top:calc(24% - 9px);right:-2px;display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+.lt-tok{width:17px;height:17px;border-radius:50%;color:#fff;font-size:9px;font-weight:800;font-style:normal;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45)}
+.lt-note{font-size:12px;color:#5f5a48;margin:14px 4px 0;line-height:1.45}
 </style>
 
 <canvas id="scene" aria-label="Bàn cờ 3D"></canvas><div id="life" hidden aria-label="Đường đời"></div>
@@ -2032,8 +2039,8 @@ function pickChar(i,done){
 }
 function syncNames(){draft.forEach((d,i)=>{const el=$('#pname'+i);if(el)d.name=el.value;});}
 function setCount(n){const used=new Set(draft.map(d=>d.prof));while(draft.length<n){let pr;do{pr=Math.floor(Math.random()*PROFS.length);}while(used.has(pr)&&used.size<PROFS.length);used.add(pr);const k=draft.length,bot=k>0;const ud=new Set(draft.map(x=>x.dreamId));let dr=Math.floor(Math.random()*DREAMS.length);if(ud.size<4)while(ud.has(dr))dr=(dr+1)%DREAMS.length;else dr=[...ud][k%ud.size];draft.push({name:bot?BOT_NAMES[k]:`Người chơi ${k+1}`,bot,botLvl:'normal',prof:pr,dreamId:dr,char:CHARS[k%CHARS.length].id,zod:(k*5)%12,col:PCOLORS[(k*3)%PCOLORS.length].c});}draft.length=n;}
-$('#menuBtn').onclick=()=>{const inl=[()=>{closeViewer();showSummary();},()=>{closeViewer();closeModal();if(isOnline())leaveRoom();startedOnline=false;G={dreams:G&&G.dreams};draft=[];showSetup();},()=>{GFX=GFX==='high'?'low':'high';try{localStorage.setItem('dongtien3d.gfx',GFX)}catch(e){}applyGfx();toast('Đồ họa: '+(GFX==='high'?'Đẹp':'Nhẹ'));closeViewer();},()=>{setView(VIEW==='road'?'3d':'road');toast(VIEW==='road'?'Đường đời':'Bàn cờ 3D');closeViewer();},()=>{closeViewer();openLifePath(curP());}];
-  openViewer({tone:'downsized',eyebrow:'Ván chơi',title:'Menu',inl,body:`<div class="acts">${G&&G.players?'<button class="btn" data-i="0">Tổng kết ván</button>':''}<button class="btn primary" data-i="1">Bắt đầu ván mới</button><button class="btn" data-i="2">Đồ họa: ${GFX==='high'?'Đẹp':'Nhẹ'} ⇄</button><button class="btn" data-i="3">Xem: ${VIEW==='road'?'Đường đời':'Bàn cờ 3D'} ⇄</button>${G&&G.players?'<button class="btn" data-i="4">Hành trình và số liệu</button>':''}</div><p class="lesson">Ván mới sẽ thay thế ván đang chơi. Đồ họa Nhẹ tắt bóng đổ, phản chiếu và đèn sân khấu cho máy yếu. Góc nhìn Nhân vật 3D: nhân vật mặc đồ đúng nghề, khá giả thì đi xe máy, giàu thì lái ô tô; hai bên đường là cảnh đúng nội dung từng ô.</p>`});};
+$('#menuBtn').onclick=()=>{const inl=[()=>{closeViewer();showSummary();},()=>{closeViewer();closeModal();if(isOnline())leaveRoom();startedOnline=false;G={dreams:G&&G.dreams};draft=[];showSetup();},()=>{GFX=GFX==='high'?'low':'high';try{localStorage.setItem('dongtien3d.gfx',GFX)}catch(e){}applyGfx();toast('Đồ họa: '+(GFX==='high'?'Đẹp':'Nhẹ'));closeViewer();},()=>{setView(nextView());toast(VIEW_NAME[VIEW]);closeViewer();},()=>{closeViewer();openLifePath(curP());}];
+  openViewer({tone:'downsized',eyebrow:'Ván chơi',title:'Menu',inl,body:`<div class="acts">${G&&G.players?'<button class="btn" data-i="0">Tổng kết ván</button>':''}<button class="btn primary" data-i="1">Bắt đầu ván mới</button><button class="btn" data-i="2">Đồ họa: ${GFX==='high'?'Đẹp':'Nhẹ'} ⇄</button><button class="btn" data-i="3">Xem: ${VIEW_NAME[VIEW]} ⇄</button>${G&&G.players?'<button class="btn" data-i="4">Hành trình và số liệu</button>':''}</div><p class="lesson">Ván mới sẽ thay thế ván đang chơi. Đồ họa Nhẹ tắt bóng đổ, phản chiếu và đèn sân khấu cho máy yếu. Góc nhìn Nhân vật 3D: nhân vật mặc đồ đúng nghề, khá giả thì đi xe máy, giàu thì lái ô tô; hai bên đường là cảnh đúng nội dung từng ô.</p>`});};
 function showRules(){
   openViewer({tone:'payday',key:'rules',eyebrow:'Luật chơi',title:'Dòng Tiền 3D chơi thế nào?',body:`<div class="rules">
   <h3>Hai vòng chơi</h3><ul><li><b>Vòng 1 – Người lao động</b> (vòng trong): đi làm, nhận lương, trả chi phí, mua tài sản. Hoàn thành khi <b>thu nhập thụ động lớn hơn tổng chi phí</b> hằng tháng.</li><li><b>Vòng 2 – Vòng Bứt Phá</b> (vòng ngoài): thắng khi mua được giấc mơ hoặc tăng ngày lĩnh lương thêm ${fmt(ftGoal())}.</li></ul>
@@ -2956,6 +2963,7 @@ const clock=new THREE.Clock();
 /* Đồ họa Nhẹ vẽ tối đa 30 khung hình mỗi giây, Đẹp vẽ 60 */
 let lastDraw=0;
 function frame(now){
+  if(VIEW==='road'){FRAME_IDLE=true;return;}
   requestAnimationFrame(frame);
   if(GFX!=='high'&&now-lastDraw<31)return;
   lastDraw=now;
@@ -3565,7 +3573,7 @@ hopTo=function(p,big){if(!TPS.on||big||!tokens.get(p.id))return _hopBoard(p,big)
 const _boardFromState=boardFromState;
 boardFromState=function(){_boardFromState();roadWorld(false);roadReset();tpsApply();};
 tpsApply();tpsBtn();
-$('#viewBtn').onclick=()=>{if(VIEW!=='3d'){setView('3d');toast('Bàn cờ 3D');return;}tpsSet(!TPS.on);toast(TPS.on?'Góc nhìn nhân vật: đi qua cảnh đời bên đường':'Góc nhìn bàn cờ');};
+$('#viewBtn').onclick=()=>{setView(VIEW==='3d'?'board':'3d');toast(VIEW_NAME[VIEW]);};
 
 /* ================= Bản tin chạy chữ ================= */
 /* Tin thật lấy từ trạng thái ván chơi (chu kỳ, giá, lãi suất, sự kiện của người chơi), xen lẫn tin đồn, tin bịp:
@@ -3617,29 +3625,55 @@ async function start(data){
 window.claude?.hot?.snapshot?.(()=>({G:G&&G.players?G:null}));
 window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
 
-/* ===== Đường đời: màn hình chính. Các ô đi theo đường xoắn, người chơi là chấm màu. Bàn 3D là chế độ xem thêm. ===== */
-let VIEW=(()=>{try{return localStorage.getItem('dongtien3d.view')==='3d'?'3d':'road';}catch(e){return 'road';}})();
-function setView(v){VIEW=v==='3d'?'3d':'road';try{localStorage.setItem('dongtien3d.view',VIEW);}catch(e){}applyView();}
-function applyView(){const c=document.getElementById('scene'),L=document.getElementById('life');if(c)c.style.display=VIEW==='3d'?'block':'none';if(L)L.hidden=VIEW!=='road';renderLife();}
+/* ===== Màn hình chơi: 3D nhân vật (mặc định), bàn cờ, hoặc đường đời. Đường đời tắt 3D để tiết kiệm pin. ===== */
+const VIEW_NAME={'3d':'Nhân vật 3D','board':'Bàn cờ','road':'Đường đời'};
+const VIEW_ORDER=['3d','board','road'];
+let VIEW=(()=>{try{const v=localStorage.getItem('dongtien3d.screen');return VIEW_ORDER.includes(v)?v:'3d';}catch(e){return '3d';}})();
+let FRAME_IDLE=false;
+function nextView(){return VIEW_ORDER[(VIEW_ORDER.indexOf(VIEW)+1)%VIEW_ORDER.length];}
+function setView(v){VIEW=VIEW_ORDER.includes(v)?v:'3d';try{localStorage.setItem('dongtien3d.screen',VIEW);}catch(e){}applyView();}
+function applyView(){const c=document.getElementById('scene'),L=document.getElementById('life');const road=VIEW==='road';
+  if(c)c.style.display=road?'none':'block';
+  if(L)L.hidden=!road;
+  if(!road){if(FRAME_IDLE){FRAME_IDLE=false;requestAnimationFrame(frame);}
+    if(VIEW==='3d'&&!TPS.on)tpsSet(true);if(VIEW==='board'&&TPS.on)tpsSet(false);
+    try{arrangeTokens();}catch(e){}}
+  renderLife();}
 const LIFE_COLS=8;
+const LIFE_ICON={opp:'💼',market:'📈',doodad:'🛍️',free:'🌳',salary:'🏦',midbonus:'🏆',tetbonus:'🧧',charity:'🤝',baby:'🍼',downsized:'🏢',job:'👔',party:'🎉',milestone:'🏠',
+  cf:'💰',biz:'🏭',dream:'⭐',lawsuit:'⚖️',audit:'🧾',divorce:'💔',tech:'💡',ipo:'🔔',kcn:'🏗️',fun:'🎡',legacy:'🏛️',golf:'⛳',inspect:'🔍',law:'📜',crash:'📉',fraud:'🎭'};
+function ftTileName(i,inf,t){if(t==='dream'&&G&&G.dreams){const d=G.dreams[FT[i].slot];return d?d.n:'Giấc mơ';}return FT[i].name||(inf.lines||[t]).join(' ');}
 function lifeIndexAt(row,col){return row*LIFE_COLS+(row%2?LIFE_COLS-1-col:col);}
 function lifeTokens(ring,i){return G.players.filter(q=>!q.out&&!!q.ft===(ring==='ft')&&(ring==='ft'?q.ftPos:q.pos)===i);}
 function lifeTile(ring,i,cur){const isIn=ring==='in';const t=isIn?BOARD[i]:FT[i].t;const inf=isIn?(TILE_INFO[t]||{lines:[t],col:'#888'}):(FT_INFO[t]||{lines:[t],col:'#888'});
   const toks=lifeTokens(ring,i).map(q=>`<i class="lt-tok" style="background:${q.color}" title="${esc(q.name)}">${esc((q.name||'?').trim().slice(0,1).toUpperCase())}</i>`).join('');
   const here=cur&&!!cur.ft===(ring==='ft')&&(ring==='ft'?cur.ftPos:cur.pos)===i;
-  const name=isIn?(inf.lines||[t]).join(' '):(FT[i].name||(inf.lines||[t]).join(' '));
-  return `<button class="lt-tile${here?' now':''}" data-ring="${ring}" data-i="${i}" style="--tc:${inf.col}" aria-label="${esc(name)}"><span class="lt-lab">${esc(name)}</span><span class="lt-toks">${toks}</span></button>`;}
-function lifeRow(ring,rows,cur){let h='';for(let r=0;r<rows;r++){for(let c=0;c<LIFE_COLS;c++)h+=lifeTile(ring,lifeIndexAt(r,c),cur);}return `<div class="lt-grid">${h}</div>`;}
+  const name=isIn?(inf.lines||[t]).join(' '):ftTileName(i,inf,t);
+  return `<button class="lt-tile${here?' now':''}" data-ring="${ring}" data-i="${i}" style="--tc:${inf.col}" aria-label="${esc(name)}"><i class="lt-band"></i><span class="lt-ico">${LIFE_ICON[t]||'•'}</span><span class="lt-lab">${esc(name)}</span><span class="lt-toks">${toks}</span></button>`;}
+function lifeTrack(ring,rows,cur){let h='';for(let r=0;r<rows;r++){for(let c=0;c<LIFE_COLS;c++)h+=lifeTile(ring,lifeIndexAt(r,c),cur);}
+  return `<div class="lt-track" data-track="${ring}"><svg class="lt-svg" aria-hidden="true"></svg><div class="lt-grid">${h}</div></div>`;}
+/* đường nối các ô theo đúng thứ tự đi: nền nhựa đường, vạch đứt giữa đường */
+function drawLifeRoad(){const L=document.getElementById('life');if(!L||L.hidden)return;
+  L.querySelectorAll('.lt-track').forEach(tr=>{const ring=tr.dataset.track,n=ring==='in'?BOARD.length:FT.length;const svg=tr.querySelector('svg');
+    const base=tr.getBoundingClientRect();const pts=[];
+    for(let i=0;i<n;i++){const b=tr.querySelector(`.lt-tile[data-ring="${ring}"][data-i="${i}"]`);if(!b)return;const r=b.getBoundingClientRect();pts.push([r.left-base.left+r.width/2,r.top-base.top+r.height/2]);}
+    const d='M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L')+' Z';
+    const col=ring==='in'?'#4f5b4a':'#5a4b6b';
+    svg.setAttribute('viewBox',`0 0 ${base.width} ${base.height}`);
+    svg.innerHTML=`<path d="${d}" fill="none" stroke="rgba(60,50,30,.18)" stroke-width="22" stroke-linejoin="round" transform="translate(0 4)"/><path d="${d}" fill="none" stroke="${col}" stroke-width="16" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#f7e7a6" stroke-width="2.5" stroke-dasharray="7 9" stroke-linejoin="round"/>`;});}
 function renderLife(){const L=document.getElementById('life');if(!L||L.hidden||!G||!G.players||!G.players.length)return;
   const cur=curP();const ftOn=G.players.some(p=>p.ft&&!p.out);
-  const head=cur?`<div class="lt-head"><span>${esc(cur.name)} · ${Math.floor(cur.age)} tuổi</span><small>Lượt ${G.turn} · năm ${yearOf()}</small></div>`:'';
-  L.innerHTML=`${head}
-    <div class="lt-sec"><span>Vòng Mưu Sinh</span><small>${BOARD.length} ô</small></div>${lifeRow('in',BOARD.length/LIFE_COLS,cur)}
-    <div class="lt-sec"><span>Vòng Bứt Phá${ftOn?'':' · chưa ai vào'}</span><small>${FT.length} ô</small></div>${lifeRow('ft',FT.length/LIFE_COLS,cur)}
-    <p class="lt-note">Bấm một ô để xem ô đó làm gì. Chấm màu là người chơi đang đứng ở ô đó.</p>`;}
+  const pct=cur?Math.max(0,Math.min(100,(cur.age-20)/50*100)):0;
+  const top=cur?`<div class="lt-top"><div class="lt-top-row"><span class="lt-name">${esc(cur.name)}</span><span class="lt-meta">${Math.floor(cur.age)} tuổi · lượt ${G.turn} · ${yearOf()}</span></div><div class="lt-age"><i style="width:${pct}%"></i></div><div class="lt-age-l"><span>20 tuổi</span><span>${cur.ft?'Đã tự do tài chính':'Vòng Mưu Sinh'}</span><span>70 tuổi</span></div></div>`:'';
+  L.innerHTML=`${top}
+    <div class="lt-sec"><span>Vòng Mưu Sinh</span><span>${BOARD.length} ô</span></div>${lifeTrack('in',BOARD.length/LIFE_COLS,cur)}
+    <div class="lt-sec"><span>Vòng Bứt Phá${ftOn?'':' · chưa ai vào'}</span><span>${FT.length} ô</span></div>${lifeTrack('ft',FT.length/LIFE_COLS,cur)}
+    <p class="lt-note">Bấm một ô để xem ô đó làm gì. Chấm màu là người chơi đang đứng ở ô đó.</p>`;
+  requestAnimationFrame(drawLifeRoad);}
 document.getElementById('life').addEventListener('click',e=>{const b=e.target.closest('.lt-tile');if(!b||!G||!G.players)return;const ring=b.dataset.ring,i=+b.dataset.i;
   const isIn=ring==='in';const t=isIn?BOARD[i]:FT[i].t;const inf=isIn?(TILE_INFO[t]||{}):(FT_INFO[t]||{});
-  openViewer({tone:'payday',eyebrow:isIn?'Vòng Mưu Sinh':'Vòng Bứt Phá',title:esc(isIn?(inf.lines||[t]).join(' '):(FT[i].name||(inf.lines||[t]).join(' '))),body:`<p>${esc(inf.desc||'')}</p>`});});
+  openViewer({tone:'payday',eyebrow:isIn?'Vòng Mưu Sinh':'Vòng Bứt Phá',title:esc(isIn?(inf.lines||[t]).join(' '):ftTileName(i,inf,t)),body:`<p>${esc(inf.desc||'')}</p>`});});
+window.addEventListener('resize',()=>{if(VIEW==='road')renderLife();});
 /* mỗi bước đi trên đường đời được hiện ngay, không cần chờ hiệu ứng 3D */
 const _hopBeforeRoad=hopTo;
 hopTo=function(p,big){if(VIEW!=='road')return _hopBeforeRoad(p,big);renderLife();return new Promise(r=>setTimeout(r,big?160:240)).then(renderLife);};
