@@ -364,18 +364,26 @@ const DREAMS=[{n:'Vòng quanh thế giới',c:3*TY,a:0},{n:'Du thuyền riêng',
 const CHARS=[{id:'pig',n:'Heo đất'},{id:'cat',n:'Mèo thần tài'},{id:'car',n:'Xe hơi'},{id:'bag',n:'Túi tiền'},{id:'rocket',n:'Tên lửa'},{id:'gem',n:'Kim cương'},{id:'house',n:'Ngôi nhà'},{id:'pawn',n:'Quân cờ'}];
 const BOT_NAMES=['Máy Minh','Máy Hoa','Máy Khang','Máy Vy','Máy Phúc','Máy Ngân'];
 
-const BOARD=['salary','doodad','opp','charity','opp','midbonus','opp','market','opp','free','opp','downsized','opp','tetbonus','opp','market','opp','doodad','opp','baby','opp','free','doodad','market'];
+/* Bảng ô vòng Mưu Sinh. Ô 'W' là ô đời sống: mỗi ván được rút ngẫu nhiên từ LIFE_POOL, nên thứ tự ô khác nhau giữa các ván. */
+const BOARD_TEMPLATE=['salary','doodad','W','charity','W','midbonus','W','market','W','free','W','downsized','W','tetbonus','W','market','W','doodad','W','baby','W','free','doodad','market'];
+const LIFE_POOL=[['opp',30],['party',20],['job',20],['doodad',10],['market',10],['milestone',6],['charity',4]];
+function makeBoard(){const tot=LIFE_POOL.reduce((a,[,w])=>a+w,0);return BOARD_TEMPLATE.map(t=>{if(t!=='W')return t;let r=Math.random()*tot;for(const [k,w] of LIFE_POOL){if((r-=w)<0)return k;}return 'opp';});}
+let BOARD=BOARD_TEMPLATE.map(t=>t==='W'?'opp':t);
+function setBoard(b){BOARD=Array.isArray(b)&&b.length===BOARD_TEMPLATE.length?b:makeBoard();}
 const TILE_INFO={
- opp:{lines:['CƠ HỘI'],col:'#2a9f63',desc:'Cơ hội: mua cổ phiếu, trái phiếu, bất động sản, doanh nghiệp.'},
- market:{lines:['THỊ','TRƯỜNG'],col:'#2f78c4',desc:'Thị trường: có người mua lại tài sản, lãi suất hoặc giá thay đổi.'},
- doodad:{lines:['TIÊU','XÀI'],col:'#d24a60',desc:'Tiêu xài: chi tiêu bất ngờ hoặc một lựa chọn trong cuộc sống.'},
- free:{lines:['THỜI GIAN','RẢNH'],col:'#139a9a',desc:'Thời gian rảnh: chọn chăm con, đọc tin, cà phê với bạn, làm thêm, tập thể dục hay nghỉ ngơi. Gieo gì gặt nấy.'},
- salary:{lines:['LƯƠNG'],col:'#c9952a',desc:'Mốc nhận lương: đầu mỗi lượt (4 tháng) bạn tự động nhận lương và trả chi phí.'},
- midbonus:{lines:['THƯỞNG','GIỮA NĂM'],col:'#d9a53a',desc:'Thưởng giữa năm: đi qua hoặc dừng lại đều nhận thưởng theo kết quả công việc.'},
- tetbonus:{lines:['THƯỞNG','TẾT'],col:'#d6303a',desc:'Thưởng Tết (lương tháng 13): đi qua hoặc dừng lại đều nhận.'},
- charity:{lines:['TỪ','THIỆN'],col:'#8a5bd0',desc:'Từ thiện: góp 10% thu nhập, May mắn +15. Khi May mắn đạt 80, lần tung tới được nhân đôi điểm xúc xắc.'},
- baby:{lines:['EM BÉ'],col:'#e57aa8',desc:'Em bé: chi phí nuôi con tăng, nhưng được giảm trừ gia cảnh khi tính thuế.'},
- downsized:{lines:['MẤT','VIỆC'],col:'#5f6d88',desc:'Mất việc: mất lương 1–2 lượt, chỉ nhận trợ cấp thất nghiệp 60%.'}};
+ opp:{lines:['THƯƠNG','VỤ'],col:'#2a9f63',desc:'Thương vụ: mua cổ phiếu, trái phiếu, bất động sản, doanh nghiệp, hoặc thương vụ hợp sở thích của bạn.'},
+ market:{lines:['SÀN','GIAO DỊCH'],col:'#2f78c4',desc:'Sàn giao dịch: giá tài sản và lãi suất thay đổi, có người mua lại tài sản.'},
+ doodad:{lines:['TRUNG TÂM','MUA SẮM'],col:'#d24a60',desc:'Trung tâm mua sắm: chi tiêu bất ngờ hoặc một lựa chọn trong cuộc sống.'},
+ free:{lines:['CÔNG','VIÊN'],col:'#139a9a',desc:'Công viên: chọn chăm con, đọc tin, cà phê với bạn, làm thêm, tập thể dục hay nghỉ ngơi. Gieo gì gặt nấy.'},
+ salary:{lines:['NGÂN','HÀNG'],col:'#c9952a',desc:'Ngân hàng: đầu mỗi lượt (4 tháng) bạn tự động nhận lương và trả chi phí.'},
+ midbonus:{lines:['PHÒNG','KINH DOANH'],col:'#d9a53a',desc:'Phòng kinh doanh: thưởng giữa năm theo kết quả công việc. Đi qua hoặc dừng lại đều nhận.'},
+ tetbonus:{lines:['CHỢ','TẾT'],col:'#d6303a',desc:'Chợ Tết: thưởng lương tháng 13. Đi qua hoặc dừng lại đều nhận.'},
+ charity:{lines:['NHÀ','THIỆN NGUYỆN'],col:'#8a5bd0',desc:'Nhà thiện nguyện: góp 10% thu nhập, May mắn +15. Khi May mắn đạt 80, lần tung tới được nhân đôi điểm xúc xắc.'},
+ baby:{lines:['BỆNH','VIỆN'],col:'#e57aa8',desc:'Bệnh viện phụ sản: chi phí nuôi con tăng, nhưng được giảm trừ gia cảnh khi tính thuế.'},
+ downsized:{lines:['TRỤ SỞ','CÔNG TY'],col:'#5f6d88',desc:'Trụ sở công ty: cắt giảm nhân sự, mất lương 1–2 lượt, chỉ nhận trợ cấp thất nghiệp 60%.'},
+ job:{lines:['VIỆC','LÀM MỚI'],col:'#3d7bd9',desc:'Việc làm mới: sếp đề nghị tăng chức, hoặc công ty khác mời về với mức lương mới. Có thể tốt hơn, cũng có thể kém hơn.'},
+ party:{lines:['TIỆC','CƯỚI'],col:'#e2708a',desc:'Tiệc cưới: bạn bè, anh chị em hoặc đồng nghiệp mời. Mừng càng nhiều, quan hệ và hạnh phúc càng tăng. Tiền mừng trừ thẳng vào tiền mặt.'},
+ milestone:{lines:['VIỆC','ĐẠI SỰ'],col:'#8a6a3a',desc:'Việc đại sự: mua ô tô hoặc xây nhà, trả thẳng hay trả góp. Tăng uy tín, quan hệ, hạnh phúc và sức khỏe.'}};
 
 const BONDS=[{n:'Điện lực Miền Trang',c:.085,risk:'Thấp',w:1},{n:'Bán lẻ Sao Mai',c:.105,risk:'Trung bình',w:2},{n:'Địa ốc Hưng Phát',c:.13,risk:'Cao',w:5}];
 /* Mã chứng khoán Việt Nam. Giá, EPS, cổ tức chỉ là số ước lượng trong game, không phải dữ liệu thị trường. */
@@ -411,7 +419,7 @@ let G=null;
 const SAVE_KEY='dongtien3d.v4',STATE_V=4;
 function save(){try{if(!G||!G.online)localStorage.setItem(SAVE_KEY,JSON.stringify(G))}catch(e){}if(typeof pushState==='function')pushState();}
 function validState(s){return s&&s.v===STATE_V&&Array.isArray(s.players)&&s.players.length&&s.players.every(p=>'living' in p&&'age' in p);}
-function sanitize(s){['turn','cur','stockIdx','rateAdj'].forEach(k=>s[k]=num(s[k]));if(!s.stockIdx)s.stockIdx=1;s.cyc=s.cyc||{land:'normal',re:'normal',stock:'normal'};
+function sanitize(s){s.board=Array.isArray(s.board)&&s.board.length===BOARD_TEMPLATE.length?s.board:makeBoard();setBoard(s.board);['turn','cur','stockIdx','rateAdj'].forEach(k=>s[k]=num(s[k]));if(!s.stockIdx)s.stockIdx=1;s.cyc=s.cyc||{land:'normal',re:'normal',stock:'normal'};
   s.players.forEach(p=>{['cash','loan','salary','rent','living','childPer','kids','pos','ftPos','ftCF','ftStart','ftBase','ftExp','ftLap','charity','skip','age','dep','cpi','net','parentCare'].forEach(k=>p[k]=num(p[k]));
   p.liabs=(p.liabs||[]).filter(l=>l).map(l=>({...l,bal:num(l.bal),pay:num(l.pay)}));p.assets=(p.assets||[]).filter(a=>a&&(a.type!=='stock'||STOCKS[a.sym]));
   p.assets.forEach(a=>['price','value','loan','pay','left','rent','opex','profit','equity','shares','cost','units','face','coupon','qty','rate','amount','paid','turns'].forEach(k=>{if(k in a)a[k]=num(a[k]);}));
@@ -683,7 +691,7 @@ const DOODAD_LOANS=[{n:'Đổi xe tay ga mới',down:10*TR,bal:60*TR,pay:3*TR,ar
 /* thẻ lựa chọn: mỗi lựa chọn có chi phí và hệ quả */
 function choiceCards(p){const M=mode(),L=[
  {id:'friendwed',art:'wedding',title:'Đám cưới bạn thân',story:`${cap(who())} là bạn thân từ hồi đại học, tổ chức cưới ở trung tâm tiệc cưới lớn.`,opts:[
-   {label:'Mừng 2 tr, đi cả nhà',cost:2*TR,net:1,stat:{rel:8},note:'+1 quan hệ: lần tới gặp ô Cơ hội được xem 2 thương vụ'},{label:'Mừng 500k',cost:.5*TR},{label:'Không đi, nhắn tin chúc',cost:0,stat:{rel:-6},note:'Tiết kiệm, nhưng bạn bè hơi buồn'}]},
+   {label:'Mừng 2 tr, đi cả nhà',cost:2*TR,net:1,stat:{rel:8},note:'+1 quan hệ: lần tới gặp ô Thương vụ được xem 2 thương vụ'},{label:'Mừng 500k',cost:.5*TR},{label:'Không đi, nhắn tin chúc',cost:0,stat:{rel:-6},note:'Tiết kiệm, nhưng bạn bè hơi buồn'}]},
  {id:'lend',art:'opp',title:'Bạn mượn tiền gấp',story:`${cap(who())} cần 20 tr để đóng viện phí cho mẹ, hứa trả trong 1 năm.`,opts:[
    {label:'Cho mượn 20 tr',cost:20*TR,lend:20*TR,net:1,stat:{rel:10,luck:3},note:'Khả năng cao được trả lại, +1 quan hệ'},{label:'Từ chối khéo',cost:0}]},
  {id:'phone',art:'phone',title:'Điện thoại cũ bị vỡ màn hình',story:'Cửa hàng đang có chương trình trả góp 0% cho mẫu mới nhất.',opts:[
@@ -871,10 +879,10 @@ function checkAch(p){const got=[];const c=calc(p),nw=netWorth(p);
   return got;}
 
 /* ================= Chỉ số cuộc sống: GIEO GÌ GẶT NẤY ================= */
-const STATS={happy:{n:'Hạnh phúc',c:'#ff8fab',d:'Kéo May mắn đi lên mỗi năm'},luck:{n:'May mắn',c:'#ffd23f',d:'Cơ hội tốt xuất hiện nhiều hơn, có thể thoát nạn'},health:{n:'Sức khỏe',c:'#4fd18b',d:'Ít ốm, viện phí thấp hơn'},
+const STATS={rep:{n:'Uy tín',c:'#7ad3c3',d:'Được tin cậy trong công việc. Tăng khi thăng chức, làm việc lớn.'},happy:{n:'Hạnh phúc',c:'#ff8fab',d:'Kéo May mắn đi lên mỗi năm'},luck:{n:'May mắn',c:'#ffd23f',d:'Cơ hội tốt xuất hiện nhiều hơn, có thể thoát nạn'},health:{n:'Sức khỏe',c:'#4fd18b',d:'Ít ốm, viện phí thấp hơn'},
   kids:{n:'Con cái',c:'#7fd0ff',d:'Con ít tốn kém; trưởng thành sẽ báo hiếu'},know:{n:'Hiểu biết đầu tư',c:'#b98cff',d:'Gặp cổ phiếu giá tốt nhiều hơn'},rel:{n:'Quan hệ',c:'#ff9f43',d:'Được giới thiệu bất động sản tốt hơn'},
   legacy:{n:'Di sản',c:'#f5c542',d:'Công trình để đời, từ thiện, giúp đỡ người khác. Ở Vòng Bứt Phá phải đủ Di sản mới chiến thắng.'}};
-function S(p){if(!p.S)p.S={happy:50,luck:50,health:60,kids:50,know:40,rel:40,legacy:0};if(p.S.legacy==null)p.S.legacy=0;return p.S;}
+function S(p){if(!p.S)p.S={happy:50,luck:50,health:60,kids:50,know:40,rel:40,legacy:0,rep:40};if(p.S.legacy==null)p.S.legacy=0;if(p.S.rep==null)p.S.rep=40;return p.S;}
 const sv=(p,k)=>S(p)[k]/100;
 function addS(p,ch,why){const s=S(p),parts=[];let neg=false;for(const k in ch){const v=Math.round(ch[k]);if(!v)continue;s[k]=clamp(s[k]+v,0,100);parts.push(`${STATS[k].n} ${v>0?'+':''}${v}`);if(v<0)neg=true;}
   if(!parts.length)return;if(!p.bot&&typeof toast==='function')toast(parts.join(' · '),neg?'neg':'pos');if(typeof log==='function'&&G&&G.log)log(`${why?why+': ':''}${parts.join(', ')}`,p);}
@@ -969,7 +977,7 @@ $('#rank').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(
 $('#rankToggle').addEventListener('click',()=>{rankOpen=!rankOpen;try{localStorage.setItem('dongtien3d.rank',rankOpen?'1':'0')}catch(e){}if(G&&G.players){renderChips();layoutCamera();}});
 /* sở thích nổi bật của người chơi hiện tại: hiện ngay trên bảng để người chơi thấy game đang hiểu mình */
 function interestLine(p){const top=Object.entries(p.pref||{}).filter(([,v])=>v>0).sort((x,y)=>y[1]-x[1]).slice(0,2);
-  return top.length?`Sở thích nổi bật: <b style="color:var(--text)">${top.map(([k])=>PREFS[k]).join(" · ")}</b> · thương vụ sẽ bám theo đó`:"Chưa rõ sở thích: chọn lựa chọn ở ô Thời gian rảnh và Tiêu xài để game hiểu bạn";}
+  return top.length?`Sở thích nổi bật: <b style="color:var(--text)">${top.map(([k])=>PREFS[k]).join(" · ")}</b> · thương vụ sẽ bám theo đó`:"Chưa rõ sở thích: chọn lựa chọn ở ô Công viên và Trung tâm mua sắm để game hiểu bạn";}
 function renderHUD(){
   if(!G||!G.players)return;renderChips();
   const p=curP(),c=calc(p),remote=isBotTurn(),busy=G.phase!=='roll'||remote;
@@ -1113,7 +1121,7 @@ function showStatement(p){
       const room=(a.type==='re'||a.type==='biz')&&a.kind!=='startup'?equityRoom(a):0;if(room>=10*TR)acts+=btn(`Vay thế chấp ${fmt(room)}`,()=>equityLoan(p,a,room));}
     if(buyer&&Q&&a.type!=='stock')acts+=[1,1.1,1.25].map(k=>{const o=offerFor(a,k);return btn(`Hỏi mua ${fmt(o)}`,()=>tradeAsset(buyer,p,a,o),buyer.cash<o-num(a.loan));}).join('');
     const qd=Q&&isCur?`<br><small>Bán ngay: giá ${fmt(Q.price)}${a.loan?` − dư nợ ${fmt(a.loan)}`:''}${a.type==='re'?' − thuế 2%':''} = nhận ${fmt(Q.net)} · <span class="${Q.profit>=0?'pos':'neg'}">${Q.profit>=0?'lãi':'lỗ'} ${fmt(Math.abs(Q.profit))}</span></small>`:'';
-    return `<tr><td>${esc(assetLabel(a))}<br><small>${d}</small>${qd}${acts?`<div class="acts">${acts}</div>`:''}</td><td>${fmt(assetValue(a))}</td></tr>`;}).join('')||'<tr><td style="color:var(--muted)">Chưa có tài sản. Hãy tìm thương vụ ở ô Cơ hội.</td><td></td></tr>';
+    return `<tr><td>${esc(assetLabel(a))}<br><small>${d}</small>${qd}${acts?`<div class="acts">${acts}</div>`:''}</td><td>${fmt(assetValue(a))}</td></tr>`;}).join('')||'<tr><td style="color:var(--muted)">Chưa có tài sản. Hãy tìm thương vụ ở ô Thương vụ.</td><td></td></tr>';
   const liabRows=p.liabs.map((l,i)=>`<tr><td>${esc(l.label)}<br><small>Trả ${fmt(l.pay)}/tháng</small></td><td>${fmt(l.bal)} ${isCur?btn('Trả hết',()=>payOff(p,i),p.cash<l.bal):''}${isCur&&l.bal>10*TR?btn(`Trả bớt ${fmt(Math.max(10*TR,Math.round(l.bal/4/TR)*TR))}`,()=>payDown(p,i,Math.max(10*TR,Math.round(l.bal/4/TR)*TR)),p.cash<Math.max(10*TR,Math.round(l.bal/4/TR)*TR),'green'):''}</td></tr>`).join('')
     +`<tr><td>Vay tiêu dùng<br><small>Lãi ${pct(clr())}/tháng, hạn mức ${fmt(loanCap(p))}</small></td><td>${fmt(p.loan)}</td></tr>`;
   const loanBtns=isCur?`<div class="acts">${btn('Vay thêm 10 tr',()=>{p.loan+=CL_STEP;p.cash+=CL_STEP;log('Vay tiêu dùng 10 tr',p);},p.loan+CL_STEP>loanCap(p))}${btn('Trả bớt nợ 10 tr',()=>{p.loan-=CL_STEP;p.cash-=CL_STEP;log('Trả nợ tiêu dùng 10 tr',p);},p.loan<CL_STEP||p.cash<CL_STEP,'green')}${btn('Vay thêm 100 tr',()=>{p.loan+=10*CL_STEP;p.cash+=10*CL_STEP;log('Vay tiêu dùng 100 tr',p);},p.loan+10*CL_STEP>loanCap(p))}${btn('Trả hết nợ tiêu dùng',()=>{const v=p.loan;p.cash-=v;p.loan=0;log(`Trả hết nợ tiêu dùng ${fmt(v)}`,p);},!p.loan||p.cash<p.loan,'green')}</div>`:'';
@@ -1284,6 +1292,9 @@ function landing(p){
   if(t==='baby')return cardBaby(p);
   if(t==='downsized')return cardDown(p);
   if(t==='free')return cardFree(p);
+  if(t==='job')return cardJob(p);
+  if(t==='party')return cardParty(p);
+  if(t==='milestone')return cardMilestone(p);
   if(t==='midbonus'||t==='tetbonus'){const tet=t==='tetbonus',amt=bonus(p,tet?'tet':'mid',true);
     return openModal({tone:'payday',eyebrow:'Thưởng',title:tet?'Thưởng Tết – lương tháng 13':'Thưởng giữa năm',art:art(tet?'tet':'promo'),story:tet?`Công ty tất niên ở ${pick(['nhà hàng tiệc cưới','resort Vũng Tàu','hội trường công ty'])}. Phong bì thưởng Tết dày hơn bạn nghĩ.`:'Phòng nhân sự gửi email kết quả đánh giá giữa năm.',
       body:`<div class="facts">${fact('Tiền thưởng',amt?'+'+fmt(amt):'0đ',amt?'pos':'')}${fact('Bằng',trimNum(amt/Math.max(1,p.salary),1)+' tháng lương')}</div>`,lesson:'Tiền thưởng là cơ hội tốt để trả nợ xấu hoặc đầu tư, thay vì nâng cấp chi tiêu.',acts:[{label:'Tuyệt!',cls:'primary',fn:endTurn}],bot:endTurn});}
@@ -1484,6 +1495,48 @@ function cardBaby(p){
   openModal({tone:'baby',eyebrow:'Em bé',title:can?'Chúc mừng, gia đình có thêm em bé!':'Gia đình đã đủ đầy',art:art('baby'),quote:can?QUOTES.ctx.baby:'',story:can?`Em bé ${pick(['nặng 3,2 kg','khóc rất to','giống bố như đúc','có má lúm đồng tiền'])} chào đời ở bệnh viện phụ sản. Ông bà đặt tên là ${pick(['Bin','Su','Bống','Na','Cốm','Tôm'])}.`:'',lesson:LESSON.baby,
     body:can?`<p>Chi phí nuôi con tăng ${fmt(p.childPer)}/tháng (bỉm sữa, tiêm chủng, gửi trẻ)${mode().life?', thêm học phí khi con đi học và đại học':''}. Bạn được giảm trừ gia cảnh 6,2 tr khi tính thuế, nên tổng chi phí thực tăng <b class="num neg">${fmt(delta)}</b>/tháng.</p>`:'<p>Không có thay đổi về chi phí.</p>',
     acts:[{label:'Tuyệt vời',cls:'primary',fn:go}],bot:go});
+}
+/* ===== Ô đời sống mới: việc làm, tiệc, việc đại sự ===== */
+function cardJob(p){
+  const keep=()=>{addS(p,{happy:1},'Ở lại công việc cũ');endTurn();};
+  if(Math.random()<.5){
+    const chance=Math.min(.85,.3+(S(p).rel+S(p).know)/200),up=Math.round(p.salary*.12/1e5)*1e5;
+    const go=()=>{if(Math.random()<chance){p.salary+=up;addS(p,{rep:8,happy:3},'Tăng chức');log(`Tăng chức: lương +${fmt(up)}/tháng`,p);}else{addS(p,{happy:-2},'Chưa được tăng chức');log('Chưa được tăng chức, vẫn giữ vị trí cũ',p);}endTurn();};
+    return openModal({tone:'payday',eyebrow:'Việc làm mới · Tăng chức',title:'Sếp đề nghị bạn lên vị trí mới',art:art('promo'),story:'Dự án bạn phụ trách được khen. Sếp muốn đề bạt, nhưng vị trí mới nhiều áp lực hơn.',
+      body:`<div class="facts">${fact('Lương hiện tại',fmt(p.salary))}${fact('Lương mới nếu được duyệt',fmt(p.salary+up),'pos')}${fact('Cơ hội được duyệt',pct(chance,0),'','theo Quan hệ và Hiểu biết')}</div><p>Nhận đề bạt thì có thể được tăng lương, nhưng nếu làm không tốt sẽ mất uy tín.</p>`,
+      lesson:'Thăng tiến đến từ quan hệ tốt và năng lực tích lũy, không chỉ từ việc chờ đợi.',acts:[{label:'Nhận đề bạt',cls:'primary',fn:go},{label:'Giữ việc hiện tại',fn:keep}],bot:go});
+  }
+  const cur=p.salary,nsal=Math.round(cur*(.9+Math.random()*.5)/1e5)*1e5;
+  const go=()=>{const old=p.salary;p.salary=nsal;const better=nsal>=old;addS(p,{rep:better?3:0,happy:better?3:-4},'Đổi việc');log(`Đổi việc: lương ${fmt(old)} → ${fmt(nsal)}/tháng`,p);endTurn();};
+  return openModal({tone:'payday',eyebrow:'Việc làm mới · Lời mời',title:'Công ty khác mời bạn về',art:art('chartup'),story:'Một công ty mới đang tuyển người có kinh nghiệm như bạn và đưa ra mức lương khác hẳn hiện tại.',
+    body:`<div class="facts">${fact('Lương hiện tại',fmt(cur))}${fact('Lương đề nghị',fmt(nsal),nsal>=cur?'pos':'neg')}</div><p>Đổi việc có thể tăng lương, nhưng cũng có thể đưa bạn tới môi trường kém hơn.</p>`,
+    lesson:'Đổi việc chỉ đáng khi mức lương và môi trường cùng tốt hơn.',acts:[{label:'Nhận việc mới',cls:'primary',fn:go},{label:'Ở lại',fn:keep}],bot:nsal>=cur?go:keep});
+}
+const PARTY_KINDS=[
+  {k:'friend',title:'Bạn cũ mời dự đám cưới',story:'Người bạn học cùng lớp đãi tiệc cưới ở nhà hàng ngoại ô. Thiệp mời ghi: “Có mặt là vui rồi”.',mul:1,art:'wedding'},
+  {k:'sibling',title:'Anh chị em ruột kết hôn',story:'Anh chị ruột tổ chức đám cưới, cả họ đều tới. Mừng bao nhiêu, cả nhà đều biết.',mul:1.6,art:'wedding'},
+  {k:'colleague',title:'Đồng nghiệp mời tiệc',story:'Đồng nghiệp tổ chức tiệc cưới, cả phòng góp phong bì. Sếp cũng có mặt.',mul:.8,art:'party'}];
+function cardParty(p){
+  const K=pick(PARTY_KINDS),base=Math.max(1e5,Math.round(p.salary*.1/1e5)*1e5)*K.mul;
+  const tiers=[{l:'Phong bì nhỏ',a:Math.round(base*.5/1e5)*1e5,st:{rel:1,happy:1}},{l:'Phong bì vừa',a:Math.round(base/1e5)*1e5,st:{rel:3,happy:4}},{l:'Phong bì hậu',a:Math.round(base*2/1e5)*1e5,st:{rel:5,happy:7}},{l:'Không mừng',a:0,st:{rel:-3}}];
+  const take=t=>()=>{if(t.a>p.cash)return;p.cash-=t.a;addS(p,t.st,'Mừng cưới');log(`${K.title}: mừng ${fmt(t.a)}`,p);endTurn();};
+  openModal({tone:'payday',eyebrow:'Tiệc cưới',title:K.title,art:art(K.art),story:K.story,
+    body:`<div class="facts">${fact('Mức mừng gợi ý',fmt(base))}${fact('Tiền mặt của bạn',fmt(p.cash))}</div><div class="note">Tiền mừng trừ thẳng vào tiền mặt, không vay được. Mừng càng nhiều, quan hệ và hạnh phúc càng tăng.</div>`,
+    acts:tiers.map((t,i)=>({label:`${t.l} · ${t.a?fmt(t.a):'0đ'}`,cls:i===1?'primary':'',disabled:t.a>p.cash,fn:take(t)})),
+    bot:take(p.cash>=tiers[1].a?tiers[1]:tiers[3])});
+}
+function cardMilestone(p){
+  const opts=[
+    {label:`Mua ô tô, trả thẳng ${fmt(900*TR)}`,cost:900*TR,st:{rep:6,rel:3,happy:6,health:2},msg:'Mua ô tô trả thẳng'},
+    {label:`Mua ô tô, trả góp: trả trước ${fmt(270*TR)}, vay ${fmt(630*TR)}`,cost:270*TR,liab:{label:'Vay mua ô tô',bal:630*TR,pay:13*TR},st:{rep:6,rel:3,happy:6,health:2},msg:'Mua ô tô trả góp'},
+    {label:`Xây nhà, trả thẳng ${fmt(2400*TR)}`,cost:2400*TR,st:{rep:10,rel:5,happy:8,health:4},msg:'Xây nhà trả thẳng'},
+    {label:`Xây nhà, trả góp: trả trước ${fmt(600*TR)}, vay ${fmt(1800*TR)}`,cost:600*TR,liab:{label:'Vay xây nhà',bal:1800*TR,pay:18*TR},st:{rep:10,rel:5,happy:8,health:4},msg:'Xây nhà trả góp'}];
+  const buy=o=>()=>{if(o.cost>p.cash)return;p.cash-=o.cost;if(o.liab)p.liabs.push({key:'x'+Date.now(),label:o.liab.label,bal:o.liab.bal,pay:o.liab.pay});addS(p,o.st,'Việc đại sự');log(`${o.msg}: trả ${fmt(o.cost)}`,p);endTurn();};
+  const later=()=>{addS(p,{happy:-1},'Chưa lo việc lớn');endTurn();};
+  openModal({tone:'payday',eyebrow:'Việc đại sự',title:'Đã đến lúc lo xe và nhà',art:art('villa'),story:'Gia đình muốn có chỗ ở ổn định hơn và đi lại thuận tiện. Trả thẳng thì không vay, nhưng cần đủ tiền mặt. Trả góp thì hằng tháng trả thêm tiền vay.',
+    body:`<div class="facts">${fact('Tiền mặt của bạn',fmt(p.cash))}</div>`,lesson:'Việc đại sự tăng uy tín và hạnh phúc, nhưng khoản trả góp kéo dài sẽ chiếm dòng tiền.',
+    acts:[...opts.map((o,i)=>({label:o.label,cls:i===2?'primary':'',disabled:o.cost>p.cash,fn:buy(o)})),{label:'Để sau',fn:later}],
+    bot:()=>(opts[1].cost<=p.cash?buy(opts[1]):later)()});
 }
 function cardDown(p){
   const M=mode();if(Math.random()<Math.max(0,(S(p).luck-55)/110)){const ok=()=>{addS(p,{luck:-10,happy:5},'Thoát nạn');endTurn();};return openModal({tone:'payday',eyebrow:'May mắn',title:'Thoát nạn cắt giảm nhân sự!',art:art('promo'),story:'Công ty cắt giảm 30% nhân sự nhưng sếp quyết định giữ bạn lại vì năng lực và… chút may mắn.',quote:'Ở hiền gặp lành!',body:`<p>Nhờ chỉ số May mắn ${S(p).luck}, bạn không bị mất việc. May mắn giảm 10 vì đã dùng.</p>`,acts:[{label:'Phù!',cls:'primary',fn:ok}],bot:ok});}
@@ -1892,8 +1945,8 @@ function showSetup(resume){
     else if(b.dataset.char){const k=+b.dataset.char;avatarPicker(draft[k],v=>{Object.assign(draft[k],v);render();},k);}
     else if(b.id==='onlineBtn'){showOnline();}
     else if(b.id==='resumeBtn'){G=resume;s.hidden=true;boardFromState();G.phase='busy';afterEvents(curP());}
-    else if(b.id==='startBtn'){const ids=[...new Set(draft.map(d=>d.dreamId))];while(ids.length<4){const k=Math.floor(Math.random()*DREAMS.length);if(!ids.includes(k))ids.push(k);}const dreams=ids.slice(0,4).map(k=>DREAMS[k]);draft.forEach(d=>d.dream=Math.max(0,ids.indexOf(d.dreamId)));G={v:STATE_V,mode:draftMode,scenario:draftScen,quiz:draftQuiz,dreams,players:[],cur:0,turn:1,month:0,phase:'roll',log:[],stockIdx:draftScen==='crisis'?.7:1,rateAdj:draftScen==='crisis'?.03:0,cyc:{land:draftScen==='bubble'?'boom':draftScen==='crisis'?'bust':'normal',re:draftScen==='crisis'?'bust':'normal',stock:draftScen==='crisis'?'bust':'normal'}};
-      G.players=draft.map((d,i)=>newPlayer(i,d,PROFS[d.prof],d.name.trim()||`Người chơi ${i+1}`,draftScen));
+    else if(b.id==='startBtn'){const ids=[...new Set(draft.map(d=>d.dreamId))];while(ids.length<4){const k=Math.floor(Math.random()*DREAMS.length);if(!ids.includes(k))ids.push(k);}const dreams=ids.slice(0,4).map(k=>DREAMS[k]);draft.forEach(d=>d.dream=Math.max(0,ids.indexOf(d.dreamId)));G={v:STATE_V,mode:draftMode,scenario:draftScen,quiz:draftQuiz,dreams,board:makeBoard(),players:[],cur:0,turn:1,month:0,phase:'roll',log:[],stockIdx:draftScen==='crisis'?.7:1,rateAdj:draftScen==='crisis'?.03:0,cyc:{land:draftScen==='bubble'?'boom':draftScen==='crisis'?'bust':'normal',re:draftScen==='crisis'?'bust':'normal',stock:draftScen==='crisis'?'bust':'normal'}};
+      setBoard(G.board);G.players=draft.map((d,i)=>newPlayer(i,d,PROFS[d.prof],d.name.trim()||`Người chơi ${i+1}`,draftScen));
       G.players.forEach(p=>log(`Bắt đầu ${Math.floor(p.age)} tuổi: ${p.prof}, lương ${fmt(p.salary)}, tiền mặt ${fmt(p.cash)}`,p));draft=[];s.hidden=true;ensureAudio();boardFromState();
       G.phase='busy';afterEvents(curP());}
   };
@@ -2244,8 +2297,8 @@ function pickOnline(kind,i){const s=roomData.seats[i];
   if(kind==='dream'){const inl=DREAMS.map((d,k)=>()=>{updSeat((x,j)=>j===i?{...x,dreamId:k}:null);showRoom();});pendingJingle=null;return openViewer({tone:'ft',key:'ol:pick',eyebrow:'Phòng',title:'Chọn ước mơ',inl,body:`<div class="dreamgrid">${DREAMS.map((d,k)=>`<button class="dreamc ${s.dreamId===k?'on':''}" data-i="${k}">${art(DREAM_ART[d.a])}<b>${d.n}</b><small>${fmt(d.c)}</small></button>`).join('')}</div>`});}
   avatarPicker({zod:s.zod,col:s.col,char:s.char},v=>{updSeat((x,j)=>j===i?{...x,...v}:null);FB.db.collection('users').doc(ME.uid).update({char:v.char,zod:v.zod}).catch(()=>{});showRoom();},i);}
 async function startOnlineGame(){const r=roomData;const ids=[...new Set(r.seats.map(s=>s.dreamId))];while(ids.length<4){const k=Math.floor(Math.random()*DREAMS.length);if(!ids.includes(k))ids.push(k);}
-  const g={v:STATE_V,mode:r.mode,scenario:'normal',quiz:false,dreams:ids.slice(0,4).map(k=>DREAMS[k]),players:[],cur:0,turn:1,month:0,phase:'await',log:[],stockIdx:1,rateAdj:0,btcIdx:1,cyc:{land:'normal',re:'normal',stock:'normal'},online:{room:r.id,host:r.host}};
-  G=g;G.players=r.seats.map((s,i)=>{const p=newPlayer(i,{...s,dream:Math.max(0,ids.indexOf(s.dreamId))},PROFS[s.prof],s.name,'normal');p.uid=s.uid;return p;});
+  const g={v:STATE_V,mode:r.mode,scenario:'normal',quiz:false,dreams:ids.slice(0,4).map(k=>DREAMS[k]),board:makeBoard(),players:[],cur:0,turn:1,month:0,phase:'await',log:[],stockIdx:1,rateAdj:0,btcIdx:1,cyc:{land:'normal',re:'normal',stock:'normal'},online:{room:r.id,host:r.host}};
+  G=g;setBoard(G.board);G.players=r.seats.map((s,i)=>{const p=newPlayer(i,{...s,dream:Math.max(0,ids.indexOf(s.dreamId))},PROFS[s.prof],s.name,'normal');p.uid=s.uid;return p;});
   G.players.forEach(p=>log(`Bắt đầu ${Math.floor(p.age)} tuổi: ${p.prof}, lương ${fmt(p.salary)}`,p));
   await FB.db.collection('rooms').doc(r.id).update({status:'playing',state:JSON.stringify(G),rev:1,updated:now()});}
 /* ---- giới hạn thời gian mỗi lượt khi chơi trực tuyến ---- */
@@ -2552,6 +2605,9 @@ function bigCoin(r){const g=new THREE.CylinderGeometry(r,r,r*.22,40);return new 
 /* tile icons */
 function makeIcon(type){
   const g=new THREE.Group();
+  if(type==='job'){g.add(box(.26,.18,.1,'#8a5a2b',0,0,0));g.add(box(.1,.05,.11,'#d9b26a',0,.1,0));}
+  else if(type==='party'){g.add(sph(.1,'#ff8fb1',0,.02,0));g.add(sph(.05,'#ffd23f',.09,.1,0));}
+  else if(type==='milestone'){g.add(box(.26,.2,.2,'#f4e4c1',0,-.02,0));g.add(box(.3,.06,.24,'#c0503a',0,.12,0));}
   if(type==='opp'){g.add(mesh(ext(starShape(.2,.09),.07),std('#5ee39a',{emissive:'#1a6b40',emissiveIntensity:.4,metalness:.4})));}
   else if(type==='market'){const m=std('#6db4ff',{metalness:.4});[[.09,-.1],[.17,0],[.26,.1]].forEach(([h,x])=>g.add(mesh(new THREE.BoxGeometry(.075,h,.075),m,x,h/2-.13,0)));const ar=mesh(new THREE.ConeGeometry(.05,.09,4),goldM,.16,.12,0);ar.rotation.z=-.8;g.add(ar);}
   else if(type==='doodad'){const m=std('#ff6f85');g.add(mesh(new THREE.BoxGeometry(.24,.24,.12),m));const hd=mesh(new THREE.TorusGeometry(.065,.014,8,20,Math.PI),darkM,0,.12,0);g.add(hd);}
@@ -2980,8 +3036,8 @@ function gfxTick(t,dt){
 const TPS={on:false,head:0,yaw:0,lastTh:null,kick:0,shake:0,running:false,runAng:0,t:0,cam:new THREE.Vector3(),look:new THREE.Vector3(),props:new THREE.Group(),anim:[],built:false};
 try{TPS.on=localStorage.getItem('dongtien3d.view')==='tps'}catch(e){}
 scene.add(TPS.props);
-const TPS_SAY={salary:'Ngày lương: cây ATM nhả tiền!',doodad:'Trung tâm mua sắm giảm giá: giữ chặt ví!',opp:'Cơ hội đầu tư bên đường',charity:'Điểm quyên góp từ thiện',midbonus:'Công ty phát thưởng giữa năm',tetbonus:'Tết đến: hoa đào, bánh chưng, lì xì',market:'Bảng điện chứng khoán nhảy số',free:'Công viên: thư giãn cuối tuần',downsized:'Công ty cắt giảm nhân sự',baby:'Bệnh viện: chào đón em bé!'};
-const TPS_COL={salary:'#e9b949',doodad:'#e0566b',opp:'#2fae6e',charity:'#9b6bdb',midbonus:'#e9b949',tetbonus:'#e8423f',market:'#3a86d4',free:'#139a9a',downsized:'#7d8aa3',baby:'#f08fb8'};
+const TPS_SAY={salary:'Ngày lương: cây ATM nhả tiền!',doodad:'Trung tâm mua sắm giảm giá: giữ chặt ví!',opp:'Cơ hội đầu tư bên đường',charity:'Điểm quyên góp từ thiện',midbonus:'Công ty phát thưởng giữa năm',tetbonus:'Tết đến: hoa đào, bánh chưng, lì xì',market:'Bảng điện chứng khoán nhảy số',free:'Công viên: thư giãn cuối tuần',downsized:'Công ty cắt giảm nhân sự',baby:'Bệnh viện: chào đón em bé!',job:'Văn phòng tuyển dụng: có việc làm mới!',party:'Nhà hàng tiệc cưới: đến mừng bạn bè!',milestone:'Đại lý xe và công trường: việc đại sự'};
+const TPS_COL={salary:'#e9b949',doodad:'#e0566b',opp:'#2fae6e',charity:'#9b6bdb',midbonus:'#e9b949',tetbonus:'#e8423f',market:'#3a86d4',free:'#139a9a',downsized:'#7d8aa3',baby:'#f08fb8',job:'#3d7bd9',party:'#e2708a',milestone:'#8a6a3a'};
 
 /* vật liệu, khối hình và biển hiệu dùng chung (lưu đệm để không tạo trùng) */
 const MC={};
@@ -3088,7 +3144,10 @@ function scTet(){const g=new THREE.Group(),br=mat('#5a3420',{roughness:.9});
   [[.12,.08],[.2,.1],[.16,.03]].forEach(([x,z],i)=>{const b=new THREE.Group();b.add(bx(.07,.035,.07,mat('#2f7d32',{roughness:.8}),0,.0175,0));b.add(bx(.072,.037,.006,mat('#e8d9b5'),0,.0175,0));b.add(bx(.006,.037,.072,mat('#e8d9b5'),0,.0175,0));b.position.set(x,i===2?.035:0,z);g.add(b);});
   [[.28,.1],[.3,.06]].forEach(([x,z],i)=>{const e=bx(.05,.075,.004,mat('#e0263f',{emissive:'#a0101e',emissiveIntensity:.3}),x,.05,z);e.rotation.set(-.2,.4*i,0);g.add(e);});
   g.add(sign('CHÚC MỪNG NĂM MỚI','#c0161f','#ffd56a',.42,.07,.14,.5,-.08));return g;}
-function tpsScene(t,v){return t==='salary'?scATM():t==='baby'?scHospital():t==='doodad'?scShop():t==='opp'?scOpp(v):t==='market'?scMarket():t==='charity'?scCharity():t==='free'?scPark():t==='downsized'?scLayoff():t==='midbonus'?scBonus():t==='tetbonus'?scTet():null;}
+function scJob(){const g=new THREE.Group();g.add(bldg(.6,.6,.28,'#3d7bd9',0,-.14));g.add(sign('VIỆC MỚI','#1d3f73','#bfe0ff',.46,.08,0,.5,.002));return g;}
+function scParty(){const g=new THREE.Group();g.add(bldg(.6,.44,.28,'#e2708a',0,-.14));g.add(sign('TIỆC CƯỚI','#7a2a44','#ffd7e4',.46,.08,0,.42,.002));return g;}
+function scHome(){const g=new THREE.Group();g.add(bldg(.62,.5,.28,'#f4e4c1',0,-.14));g.add(sign('NHÀ MỚI','#8a6a3a','#fff4d6',.46,.08,0,.42,.002));return g;}
+function tpsScene(t,v){return t==='salary'?scATM():t==='baby'?scHospital():t==='doodad'?scShop():t==='opp'?scOpp(v):t==='market'?scMarket():t==='charity'?scCharity():t==='free'?scPark():t==='downsized'?scLayoff():t==='midbonus'?scBonus():t==='tetbonus'?scTet():t==='job'?scJob():t==='party'?scParty():t==='milestone'?scHome():null;}
 /* hướng vào trong bàn từ một ô trên vòng trong (góc bàn thì chéo) */
 /* ---------- nhân vật người theo nghề (thứ tự giống PROFS) ---------- */
 const TSKIN=['#f1c7a3','#e6b48e','#d2a07a','#f5d0b0'];
