@@ -58,7 +58,7 @@ def main(version_string):
 
     # App Review details: no demo login needed (the game is fully playable offline); notes tell the reviewer what to expect.
     detail = call('GET', f'/v1/appStoreVersions/{version["id"]}/appStoreReviewDetail').get('data')
-    notes = ('Gameplay video of this build (3D view, board and Life path): https://1drv.ms/v/c/3cdee36e058faff7/IQBjGKcy7CLKTY-kmwJEhsKvAR3JlCDTKkWmVYumZJXNPCc?e=7To7h9 '
+    notes = ('Gameplay video of this build (3D view, board and Life path): https://drive.google.com/file/d/10-cQ1vPEF0NVwx7XRZFxmBsteXbvgz66/view?usp=sharing'
              'No account is needed to play; progress is stored on the device. Online play is optional: Start screen → '
              '"Play online" → Sign in with Apple (or email), then create a room and add bots; Delete account is in the online lobby. '
              'Tap "Start a new game" (1 player vs 3 bots by default), then "Roll the dice". It is an educational board game about '
