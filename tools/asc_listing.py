@@ -137,7 +137,7 @@ def main(version_string):
          'attributes': {'copyright': read('copyright.txt')}}})
     version_locs = call('GET', f'/v1/appStoreVersions/{version["id"]}/appStoreVersionLocalizations')['data']
     # What's New cannot be edited on a version that is still being prepared for its first review, or one that was rejected.
-    first_version = len(infos) == 1 and version['attributes'].get('appStoreState') in ('PREPARE_FOR_SUBMISSION', 'REJECTED')
+    first_version = len(infos) == 1 and version['attributes'].get('appStoreState') in ('PREPARE_FOR_SUBMISSION', 'REJECTED', 'DEVELOPER_REJECTED')
 
     for locale in sorted(os.listdir(os.path.join(ROOT, 'metadata'))):
         if not os.path.isdir(os.path.join(ROOT, 'metadata', locale)):
